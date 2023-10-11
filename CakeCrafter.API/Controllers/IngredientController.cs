@@ -19,7 +19,7 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Ingredient>>> GetIngredient()
+        public async Task<ActionResult<List<Ingredient>>> GetIngredients()
         {
             return Ok(await _context.Ingredients.ToListAsync());
         }
@@ -44,15 +44,15 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<Ingredient>>> UpdateIngredient(Ingredient requestIngredient)
+        public async Task<ActionResult<List<Ingredient>>> UpdateIngredient(Ingredient inputIngredient)
         {
-            var dbIngredient = await _context.Ingredients.FindAsync(requestIngredient.Id);
+            var dbIngredient = await _context.Ingredients.FindAsync(inputIngredient.Id);
             if (dbIngredient == null)
             {
                 return BadRequest("Ingredient not found!");
             }
-            dbIngredient.Name = requestIngredient.Name;
-            dbIngredient.Price = requestIngredient.Price;
+            dbIngredient.Name = inputIngredient.Name;
+            dbIngredient.Price = inputIngredient.Price;
 
             await _context.SaveChangesAsync();
 
