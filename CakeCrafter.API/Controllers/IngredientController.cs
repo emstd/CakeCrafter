@@ -1,0 +1,77 @@
+﻿using CakeCrafter.API.Data;
+using CakeCrafter.API.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
+
+namespace CakeCrafter.API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class IngredientController : ControllerBase
+    {
+        private readonly AppDbContext _context;
+
+        public IngredientController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Ingredient>>> GetIngredient()
+        {
+            return Ok(await _context.Ingredients.ToListAsync());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Ingredient>> GetIngredient(int id)
+        {
+            var ingredient = await _context.Ingredients.FindAsync(id);
+            if (ingredient == null)
+            {
+                return BadRequest("Ingredient not found!");
+            }
+            return Ok(ingredient);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<Ingredient>>> AddIngredient(Ingredient ingredient)
+        {
+            _context.Ingredients.Add(ingredient);
+            await _context.SaveChangesAsync();
+            return Ok(await _context.Ingredients.ToListAsync());
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<List<Ingredient>>> UpdateIngredient(Ingredient requestIngredient)
+        {
+            var dbIngredient = await _context.Ingredients.FindAsync(requestIngredient.Id);
+            if (dbIngredient == null)
+            {
+                return BadRequest("Ingredient not found!");
+            }
+            dbIngredient.Name = requestIngredient.Name;
+            dbIngredient.Price = requestIngredient.Price;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Ingredients.ToListAsync());
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Ingredient>>> DeleteIngredient(int id)
+        {
+            var dbIngredient = await _context.Ingredients.FindAsync(id);
+            if (dbIngredient == null)
+            {
+                return BadRequest("Ingredient not found!");
+            }
+            _context.Ingredients.Remove(dbIngredient);
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Ingredients.ToListAsync());
+        }
+
+    }
+}
