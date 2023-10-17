@@ -72,6 +72,5 @@ namespace CakeCrafter.API.Controllers
 
             return Ok(await _context.Ingredients.ToListAsync());
         }
-
     }
 }
