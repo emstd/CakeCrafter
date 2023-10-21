@@ -1,4 +1,5 @@
-﻿using CakeCrafter.API.Data;
+﻿using CakeCrafter.API.Controllers.Templates;
+using CakeCrafter.API.Data;
 using CakeCrafter.API.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,55 +18,36 @@ namespace CakeCrafter.API.Controllers
             _context = context;
         }
 
+        private InformationController<Category> info = new();
+
         [HttpGet]
         public async Task<ActionResult<List<Category>>> GetCategories()
         {
-            return Ok(await _context.Categories.ToListAsync());
+            return await info.GetModelsAsync(_context.Categories); ;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Category>> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return BadRequest("Category nor found!");
-            }
-            return Ok(category);
+            return await info.GetModelByIdAsync(_context.Categories, id);
         }
 
         [HttpPost]
         public async Task<ActionResult<List<Category>>> AddCategory(Category category)
         {
-            _context.Add(category);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Categories.ToListAsync());
+            return await info.AddModelAsync(category, _context.Categories, _context);
         }
 
         [HttpPut]
         public async Task<ActionResult<List<Category>>> UpdateCategory(Category inputCategory)
         {
-            var dbCategory = await _context.Categories.FindAsync(inputCategory.Id);
-            if (dbCategory == null)
-            {
-                return BadRequest("Category nor found!");
-            }
-            dbCategory.Name = inputCategory.Name;
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Categories.ToListAsync());
+            return await info.UpdateModelAsync(inputCategory, _context.Categories, _context);
         }
 
         [HttpDelete]
         public async Task<ActionResult<List<Category>>> DeleteCategory(int id)
         {
-            var dbCategory = await _context.Categories.FindAsync(id);
-            if (dbCategory == null)
-            {
-                return BadRequest("Category nor found!");
-            }
-            _context.Categories.Remove(dbCategory);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Categories.ToListAsync());
+            return await info.DeleteModelASync(_context.Categories, id, _context);
         }
     }
 }
