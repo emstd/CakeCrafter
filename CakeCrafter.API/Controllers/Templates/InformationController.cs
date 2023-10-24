@@ -1,12 +1,14 @@
 ﻿using CakeCrafter.API.Data;
 using CakeCrafter.API.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace CakeCrafter.API.Controllers.Templates
 {
-    public class InformationController<TModel> : ControllerBase where TModel : class, IInfo
+    [Route("api/[controller]")]
+    [ApiController]
+    public abstract class InformationConttroller<TModel> : ControllerBase where TModel : class, IInfo
     {
         public async Task<ActionResult<List<TModel>>> GetModelsAsync(DbSet<TModel> table)
         {
@@ -18,7 +20,7 @@ namespace CakeCrafter.API.Controllers.Templates
             var dbModel = await table.FindAsync(id);
             if (dbModel == null)
             {
-                return BadRequest("Category nor found!");
+                return NotFound();
             }
             return Ok(dbModel);
         }
@@ -35,19 +37,19 @@ namespace CakeCrafter.API.Controllers.Templates
             var dbModel = await table.FindAsync(model.Id);
             if (dbModel == null)
             {
-                return BadRequest("Category nor found!");
+                return NotFound();
             }
             dbModel.Name = model.Name;
             await context.SaveChangesAsync();
             return Ok(await table.ToListAsync());
         }
 
-        public async Task<ActionResult<List<Category>>> DeleteModelASync(DbSet<TModel> table, int id, AppDbContext context)
+        public async Task<ActionResult<List<Category>>> DeleteModelAsync(DbSet<TModel> table, int id, AppDbContext context)
         {
             var dbModel = await table.FindAsync(id);
             if (dbModel == null)
             {
-                return BadRequest("Category nor found!");
+                return NotFound();
             }
             table.Remove(dbModel);
             await context.SaveChangesAsync();
