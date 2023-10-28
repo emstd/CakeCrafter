@@ -1,4 +1,4 @@
-﻿namespace CakeCrafter.API.Models
+﻿namespace CakeCrafter.API.Models.Interfaces
 {
     public interface IInfo
     {

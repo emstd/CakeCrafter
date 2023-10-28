@@ -1,5 +1,6 @@
 ﻿using CakeCrafter.API.Data;
 using CakeCrafter.API.Models;
+using CakeCrafter.API.Models.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
