@@ -10,6 +10,12 @@ namespace CakeCrafter.API.Controllers.Templates
     [ApiController]
     public abstract class InformationConttroller<TModel> : ControllerBase where TModel : class, IInfo
     {
+        protected readonly AppDbContext _context;
+
+        public InformationConttroller(AppDbContext context)
+        {
+            _context = context;
+        }
         public async Task<ActionResult<List<TModel>>> GetModelsAsync(DbSet<TModel> table)
         {
             return Ok(await table.ToListAsync());
