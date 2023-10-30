@@ -9,36 +9,6 @@ namespace CakeCrafter.API.Controllers
 {
     public class CategoriesController : InformationController<Category>
     {
-        public CategoriesController(AppDbContext context) : base(context) { }
-
-        [HttpGet]
-        public async Task<ActionResult<List<Category>>> GetCategories()
-        {
-            return await GetModelsAsync(_context.Categories);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
-        {
-            return await GetModelByIdAsync(_context.Categories, id);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<List<Category>>> AddCategory(Category category)
-        {
-            return await AddModelAsync(category, _context.Categories, _context);
-        }
-
-        [HttpPut]
-        public async Task<ActionResult<List<Category>>> UpdateCategory(Category inputCategory)
-        {
-            return await UpdateModelAsync(inputCategory, _context.Categories, _context);
-        }
-
-        [HttpDelete]
-        public async Task<ActionResult<List<Category>>> DeleteCategory(int id)
-        {
-            return await DeleteModelAsync(_context.Categories, id, _context);
-        }
+        public CategoriesController(AppDbContext context, DbSet<Category> Categories) : base(context, Categories) { }
     }
 }

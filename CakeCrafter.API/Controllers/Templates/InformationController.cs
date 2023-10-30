@@ -12,19 +12,24 @@ namespace CakeCrafter.API.Controllers.Templates
     public abstract class InformationController<TModel> : ControllerBase where TModel : class, IInfo
     {
         protected readonly AppDbContext _context;
+        private DbSet<TModel> _table;
 
-        public InformationController(AppDbContext context)
+        public InformationController(AppDbContext context, DbSet<TModel> table)
         {
             _context = context;
-        }
-        public async Task<ActionResult<List<TModel>>> GetModelsAsync(DbSet<TModel> table)
-        {
-            return Ok(await table.ToListAsync());
+            _table = table;
         }
 
-        public async Task<ActionResult<TModel>> GetModelByIdAsync(DbSet<TModel> table, int id)
+        [HttpGet]
+        public async Task<ActionResult<List<TModel>>> GetModelsAsync()
         {
-            var dbModel = await table.FindAsync(id);
+            return Ok(await _table.ToListAsync());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TModel>> GetModelByIdAsync(int id)
+        {
+            var dbModel = await _table.FindAsync(id);
             if (dbModel == null)
             {
                 return NotFound();
@@ -32,35 +37,38 @@ namespace CakeCrafter.API.Controllers.Templates
             return Ok(dbModel);
         }
 
-        public async Task<ActionResult<List<Category>>> AddModelAsync(TModel model, DbSet<TModel> table, AppDbContext context)
+        [HttpPost]
+        public async Task<ActionResult<List<Category>>> AddModelAsync(TModel model)
         {
-            table.Add(model);
-            await context.SaveChangesAsync();
-            return Ok(await table.ToListAsync());
+            _table.Add(model);
+            await _context.SaveChangesAsync();
+            return Ok(await _table.ToListAsync());
         }
 
-        public async Task<ActionResult<List<Category>>> UpdateModelAsync(TModel model, DbSet<TModel> table, AppDbContext context)
+        [HttpPut]
+        public async Task<ActionResult<List<Category>>> UpdateModelAsync(TModel model)
         {
-            var dbModel = await table.FindAsync(model.Id);
+            var dbModel = await _table.FindAsync(model.Id);
             if (dbModel == null)
             {
                 return NotFound();
             }
             dbModel.Name = model.Name;
-            await context.SaveChangesAsync();
-            return Ok(await table.ToListAsync());
+            await _context.SaveChangesAsync();
+            return Ok(await _table.ToListAsync());
         }
 
-        public async Task<ActionResult<List<Category>>> DeleteModelAsync(DbSet<TModel> table, int id, AppDbContext context)
+        [HttpDelete]
+        public async Task<ActionResult<List<Category>>> DeleteModelAsync(int id)
         {
-            var dbModel = await table.FindAsync(id);
+            var dbModel = await _table.FindAsync(id);
             if (dbModel == null)
             {
                 return NotFound();
             }
-            table.Remove(dbModel);
-            await context.SaveChangesAsync();
-            return Ok(await table.ToListAsync());
+            _table.Remove(dbModel);
+            await _context.SaveChangesAsync();
+            return Ok(await _table.ToListAsync());
         }
     }
 }
