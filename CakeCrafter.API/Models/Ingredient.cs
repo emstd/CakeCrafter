@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using CakeCrafter.API.Models.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CakeCrafter.API.Models
 {
-    public class Ingredient
+    public class Ingredient : IInfo
     {
         public int Id { get; set; }
         public string Name { get; set; }

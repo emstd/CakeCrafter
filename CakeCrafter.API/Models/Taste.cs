@@ -1,6 +1,8 @@
-﻿namespace CakeCrafter.API.Models
+﻿using CakeCrafter.API.Models.Interfaces;
+
+namespace CakeCrafter.API.Models
 {
-    public class Taste
+    public class Taste : IInfo
     {
         public int Id { get; set; }
         public string Name { get; set; }
