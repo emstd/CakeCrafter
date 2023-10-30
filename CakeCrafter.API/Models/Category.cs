@@ -6,6 +6,6 @@ namespace CakeCrafter.API.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Dish> Dishes { get; set; }  = new List<Dish>();
+        public List<Cake> Dishes { get; set; }  = new List<Cake>();
     }
 }

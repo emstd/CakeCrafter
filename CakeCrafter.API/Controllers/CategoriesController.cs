@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CakeCrafter.API.Controllers
 {
-    public class CategoryController : InformationConttroller<Category>
+    public class CategoriesController : InformationController<Category>
     {
-        public CategoryController(AppDbContext context) : base(context) { }
+        public CategoriesController(AppDbContext context) : base(context) { }
 
         [HttpGet]
         public async Task<ActionResult<List<Category>>> GetCategories()

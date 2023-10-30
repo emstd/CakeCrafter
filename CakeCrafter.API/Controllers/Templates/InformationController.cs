@@ -9,11 +9,11 @@ namespace CakeCrafter.API.Controllers.Templates
 {
     [Route("api/[controller]")]
     [ApiController]
-    public abstract class InformationConttroller<TModel> : ControllerBase where TModel : class, IInfo
+    public abstract class InformationController<TModel> : ControllerBase where TModel : class, IInfo
     {
         protected readonly AppDbContext _context;
 
-        public InformationConttroller(AppDbContext context)
+        public InformationController(AppDbContext context)
         {
             _context = context;
         }

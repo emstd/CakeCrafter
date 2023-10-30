@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Dish> dishes { get; set; }
+        public List<Cake> dishes { get; set; }
     }
 }

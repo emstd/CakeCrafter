@@ -8,11 +8,11 @@ namespace CakeCrafter.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TasteController : ControllerBase
+    public class TastesController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public TasteController(AppDbContext context)
+        public TastesController(AppDbContext context)
         {
             _context = context;
         }
