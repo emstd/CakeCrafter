@@ -8,11 +8,11 @@ namespace CakeCrafter.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MeasureUnitController : ControllerBase
+    public class MeasureUnitsController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public MeasureUnitController(AppDbContext context)
+        public MeasureUnitsController(AppDbContext context)
         {
             _context = context;
         }

@@ -2,11 +2,11 @@
 
 namespace CakeCrafter.API.Models
 {
-    public class Dish
+    public class Cake
     {
         public int Id { get; set; }
         public int DishCompositionId { get; set; }
-        public List<DishComposition> DishComposition { get; set; } = new List<DishComposition>();
+        public List<CakesIngredients> DishComposition { get; set; } = new List<CakesIngredients>();
         public string Name { get; set; }
         public string Description { get; set; }
         public int CategoryId { get; set; }

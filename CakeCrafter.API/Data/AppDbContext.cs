@@ -15,7 +15,7 @@ namespace CakeCrafter.API.Data
         public DbSet<Taste> Tastes { get; set; }
         public DbSet<MeasureUnit> MeasureUnits { get; set; }
         public DbSet<IngredientCategory> IngredientCategories { get; set; }
-        public DbSet<Dish> Dishes { get; set; }
-        public DbSet<DishComposition> DishCompositions { get; set;}
+        public DbSet<Cake> Cakes { get; set; }
+        public DbSet<CakesIngredients> CakesIngredients { get; set;}
     }
 }

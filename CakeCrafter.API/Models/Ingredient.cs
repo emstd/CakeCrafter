@@ -16,6 +16,6 @@ namespace CakeCrafter.API.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Price { get; set; }
 
-        public List<DishComposition> DishComposition { get; set; } = new List<DishComposition>();
+        public List<CakesIngredients> DishComposition { get; set; } = new List<CakesIngredients>();
     }
 }

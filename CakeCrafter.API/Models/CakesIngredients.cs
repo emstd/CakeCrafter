@@ -2,10 +2,10 @@
 
 namespace CakeCrafter.API.Models
 {
-    public class DishComposition
+    public class CakesIngredients
     {
         public int DishId { get; set; }
-        public Dish Dish { get; set; }
+        public Cake Dish { get; set; }
         public int IngredientId { get; set; }
         public Ingredient Ingredient { get; set; }
         public int IngredientQuantity { get; set; }
