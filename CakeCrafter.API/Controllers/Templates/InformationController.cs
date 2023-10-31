@@ -14,10 +14,10 @@ namespace CakeCrafter.API.Controllers.Templates
         protected readonly AppDbContext _context;
         private DbSet<TModel> _table;
 
-        public InformationController(AppDbContext context, DbSet<TModel> table)
+        public InformationController(AppDbContext context)
         {
             _context = context;
-            _table = table;
+            _table = context.Set<TModel>();
         }
 
         [HttpGet]
@@ -53,7 +53,7 @@ namespace CakeCrafter.API.Controllers.Templates
             {
                 return NotFound();
             }
-            dbModel.Name = model.Name;
+            _context.Update(model);
             await _context.SaveChangesAsync();
             return Ok(await _table.ToListAsync());
         }
