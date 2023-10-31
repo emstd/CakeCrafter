@@ -10,6 +10,12 @@ namespace CakeCrafter.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.WebHost.UseDefaultServiceProvider(x =>
+            {
+                x.ValidateScopes = true;
+                x.ValidateOnBuild = true;
+            });
+
             // Add services to the container.
 
             builder.Services.AddControllers();

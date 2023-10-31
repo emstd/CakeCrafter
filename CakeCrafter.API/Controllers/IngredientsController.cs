@@ -10,7 +10,7 @@ namespace CakeCrafter.API.Controllers
 {
     public class IngredientsController : InformationController<Ingredient>
     {
-        public IngredientsController(AppDbContext context, DbSet<Ingredient> table) : base(context, table)
+        public IngredientsController(AppDbContext context) : base(context)
         {
         }
     }

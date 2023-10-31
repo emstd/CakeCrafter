@@ -9,7 +9,7 @@ namespace CakeCrafter.API.Controllers
 {
     public class TastesController : InformationController<Taste>
     {
-        public TastesController(AppDbContext context, DbSet<Taste> table) : base(context, table)
+        public TastesController(AppDbContext context) : base(context)
         {
         }
     }

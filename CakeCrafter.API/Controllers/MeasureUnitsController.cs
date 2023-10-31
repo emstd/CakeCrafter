@@ -9,7 +9,7 @@ namespace CakeCrafter.API.Controllers
 {
     public class MeasureUnitsController : InformationController<MeasureUnit>
     {
-        public MeasureUnitsController(AppDbContext context, DbSet<MeasureUnit> table) : base(context, table)
+        public MeasureUnitsController(AppDbContext context) : base(context)
         {
         }
     }
