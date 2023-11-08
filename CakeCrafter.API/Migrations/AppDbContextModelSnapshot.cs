@@ -58,6 +58,8 @@ namespace CakeCrafter.API.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("TasteId");
+
                     b.ToTable("Cakes");
                 });
 
@@ -162,6 +164,23 @@ namespace CakeCrafter.API.Migrations
                     b.ToTable("MeasureUnits");
                 });
 
+            modelBuilder.Entity("CakeCrafter.API.Models.Taste", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tastes");
+                });
+
             modelBuilder.Entity("CakeCrafter.API.Models.Cake", b =>
                 {
                     b.HasOne("CakeCrafter.API.Models.Category", "Category")
@@ -170,7 +189,15 @@ namespace CakeCrafter.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CakeCrafter.API.Models.Taste", "Taste")
+                        .WithMany("dishes")
+                        .HasForeignKey("TasteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Category");
+
+                    b.Navigation("Taste");
                 });
 
             modelBuilder.Entity("CakeCrafter.API.Models.CakesIngredients", b =>
@@ -234,6 +261,11 @@ namespace CakeCrafter.API.Migrations
             modelBuilder.Entity("CakeCrafter.API.Models.MeasureUnit", b =>
                 {
                     b.Navigation("Ingredients");
+                });
+
+            modelBuilder.Entity("CakeCrafter.API.Models.Taste", b =>
+                {
+                    b.Navigation("dishes");
                 });
 #pragma warning restore 612, 618
         }

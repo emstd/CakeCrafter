@@ -1,9 +1,8 @@
-﻿using CakeCrafter.API.Models.Interfaces;
-using Microsoft.Identity.Client;
+﻿using Microsoft.Identity.Client;
 
 namespace CakeCrafter.API.Models
 {
-    public class IngredientCategory : IInfo
+    public class IngredientCategory
     {
         public int Id { get; set; }
         public string Name { get; set; }
