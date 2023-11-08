@@ -11,7 +11,7 @@ namespace CakeCrafter.API.Models
         public int CategoryId { get; set; }
         public Category Category { get; set; }
         public int TasteId { get; set; }
-        //public Taste Taste { get; set; }
+        public Taste Taste { get; set; }
         public string TechnologyCard { get; set; }
         public decimal Cost
         {

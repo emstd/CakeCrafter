@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CakeCrafter.API.Migrations
 {
     /// <inheritdoc />
-    public partial class TestingModelValidate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,28 +51,16 @@ namespace CakeCrafter.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cakes",
+                name: "Tastes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    TasteId = table.Column<int>(type: "int", nullable: false),
-                    TechnologyCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CookTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Level = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cakes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cakes_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Tastes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,6 +87,37 @@ namespace CakeCrafter.API.Migrations
                         name: "FK_Ingredients_MeasureUnits_MeasureUnitId",
                         column: x => x.MeasureUnitId,
                         principalTable: "MeasureUnits",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cakes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    TasteId = table.Column<int>(type: "int", nullable: false),
+                    TechnologyCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CookTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Level = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cakes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cakes_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cakes_Tastes_TasteId",
+                        column: x => x.TasteId,
+                        principalTable: "Tastes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -134,6 +153,11 @@ namespace CakeCrafter.API.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cakes_TasteId",
+                table: "Cakes",
+                column: "TasteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CakesIngredients_IngredientId",
                 table: "CakesIngredients",
                 column: "IngredientId");
@@ -163,6 +187,9 @@ namespace CakeCrafter.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Tastes");
 
             migrationBuilder.DropTable(
                 name: "IngredientCategories");
