@@ -1,11 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CakeCrafter.API.Models
 {
     public class Ingredient
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        [Required]
+        public string? Name { get; set; }
 
         public int MeasureUnitId { get; set; }
         public MeasureUnit MeasureUnit { get; set; }
