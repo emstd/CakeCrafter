@@ -12,6 +12,6 @@ namespace CakeCrafter.API.Models
         [Required]
         public string? Name { get; set; }
 
-        public List<Cake> dishes { get; set; }
+        public List<Cake> Cakes { get; set; }
     }
 }

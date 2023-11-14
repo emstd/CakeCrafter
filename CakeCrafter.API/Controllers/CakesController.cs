@@ -62,7 +62,7 @@ namespace CakeCrafter.API.Controllers
             var dbCake = await _context.Cakes.FindAsync(id);
             if (dbCake == null)
             {
-                return NotFound();
+                return Ok();
             }
             _context.Cakes.Remove(dbCake);
             await _context.SaveChangesAsync();

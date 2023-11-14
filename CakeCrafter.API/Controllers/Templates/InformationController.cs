@@ -63,7 +63,7 @@ namespace CakeCrafter.API.Controllers.Templates
             var dbModel = await _table.FindAsync(id);
             if (dbModel == null)
             {
-                return NotFound();
+                return Ok();
             }
             _table.Remove(dbModel);
             await _context.SaveChangesAsync();

@@ -12,6 +12,6 @@ namespace CakeCrafter.API.Models
         [Required]
         public string? Name { get; set; }
 
-        public List<Cake> Dishes { get; set; }  = new List<Cake>();
+        public List<Cake> Cakes { get; set; }  = new List<Cake>();
     }
 }
