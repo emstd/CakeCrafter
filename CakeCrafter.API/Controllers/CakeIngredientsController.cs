@@ -1,7 +1,6 @@
 ﻿using CakeCrafter.API.Controllers.Templates;
-using CakeCrafter.API.Data;
-using CakeCrafter.API.Models;
-using Microsoft.AspNetCore.Http;
+using CakeCrafter.Core.Models;
+using CakeCrafter.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CakeCrafter.API.Controllers
@@ -10,6 +9,6 @@ namespace CakeCrafter.API.Controllers
     [ApiController]
     public class CakeIngredientsController : InformationController<CakesIngredients>
     {
-        public CakeIngredientsController(AppDbContext context) : base(context) { }
+        public CakeIngredientsController(CakeCrafterDbContext context) : base(context) { }
     }
 }

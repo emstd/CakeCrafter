@@ -1,6 +1,4 @@
-﻿using CakeCrafter.API.Data;
-using CakeCrafter.API.Models;
-using Microsoft.AspNetCore.Http;
+﻿using CakeCrafter.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +8,10 @@ namespace CakeCrafter.API.Controllers.Templates
     [ApiController]
     public abstract class InformationController<TModel> : ControllerBase where TModel : class
     {
-        protected readonly AppDbContext _context;
+        protected readonly CakeCrafterDbContext _context;
         private DbSet<TModel> _table;
 
-        public InformationController(AppDbContext context)
+        public InformationController(CakeCrafterDbContext context)
         {
             _context = context;
             _table = context.Set<TModel>();
@@ -37,7 +35,7 @@ namespace CakeCrafter.API.Controllers.Templates
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Category>>> AddModelAsync(TModel model)
+        public async Task<ActionResult<List<TModel>>> AddModelAsync(TModel model)
         {
             _table.Add(model);
             await _context.SaveChangesAsync();
@@ -45,7 +43,7 @@ namespace CakeCrafter.API.Controllers.Templates
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<Category>>> UpdateModelAsync(TModel model, [FromRoute] int id)
+        public async Task<ActionResult<List<TModel>>> UpdateModelAsync(TModel model, [FromRoute] int id)
         {
             var dbModel = await _table.FindAsync(id);
             if (dbModel == null)
@@ -58,7 +56,7 @@ namespace CakeCrafter.API.Controllers.Templates
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Category>>> DeleteModelAsync([FromRoute] int id)
+        public async Task<ActionResult<List<TModel>>> DeleteModelAsync([FromRoute] int id)
         {
             var dbModel = await _table.FindAsync(id);
             if (dbModel == null)

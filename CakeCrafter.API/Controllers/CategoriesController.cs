@@ -1,14 +1,11 @@
 ﻿using CakeCrafter.API.Controllers.Templates;
-using CakeCrafter.API.Data;
-using CakeCrafter.API.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using CakeCrafter.Core.Models;
+using CakeCrafter.DataAccess;
 
 namespace CakeCrafter.API.Controllers
 {
     public class CategoriesController : InformationController<Category>
     {
-        public CategoriesController(AppDbContext context) : base(context) { }
+        public CategoriesController(CakeCrafterDbContext context) : base(context) { }
     }
 }

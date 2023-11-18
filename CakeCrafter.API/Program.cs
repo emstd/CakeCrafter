@@ -1,5 +1,4 @@
-
-using CakeCrafter.API.Data;
+using CakeCrafter.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace CakeCrafter.API
@@ -19,7 +18,7 @@ namespace CakeCrafter.API
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            builder.Services.AddDbContext<CakeCrafterDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
