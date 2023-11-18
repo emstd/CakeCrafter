@@ -1,11 +1,11 @@
-﻿using CakeCrafter.API.Models;
+﻿using CakeCrafter.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CakeCrafter.API.Data
+namespace CakeCrafter.DataAccess
 {
-    public class AppDbContext : DbContext
+    public class CakeCrafterDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public CakeCrafterDbContext(DbContextOptions<CakeCrafterDbContext> options) : base(options)
         {
 
         }
@@ -16,7 +16,7 @@ namespace CakeCrafter.API.Data
         public DbSet<MeasureUnit> MeasureUnits { get; set; }
         public DbSet<IngredientCategory> IngredientCategories { get; set; }
         public DbSet<Cake> Cakes { get; set; }
-        public DbSet<CakesIngredients> CakesIngredients { get; set;}
+        public DbSet<CakesIngredients> CakesIngredients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

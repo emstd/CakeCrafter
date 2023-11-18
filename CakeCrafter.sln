@@ -5,6 +5,12 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeCrafter.API", "CakeCrafter.API\CakeCrafter.API.csproj", "{37FA345F-2A80-4BFB-931F-36ED0D533619}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeCrafter.BusinessLogic", "CakeCrafter.Domain\CakeCrafter.BusinessLogic.csproj", "{1A1EE670-FF10-435C-8B56-4E70C5F3971D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeCrafter.DataAccess", "CakeCrafter.DataAccess\CakeCrafter.DataAccess.csproj", "{6056A673-0ECF-40D2-80CE-DE9F009FD0F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeCrafter.Core", "CakeCrafter.Core\CakeCrafter.Core.csproj", "{2DFF9B7A-68D3-46BA-88BC-E5761211A387}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{37FA345F-2A80-4BFB-931F-36ED0D533619}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37FA345F-2A80-4BFB-931F-36ED0D533619}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37FA345F-2A80-4BFB-931F-36ED0D533619}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1EE670-FF10-435C-8B56-4E70C5F3971D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1EE670-FF10-435C-8B56-4E70C5F3971D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1EE670-FF10-435C-8B56-4E70C5F3971D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1EE670-FF10-435C-8B56-4E70C5F3971D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6056A673-0ECF-40D2-80CE-DE9F009FD0F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6056A673-0ECF-40D2-80CE-DE9F009FD0F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6056A673-0ECF-40D2-80CE-DE9F009FD0F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6056A673-0ECF-40D2-80CE-DE9F009FD0F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DFF9B7A-68D3-46BA-88BC-E5761211A387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DFF9B7A-68D3-46BA-88BC-E5761211A387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DFF9B7A-68D3-46BA-88BC-E5761211A387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DFF9B7A-68D3-46BA-88BC-E5761211A387}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

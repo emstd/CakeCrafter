@@ -1,9 +1,6 @@
-﻿using CakeCrafter.API.Contracts;
-using CakeCrafter.API.Data;
-using CakeCrafter.API.Models;
-using Microsoft.AspNetCore.Http;
+﻿using CakeCrafter.Core.Interfaces;
+using CakeCrafter.Core.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CakeCrafter.API.Controllers
 {
@@ -11,69 +8,49 @@ namespace CakeCrafter.API.Controllers
     [ApiController]
     public class CakesController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public CakesController(AppDbContext context)
+        private readonly ICakeService _service;
+
+        public CakesController(ICakeService service)
         {
-            _context = context;
+            _service = service;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Cake>>> GetCakes()
         {
-            return Ok(await _context.Cakes.ToListAsync());
+            return Ok(await _service.Get());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Cake>> GetCakeById(int id)
         {
-            var dbCake = await _context.Cakes.FindAsync(id);
-            if (dbCake == null)
+            var result = await _service.GetById(id);
+            if (result == null)
             {
                 return NotFound();
             }
-
-            return Ok(dbCake);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Cake>>> CreateCake(CreateCakeRequest request)
+        public async Task<ActionResult<List<Cake>>> CreateCake(Cake cake)
         {
-            var cake = new Cake
-            {
-                Name = request.Name,
-                Description = request.Description
-            };
-
-            _context.Cakes.Add(cake);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Cakes.ToListAsync());
+            var result = await _service.Create(cake);
+            return Ok(result);
         }
 
         [HttpPut]
         public async Task<ActionResult<List<Cake>>> UpdateCake(Cake cake)
         {
-            var dbCake = await _context.Cakes.FindAsync(cake.Id);
-            if (dbCake == null)
-            {
-                return NotFound();
-            }
-
-            _context.Cakes.Update(dbCake);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Cakes.ToListAsync());
+            var result = await _service.Update(cake);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Cake>>> DeleteCake(int id)
         {
-            var dbCake = await _context.Cakes.FindAsync(id);
-            if (dbCake == null)
-            {
-                return Ok();
-            }
-            _context.Cakes.Remove(dbCake);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Cakes.ToListAsync());
+            var result = _service.Delete(id);
+            return Ok(result);
         }
     }
 }
