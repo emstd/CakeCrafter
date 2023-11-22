@@ -1,3 +1,4 @@
+using CakeCrafter.API.Extensions;
 using CakeCrafter.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,10 @@ namespace CakeCrafter.API
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddRepositories();
+            builder.Services.AddServices();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

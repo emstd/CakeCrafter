@@ -1,6 +1,5 @@
-﻿using CakeCrafter.DataAccess;
+﻿using CakeCrafter.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CakeCrafter.API.Controllers.Templates
 {
@@ -8,25 +7,23 @@ namespace CakeCrafter.API.Controllers.Templates
     [ApiController]
     public abstract class InformationController<TModel> : ControllerBase where TModel : class
     {
-        protected readonly CakeCrafterDbContext _context;
-        private DbSet<TModel> _table;
+        private readonly IGenericService<TModel> _service;
 
-        public InformationController(CakeCrafterDbContext context)
+        public InformationController(IGenericService<TModel> service)
         {
-            _context = context;
-            _table = context.Set<TModel>();
+            _service = service;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<TModel>>> GetModelsAsync()
         {
-            return Ok(await _table.ToListAsync());
+            return Ok(await _service.Get());
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TModel>> GetModelByIdAsync(int id)
         {
-            var dbModel = await _table.FindAsync(id);
+            var dbModel = await _service.GetById(id);
             if (dbModel == null)
             {
                 return NotFound();
@@ -35,37 +32,27 @@ namespace CakeCrafter.API.Controllers.Templates
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<TModel>>> AddModelAsync(TModel model)
+        public async Task<ActionResult<TModel>> AddModelAsync(TModel model)
         {
-            _table.Add(model);
-            await _context.SaveChangesAsync();
-            return Ok(await _table.ToListAsync());
+            var result = await _service.Create(model);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<List<TModel>>> UpdateModelAsync(TModel model, [FromRoute] int id)
         {
-            var dbModel = await _table.FindAsync(id);
+            var dbModel = await _service.GetById(id);
             if (dbModel == null)
             {
                 return NotFound();
             }
-            _context.Update(model);
-            await _context.SaveChangesAsync();
-            return Ok(await _table.ToListAsync());
+            return Ok(dbModel);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<TModel>>> DeleteModelAsync([FromRoute] int id)
         {
-            var dbModel = await _table.FindAsync(id);
-            if (dbModel == null)
-            {
-                return Ok();
-            }
-            _table.Remove(dbModel);
-            await _context.SaveChangesAsync();
-            return Ok(await _table.ToListAsync());
+            return Ok(await _service.Delete(id));
         }
     }
 }

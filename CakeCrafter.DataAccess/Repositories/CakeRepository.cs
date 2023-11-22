@@ -1,4 +1,4 @@
-﻿using CakeCrafter.Core.Interfaces;
+﻿using CakeCrafter.Core.Interfaces.Repositories;
 using CakeCrafter.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,7 +54,7 @@ namespace CakeCrafter.DataAccess.Repositories
             var dbCake = await _context.Cakes.FindAsync(id);
             if (dbCake == null)
             {
-                return true;
+                return false;
             }
             _context.Cakes.Remove(dbCake);
             await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
-﻿using CakeCrafter.Core.Interfaces;
+﻿using CakeCrafter.Core.Interfaces.Repositories;
+using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 
 namespace CakeCrafter.Domain
@@ -24,25 +25,17 @@ namespace CakeCrafter.Domain
 
         public async Task<Cake> Create(Cake cake)
         {
-            await _repository.Create(cake);
-            return cake;
+            return await _repository.Create(cake);
         }
 
         public async Task<Cake?> Update(Cake cake)
         {
-            var _cake = await _repository.Update(cake);
-            if (_cake == null)
-            {
-                return null;
-            }
-
-            return _cake;
+            return await _repository.Update(cake);
         }
 
         public async Task<bool> Delete(int id)
         {
-            var result = await _repository.Delete(id);
-            return result;
+            return await _repository.Delete(id);
         }
     }
 }

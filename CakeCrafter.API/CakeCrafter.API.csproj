@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CakeCrafter.BusinessLogic\CakeCrafter.BusinessLogic.csproj" />
     <ProjectReference Include="..\CakeCrafter.DataAccess\CakeCrafter.DataAccess.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿using CakeCrafter.Core.Interfaces;
+﻿using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +33,7 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Cake>>> CreateCake(Cake cake)
+        public async Task<ActionResult<Cake>> CreateCake(Cake cake)
         {
             var result = await _service.Create(cake);
             return Ok(result);
@@ -49,7 +49,7 @@ namespace CakeCrafter.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Cake>>> DeleteCake(int id)
         {
-            var result = _service.Delete(id);
+            var result = await _service.Delete(id);
             return Ok(result);
         }
     }
