@@ -20,6 +20,8 @@ namespace CakeCrafter.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(CakeCrafterDbContext).Assembly);
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<CakesIngredients>()
                 .HasKey(ci => new { ci.CakeId, ci.IngredientId });
         }
