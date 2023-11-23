@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CakeCrafter.BusinessLogic\CakeCrafter.BusinessLogic.csproj" />
+    <ProjectReference Include="..\CakeCrafter.Core\CakeCrafter.Core.csproj" />
     <ProjectReference Include="..\CakeCrafter.DataAccess\CakeCrafter.DataAccess.csproj" />
   </ItemGroup>
 

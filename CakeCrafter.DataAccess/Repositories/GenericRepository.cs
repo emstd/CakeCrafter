@@ -8,7 +8,7 @@ namespace CakeCrafter.DataAccess.Repositories
         private CakeCrafterDbContext _context;
         private DbSet<TModel> _table;
 
-        GenericRepository(CakeCrafterDbContext context)
+        public GenericRepository(CakeCrafterDbContext context)
         {
             _context = context;
             _table = _context.Set<TModel>();

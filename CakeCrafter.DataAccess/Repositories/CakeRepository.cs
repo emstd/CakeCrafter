@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CakeCrafter.DataAccess.Repositories
 {
-    internal class CakeRepository : ICakeRepository
+    public class CakeRepository : ICakeRepository
     {
         private readonly CakeCrafterDbContext _context;
         public CakeRepository(CakeCrafterDbContext context)

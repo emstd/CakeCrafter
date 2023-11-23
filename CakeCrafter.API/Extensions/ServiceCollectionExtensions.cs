@@ -3,13 +3,14 @@ using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 using CakeCrafter.DataAccess.Repositories;
 using CakeCrafter.BusinessLogic;
+using CakeCrafter.Domain;
 namespace CakeCrafter.API.Extensions
 {
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<ICakeRepository, ICakeRepository>();
+            services.AddScoped<ICakeRepository, CakeRepository>();
             services.AddScoped<IGenericRepository<CakesIngredients>, GenericRepository<CakesIngredients>>();
             services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
             services.AddScoped<IGenericRepository<Ingredient>, GenericRepository<Ingredient>>();
@@ -22,7 +23,7 @@ namespace CakeCrafter.API.Extensions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped<ICakeService, ICakeService>();
+            services.AddScoped<ICakeService, CakeService>();
             services.AddScoped<IGenericService<CakesIngredients>, GenericService<CakesIngredients>>();
             services.AddScoped<IGenericService<Category>, GenericService<Category>>();
             services.AddScoped<IGenericService<Ingredient>, GenericService<Ingredient>>();
