@@ -13,9 +13,9 @@ namespace CakeCrafter.Domain
             _repository = repository;
         }
 
-        public async Task<List<Cake>> Get()
+        public async Task<List<Cake>> Get(string category, int pageNumber)
         {
-            return await _repository.Get();
+            return await _repository.Get(category, pageNumber);
         }
 
         public Task<Cake?> GetById(int id)

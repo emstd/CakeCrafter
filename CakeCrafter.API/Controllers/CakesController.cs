@@ -1,4 +1,5 @@
-﻿using CakeCrafter.Core.Interfaces.Services;
+﻿using CakeCrafter.API.Contracts;
+using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,9 +17,21 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Cake>>> GetCakes()
+        public async Task<ActionResult<List<Cake>>> GetCakes([FromRoute] string category, [FromQuery] int pageNumber = 1)
         {
-            return Ok(await _service.Get());
+            var cakes = await _service.Get(category, pageNumber);
+            var result = cakes.Select(cake => new GetCakeResponse()
+            {
+                Id = cake.Id,
+                Name = cake.Name,
+                Description = cake.Description,
+                Taste = cake.Taste,
+                Category = cake.Category,
+                CookTime = cake.CookTime,
+                Level = cake.Level,
+                Weight = cake.Weight,
+            });
+            return Ok(await _service.Get(category, pageNumber));
         }
 
         [HttpGet("{id}")]

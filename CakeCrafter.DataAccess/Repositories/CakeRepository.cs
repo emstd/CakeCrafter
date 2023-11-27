@@ -1,11 +1,13 @@
 ﻿using CakeCrafter.Core.Interfaces.Repositories;
 using CakeCrafter.Core.Models;
+using CakeCrafter.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
 namespace CakeCrafter.DataAccess.Repositories
 {
     public class CakeRepository : ICakeRepository
     {
+        private const int AmountOfElements = 5;
         private readonly CakeCrafterDbContext _context;
         public CakeRepository(CakeCrafterDbContext context)
         {
@@ -13,9 +15,25 @@ namespace CakeCrafter.DataAccess.Repositories
         }
 
 
-        public async Task<List<Cake>> Get()
+        public async Task<List<Cake>> Get(string category, int PageNumber)
         {
-            return await _context.Cakes.ToListAsync();
+                var cakes = await _context.Cakes
+                                          .Where(cake => cake.Category.Name == category)
+                                          .Skip((PageNumber - 1) * AmountOfElements)
+                                          .Take(AmountOfElements)
+                                          .Select(cake => new Cake
+                                          {
+                                              Id = cake.Id,
+                                              Name = cake.Name,
+                                              Description = cake.Description,
+                                              CookTime = cake.CookTime,
+                                              Level = cake.Level,
+                                              Weight = cake.Weight,
+                                              Category = cake.Category,
+                                              Taste = cake.Taste,
+                                          })
+                                          .ToListAsync();
+                return cakes;
         }
 
         public async Task<Cake?> GetById(int id)

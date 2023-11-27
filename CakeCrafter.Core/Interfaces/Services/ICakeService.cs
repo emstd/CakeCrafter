@@ -4,7 +4,7 @@ namespace CakeCrafter.Core.Interfaces.Services
 {
     public interface ICakeService
     {
-        Task<List<Cake>> Get();
+        Task<List<Cake>> Get(string category, int pageNumber);
 
         Task<Cake?> GetById(int id);
 

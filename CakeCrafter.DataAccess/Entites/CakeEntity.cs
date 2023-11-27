@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CakeCrafter.Core.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace CakeCrafter.Core.Models
+namespace CakeCrafter.DataAccess.Entites
 {
-    public class Cake
+    public class CakeEntity
     {
         public int Id { get; set; }
         public List<CakesIngredients> CakeIngredients { get; set; } = new List<CakesIngredients>();

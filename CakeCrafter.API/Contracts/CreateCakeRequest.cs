@@ -7,10 +7,20 @@ namespace CakeCrafter.API.Contracts
     {
         [Column(TypeName = "nvarchar(100)")]
         [StringLength(100)]
-        public string? Name { get; set; }
+        public required string Name { get; set; }
 
         [Column(TypeName = "nvarchar(200)")]
         [StringLength(200)]
         public string? Description { get; set; }
+
+        public int TasteId { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public TimeSpan CookTime { get; set; }
+
+        public int Level { get; set; }
+
+        public double Weight { get; set; }
     }
 }

@@ -4,7 +4,7 @@ namespace CakeCrafter.Core.Interfaces.Repositories
 {
     public interface ICakeRepository
     {
-        Task<List<Cake>> Get();
+        Task<List<Cake>> Get(string category, int pageNumber);
 
         Task<Cake?> GetById(int id);
 
