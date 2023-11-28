@@ -92,6 +92,37 @@ namespace CakeCrafter.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cake",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(200)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    TasteId = table.Column<int>(type: "int", nullable: false),
+                    CookTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    Weight = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cake", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cake_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cake_Tastes_TasteId",
+                        column: x => x.TasteId,
+                        principalTable: "Tastes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cakes",
                 columns: table => new
                 {
@@ -101,9 +132,9 @@ namespace CakeCrafter.DataAccess.Migrations
                     Description = table.Column<string>(type: "nvarchar(200)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     TasteId = table.Column<int>(type: "int", nullable: false),
-                    TechnologyCard = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CookTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Level = table.Column<int>(type: "int", nullable: false)
+                    Level = table.Column<int>(type: "int", nullable: false),
+                    Weight = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,17 +159,23 @@ namespace CakeCrafter.DataAccess.Migrations
                 {
                     CakeId = table.Column<int>(type: "int", nullable: false),
                     IngredientId = table.Column<int>(type: "int", nullable: false),
-                    IngredientQuantity = table.Column<int>(type: "int", nullable: false)
+                    IngredientQuantity = table.Column<int>(type: "int", nullable: false),
+                    CakeEntityId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CakesIngredients", x => new { x.CakeId, x.IngredientId });
                     table.ForeignKey(
-                        name: "FK_CakesIngredients_Cakes_CakeId",
+                        name: "FK_CakesIngredients_Cake_CakeId",
                         column: x => x.CakeId,
-                        principalTable: "Cakes",
+                        principalTable: "Cake",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CakesIngredients_Cakes_CakeEntityId",
+                        column: x => x.CakeEntityId,
+                        principalTable: "Cakes",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CakesIngredients_Ingredients_IngredientId",
                         column: x => x.IngredientId,
@@ -146,6 +183,16 @@ namespace CakeCrafter.DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cake_CategoryId",
+                table: "Cake",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cake_TasteId",
+                table: "Cake",
+                column: "TasteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cakes_CategoryId",
@@ -156,6 +203,11 @@ namespace CakeCrafter.DataAccess.Migrations
                 name: "IX_Cakes_TasteId",
                 table: "Cakes",
                 column: "TasteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CakesIngredients_CakeEntityId",
+                table: "CakesIngredients",
+                column: "CakeEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CakesIngredients_IngredientId",
@@ -178,6 +230,9 @@ namespace CakeCrafter.DataAccess.Migrations
         {
             migrationBuilder.DropTable(
                 name: "CakesIngredients");
+
+            migrationBuilder.DropTable(
+                name: "Cake");
 
             migrationBuilder.DropTable(
                 name: "Cakes");

@@ -11,7 +11,7 @@ namespace CakeCrafter.DataAccess.Entites
 
         [Column(TypeName = "nvarchar(100)")]
         [Required]
-        public string? Name { get; set; }
+        public required string Name { get; set; }
 
         [Column(TypeName = "nvarchar(200)")]
         [Required]

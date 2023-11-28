@@ -15,18 +15,13 @@ namespace CakeCrafter.Core.Models
         public List<CakesIngredients> CakeIngredients { get; set; } = new List<CakesIngredients>();
 
         [Column(TypeName = "nvarchar(100)")]
-        [Required]
-        public string? Name { get; set; }
+        public required string Name { get; set; }
 
         [Column(TypeName = "nvarchar(200)")]
-        [Required]
         public string? Description { get; set; }
 
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
-
         public int TasteId { get; set; }
-        public Taste Taste { get; set; }
 
         public decimal Cost
         {

@@ -25,8 +25,8 @@ namespace CakeCrafter.API.Controllers
                 Id = cake.Id,
                 Name = cake.Name,
                 Description = cake.Description,
-                Taste = cake.Taste,
-                Category = cake.Category,
+                TasteId = cake.TasteId,
+                CategoryId = cake.CategoryId,
                 CookTime = cake.CookTime,
                 Level = cake.Level,
                 Weight = cake.Weight,
@@ -42,20 +42,51 @@ namespace CakeCrafter.API.Controllers
             {
                 return NotFound();
             }
-            return Ok(result);
+            var cake = new GetCakeResponse
+            {
+                Id = result.Id,
+                Name = result.Name,
+                Description = result.Description,
+                TasteId = result.TasteId,
+                CategoryId = result.CategoryId,
+                CookTime = result.CookTime,
+                Level = result.Level,
+                Weight = result.Weight,
+            };
+            return Ok(cake);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Cake>> CreateCake(Cake cake)
+        public async Task<ActionResult<int>> CreateCake(CreateCakeRequest cakeRequest)
         {
-            var result = await _service.Create(cake);
-            return Ok(result);
+            var cake = new Cake{
+                Name = cakeRequest.Name,
+                Description = cakeRequest.Description,
+                TasteId = cakeRequest.TasteId,
+                CategoryId = cakeRequest.CategoryId,
+                CookTime = cakeRequest.CookTime,
+                Level = cakeRequest.Level,
+                Weight = cakeRequest.Weight
+            };
+            return Ok(await _service.Create(cake));
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<Cake>>> UpdateCake(Cake cake)
+        public async Task<ActionResult<List<Cake>>> UpdateCake(CreateCakeRequest cakeRequest)
         {
+            var cake = new Cake
+            {
+                Name = cakeRequest.Name,
+                Description = cakeRequest.Description,
+                TasteId = cakeRequest.TasteId,
+                CategoryId = cakeRequest.CategoryId,
+                CookTime = cakeRequest.CookTime,
+                Level = cakeRequest.Level,
+                Weight = cakeRequest.Weight
+            };
+
             var result = await _service.Update(cake);
+
             return Ok(result);
         }
 

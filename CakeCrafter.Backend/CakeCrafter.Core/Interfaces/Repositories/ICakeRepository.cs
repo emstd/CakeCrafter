@@ -8,7 +8,7 @@ namespace CakeCrafter.Core.Interfaces.Repositories
 
         Task<Cake?> GetById(int id);
 
-        Task<Cake> Create(Cake cake);
+        Task<int> Create(Cake cake);
 
         Task<Cake?> Update(Cake cake);
 

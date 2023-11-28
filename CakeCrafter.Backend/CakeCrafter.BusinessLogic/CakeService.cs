@@ -23,7 +23,7 @@ namespace CakeCrafter.Domain
             return _repository.GetById(id);
         }
 
-        public async Task<Cake> Create(Cake cake)
+        public async Task<int> Create(Cake cake)
         {
             return await _repository.Create(cake);
         }

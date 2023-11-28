@@ -10,9 +10,9 @@ namespace CakeCrafter.API.Contracts
         public required string Name { get; set; }
         public string? Description { get; set; }
 
-        public Taste Taste { get; set; }
+        public int TasteId { get; set; }
 
-        public Category Category { get; set; }
+        public int CategoryId { get; set; }
 
         public TimeSpan CookTime { get; set; }
 

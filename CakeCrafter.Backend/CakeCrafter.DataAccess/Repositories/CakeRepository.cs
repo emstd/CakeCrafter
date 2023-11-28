@@ -17,23 +17,23 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<List<Cake>> Get(string category, int PageNumber)
         {
-                var cakes = await _context.Cakes
-                                          .Where(cake => cake.Category.Name == category)
-                                          .Skip((PageNumber - 1) * AmountOfElements)
-                                          .Take(AmountOfElements)
-                                          .Select(cake => new Cake
-                                          {
-                                              Id = cake.Id,
-                                              Name = cake.Name,
-                                              Description = cake.Description,
-                                              CookTime = cake.CookTime,
-                                              Level = cake.Level,
-                                              Weight = cake.Weight,
-                                              Category = cake.Category,
-                                              Taste = cake.Taste,
-                                          })
-                                          .ToListAsync();
-                return cakes;
+            var cakes = await _context.Cakes
+                                      .Where(cake => cake.Category.Name == category)
+                                      .Skip((PageNumber - 1) * AmountOfElements)
+                                      .Take(AmountOfElements)
+                                      .Select(cake => new Cake
+                                      {
+                                          Id = cake.Id,
+                                          Name = cake.Name,
+                                          Description = cake.Description,
+                                          CookTime = cake.CookTime,
+                                          Level = cake.Level,
+                                          Weight = cake.Weight,
+                                          CategoryId = cake.CategoryId,
+                                          TasteId = cake.TasteId,
+                                      })
+                                      .ToListAsync();
+            return cakes;
         }
 
         public async Task<Cake?> GetById(int id)
@@ -44,14 +44,37 @@ namespace CakeCrafter.DataAccess.Repositories
                 return null;
             }
 
-            return dbCake;
+            var result = new Cake
+            {
+                Id = dbCake.Id,
+                Name = dbCake.Name,
+                Description = dbCake.Description,
+                CategoryId = dbCake.CategoryId,
+                TasteId = dbCake.TasteId,
+                CookTime = dbCake.CookTime,
+                Level = dbCake.Level,
+                Weight = dbCake.Weight,
+            };
+
+            return result;
         }
 
-        public async Task<Cake> Create(Cake cake)
+        public async Task<int> Create(Cake cake)
         {
-            _context.Cakes.Add(cake);
+            var dbCake = new CakeEntity
+            {
+                Name = cake.Name,
+                Description = cake.Description,
+                CategoryId = cake.CategoryId,
+                TasteId = cake.TasteId,
+                CookTime = cake.CookTime,
+                Level = cake.Level,
+                Weight = cake.Weight,
+            };
+            _context.Cakes.Add(dbCake);
             await _context.SaveChangesAsync();
-            return cake;
+
+            return dbCake.Id;
         }
 
         public async Task<Cake?> Update(Cake cake)
@@ -61,6 +84,17 @@ namespace CakeCrafter.DataAccess.Repositories
             {
                 return null;
             }
+
+            dbCake = new CakeEntity
+            {
+                Name = cake.Name,
+                Description = cake.Description,
+                CategoryId = cake.CategoryId,
+                TasteId = cake.TasteId,
+                CookTime = cake.CookTime,
+                Level = cake.Level,
+                Weight = cake.Weight,
+            };
 
             _context.Cakes.Update(dbCake);
             await _context.SaveChangesAsync();

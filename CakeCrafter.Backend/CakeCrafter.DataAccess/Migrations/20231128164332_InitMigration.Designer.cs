@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CakeCrafter.DataAccess.Migrations
 {
     [DbContext(typeof(CakeCrafterDbContext))]
-    [Migration("20231123161507_InitMigration")]
+    [Migration("20231128164332_InitMigration")]
     partial class InitMigration
     {
         /// <inheritdoc />
@@ -40,7 +40,6 @@ namespace CakeCrafter.DataAccess.Migrations
                         .HasColumnType("time");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("Level")
@@ -53,9 +52,8 @@ namespace CakeCrafter.DataAccess.Migrations
                     b.Property<int>("TasteId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TechnologyCard")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -63,7 +61,7 @@ namespace CakeCrafter.DataAccess.Migrations
 
                     b.HasIndex("TasteId");
 
-                    b.ToTable("Cakes");
+                    b.ToTable("Cake");
                 });
 
             modelBuilder.Entity("CakeCrafter.Core.Models.CakesIngredients", b =>
@@ -76,10 +74,15 @@ namespace CakeCrafter.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasColumnOrder(2);
 
+                    b.Property<int?>("CakeEntityId")
+                        .HasColumnType("int");
+
                     b.Property<int>("IngredientQuantity")
                         .HasColumnType("int");
 
                     b.HasKey("CakeId", "IngredientId");
+
+                    b.HasIndex("CakeEntityId");
 
                     b.HasIndex("IngredientId");
 
@@ -184,27 +187,67 @@ namespace CakeCrafter.DataAccess.Migrations
                     b.ToTable("Tastes");
                 });
 
+            modelBuilder.Entity("CakeCrafter.DataAccess.Entites.CakeEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("CookTime")
+                        .HasColumnType("time");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("TasteId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("TasteId");
+
+                    b.ToTable("Cakes");
+                });
+
             modelBuilder.Entity("CakeCrafter.Core.Models.Cake", b =>
                 {
-                    b.HasOne("CakeCrafter.Core.Models.Category", "Category")
+                    b.HasOne("CakeCrafter.Core.Models.Category", null)
                         .WithMany("Cakes")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CakeCrafter.Core.Models.Taste", "Taste")
+                    b.HasOne("CakeCrafter.Core.Models.Taste", null)
                         .WithMany("Cakes")
                         .HasForeignKey("TasteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Taste");
                 });
 
             modelBuilder.Entity("CakeCrafter.Core.Models.CakesIngredients", b =>
                 {
+                    b.HasOne("CakeCrafter.DataAccess.Entites.CakeEntity", null)
+                        .WithMany("CakeIngredients")
+                        .HasForeignKey("CakeEntityId");
+
                     b.HasOne("CakeCrafter.Core.Models.Cake", "Cake")
                         .WithMany("CakeIngredients")
                         .HasForeignKey("CakeId")
@@ -241,6 +284,25 @@ namespace CakeCrafter.DataAccess.Migrations
                     b.Navigation("MeasureUnit");
                 });
 
+            modelBuilder.Entity("CakeCrafter.DataAccess.Entites.CakeEntity", b =>
+                {
+                    b.HasOne("CakeCrafter.Core.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CakeCrafter.Core.Models.Taste", "Taste")
+                        .WithMany()
+                        .HasForeignKey("TasteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Taste");
+                });
+
             modelBuilder.Entity("CakeCrafter.Core.Models.Cake", b =>
                 {
                     b.Navigation("CakeIngredients");
@@ -269,6 +331,11 @@ namespace CakeCrafter.DataAccess.Migrations
             modelBuilder.Entity("CakeCrafter.Core.Models.Taste", b =>
                 {
                     b.Navigation("Cakes");
+                });
+
+            modelBuilder.Entity("CakeCrafter.DataAccess.Entites.CakeEntity", b =>
+                {
+                    b.Navigation("CakeIngredients");
                 });
 #pragma warning restore 612, 618
         }
