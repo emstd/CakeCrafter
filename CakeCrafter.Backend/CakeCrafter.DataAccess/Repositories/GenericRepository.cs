@@ -5,8 +5,8 @@ namespace CakeCrafter.DataAccess.Repositories
 {
     public class GenericRepository<TModel> : IGenericRepository<TModel> where TModel : class
     {
-        private CakeCrafterDbContext _context;
-        private DbSet<TModel> _table;
+        private readonly CakeCrafterDbContext _context;
+        private readonly DbSet<TModel> _table;
 
         public GenericRepository(CakeCrafterDbContext context)
         {
