@@ -15,12 +15,12 @@ namespace CakeCrafter.DataAccess.Repositories
         }
 
 
-        public async Task<List<Cake>> Get(string category, int PageNumber)
+        public async Task<List<Cake>> Get(int categoryId, int skip, int take)
         {
             var cakes = await _context.Cakes
-                                      .Where(cake => cake.Category.Name == category)
-                                      .Skip((PageNumber - 1) * AmountOfElements)
-                                      .Take(AmountOfElements)
+                                      .Where(cake => cake.Category.Id == categoryId)
+                                      .Skip(skip)
+                                      .Take(take)
                                       .Select(cake => new Cake
                                       {
                                           Id = cake.Id,

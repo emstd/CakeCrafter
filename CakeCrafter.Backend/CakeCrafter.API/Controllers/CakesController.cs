@@ -17,9 +17,9 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Cake>>> GetCakes([FromRoute] string category, [FromQuery] int pageNumber = 1)
+        public async Task<ActionResult<List<Cake>>> GetCakes([FromQuery] int categoryId, [FromQuery] int skip, [FromQuery] int take)
         {
-            var cakes = await _service.Get(category, pageNumber);
+            var cakes = await _service.Get(categoryId, skip, take);
             var result = cakes.Select(cake => new GetCakeResponse()
             {
                 Id = cake.Id,
@@ -31,7 +31,7 @@ namespace CakeCrafter.API.Controllers
                 Level = cake.Level,
                 Weight = cake.Weight,
             });
-            return Ok(await _service.Get(category, pageNumber));
+            return Ok(await _service.Get(categoryId, skip, take));
         }
 
         [HttpGet("{id}")]
