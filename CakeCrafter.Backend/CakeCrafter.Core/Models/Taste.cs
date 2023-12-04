@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using CakeCrafter.Core.Interfaces;
 
 namespace CakeCrafter.Core.Models
 {

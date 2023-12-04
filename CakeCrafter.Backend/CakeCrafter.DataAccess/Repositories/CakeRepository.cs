@@ -7,7 +7,6 @@ namespace CakeCrafter.DataAccess.Repositories
 {
     public class CakeRepository : ICakeRepository
     {
-        private const int AmountOfElements = 5;
         private readonly CakeCrafterDbContext _context;
         public CakeRepository(CakeCrafterDbContext context)
         {
@@ -18,7 +17,7 @@ namespace CakeCrafter.DataAccess.Repositories
         public async Task<List<Cake>> Get(int categoryId, int skip, int take)
         {
             var cakes = await _context.Cakes
-                                      .Where(cake => cake.Category.Id == categoryId)
+                                      .Where(cake => cake.CategoryId == categoryId)
                                       .Skip(skip)
                                       .Take(take)
                                       .Select(cake => new Cake
@@ -26,7 +25,7 @@ namespace CakeCrafter.DataAccess.Repositories
                                           Id = cake.Id,
                                           Name = cake.Name,
                                           Description = cake.Description,
-                                          CookTime = cake.CookTime,
+                                          CookTimeInMinutes = cake.CookTimeInMinutes,
                                           Level = cake.Level,
                                           Weight = cake.Weight,
                                           CategoryId = cake.CategoryId,
@@ -51,7 +50,7 @@ namespace CakeCrafter.DataAccess.Repositories
                 Description = dbCake.Description,
                 CategoryId = dbCake.CategoryId,
                 TasteId = dbCake.TasteId,
-                CookTime = dbCake.CookTime,
+                CookTimeInMinutes = dbCake.CookTimeInMinutes,
                 Level = dbCake.Level,
                 Weight = dbCake.Weight,
             };
@@ -67,7 +66,7 @@ namespace CakeCrafter.DataAccess.Repositories
                 Description = cake.Description,
                 CategoryId = cake.CategoryId,
                 TasteId = cake.TasteId,
-                CookTime = cake.CookTime,
+                CookTimeInMinutes = cake.CookTimeInMinutes,
                 Level = cake.Level,
                 Weight = cake.Weight,
             };
@@ -91,7 +90,7 @@ namespace CakeCrafter.DataAccess.Repositories
                 Description = cake.Description,
                 CategoryId = cake.CategoryId,
                 TasteId = cake.TasteId,
-                CookTime = cake.CookTime,
+                CookTimeInMinutes = cake.CookTimeInMinutes,
                 Level = cake.Level,
                 Weight = cake.Weight,
             };

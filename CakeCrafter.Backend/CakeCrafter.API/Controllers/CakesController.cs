@@ -27,7 +27,7 @@ namespace CakeCrafter.API.Controllers
                 Description = cake.Description,
                 TasteId = cake.TasteId,
                 CategoryId = cake.CategoryId,
-                CookTime = cake.CookTime,
+                CookTimeInMinutes = cake.CookTimeInMinutes,
                 Level = cake.Level,
                 Weight = cake.Weight,
             });
@@ -49,7 +49,7 @@ namespace CakeCrafter.API.Controllers
                 Description = result.Description,
                 TasteId = result.TasteId,
                 CategoryId = result.CategoryId,
-                CookTime = result.CookTime,
+                CookTimeInMinutes = result.CookTimeInMinutes,
                 Level = result.Level,
                 Weight = result.Weight,
             };
@@ -64,7 +64,7 @@ namespace CakeCrafter.API.Controllers
                 Description = cakeRequest.Description,
                 TasteId = cakeRequest.TasteId,
                 CategoryId = cakeRequest.CategoryId,
-                CookTime = cakeRequest.CookTime,
+                CookTimeInMinutes = cakeRequest.CookTimeInMinutes,
                 Level = cakeRequest.Level,
                 Weight = cakeRequest.Weight
             };
@@ -80,7 +80,7 @@ namespace CakeCrafter.API.Controllers
                 Description = cakeRequest.Description,
                 TasteId = cakeRequest.TasteId,
                 CategoryId = cakeRequest.CategoryId,
-                CookTime = cakeRequest.CookTime,
+                CookTimeInMinutes = cakeRequest.CookTimeInMinutes,
                 Level = cakeRequest.Level,
                 Weight = cakeRequest.Weight
             };

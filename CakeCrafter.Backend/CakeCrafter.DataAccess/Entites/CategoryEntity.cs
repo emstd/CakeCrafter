@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CakeCrafter.DataAccess.Entites
 {
-    public class CategoryEntity
+    public class CategoryEntity : IEntity
     {
         public int Id { get; set; }
 
