@@ -4,6 +4,8 @@ using CakeCrafter.Core.Models;
 using CakeCrafter.DataAccess.Repositories;
 using CakeCrafter.BusinessLogic;
 using CakeCrafter.Domain;
+using CakeCrafter.DataAccess.Entites;
+
 namespace CakeCrafter.API.Extensions
 {
     public static class ServiceCollectionExtensions
@@ -11,8 +13,8 @@ namespace CakeCrafter.API.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<ICakeRepository, CakeRepository>();
-            services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
-            services.AddScoped<IGenericRepository<Taste>, GenericRepository<Taste>>();
+            services.AddScoped<IGenericRepository<Category>, GenericRepository<Category, CategoryEntity>>();
+            services.AddScoped<IGenericRepository<Taste>, GenericRepository<Taste, TasteEntity>>();
 
             return services;
         }

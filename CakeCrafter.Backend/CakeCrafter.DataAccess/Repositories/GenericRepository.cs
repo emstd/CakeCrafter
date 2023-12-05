@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CakeCrafter.DataAccess.Repositories
 {
-    public class GenericRepository<TModel> : IGenericRepository<TModel> where TModel : class
+    public class GenericRepository<TModel, TEntity> : IGenericRepository<TModel> where TModel : class where TEntity : class, IEntity
     {
         private readonly CakeCrafterDbContext _context;
-        private readonly DbSet<IEntity> _table;
+        private readonly DbSet<TEntity> _table;
         private readonly IMapper _mapper;
 
         public GenericRepository(CakeCrafterDbContext context, IMapper mapper)
         {
             _context = context;
-            _table = _context.Set<IEntity>();
+            _table = _context.Set<TEntity>();
             _mapper = mapper;
         }
 
@@ -47,7 +47,7 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<TModel> Create(TModel model)
         {
-            var dbModel = _mapper.Map<IEntity>(model);
+            var dbModel = _mapper.Map<TEntity>(model);
             _table.Add(dbModel);
             await _context.SaveChangesAsync();
             return model;
@@ -61,7 +61,7 @@ namespace CakeCrafter.DataAccess.Repositories
                 return null;
             }
 
-            dbModel = _mapper.Map<IEntity>(model);
+            dbModel = _mapper.Map<TEntity>(model);
 
             _context.Update(dbModel);
             await _context.SaveChangesAsync();

@@ -8,8 +8,8 @@ namespace CakeCrafter.DataAccess
     {
         public DataAccessMappingProfile()
         {
-            CreateMap<Category, IEntity>().ReverseMap();
-            CreateMap<Taste, IEntity>().ReverseMap();
+            CreateMap<Category, CategoryEntity>().ReverseMap();
+            CreateMap<Taste, TasteEntity>().ReverseMap();
         }
     }
 }
