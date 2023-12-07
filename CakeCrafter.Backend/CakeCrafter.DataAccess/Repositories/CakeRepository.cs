@@ -53,13 +53,13 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<Cake?> Update(Cake cake)
         {
-            var dbCake = await _context.Cakes.FindAsync(cake.Id);
-            if (dbCake == null)
-            {
-                return null;
-            }
+            //var dbCake = await _context.Cakes.FindAsync(cake.Id);
+            //if (dbCake == null)
+            //{
+            //    return null;
+            //}
 
-            dbCake = _mapper.Map<CakeEntity>(cake);
+            var dbCake = _mapper.Map<CakeEntity>(cake);
 
             _context.Cakes.Update(dbCake);
             await _context.SaveChangesAsync();

@@ -47,11 +47,11 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<TModel?> Update(TModel model, int id)
         {
-            var dbModel = await _table.FindAsync(id);
-            if (dbModel == null)
-            {
-                return null;
-            }
+            //var dbModel = await _table.FindAsync(id);
+            //if (dbModel == null)
+            //{
+            //    return null;
+            //}
 
             var newModel = _mapper.Map<TEntity>(model);
 
