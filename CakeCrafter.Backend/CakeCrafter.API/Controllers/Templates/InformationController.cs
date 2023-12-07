@@ -38,10 +38,10 @@ namespace CakeCrafter.API.Controllers.Templates
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<List<TModel>>> UpdateModelAsync(TModel model, [FromRoute] int id)
+        [HttpPut]
+        public async Task<ActionResult<List<TModel>>> UpdateModelAsync([FromQuery] int id, TModel model)
         {
-            var dbModel = await _service.GetById(id);
+            var dbModel = await _service.Update(model, id);
             if (dbModel == null)
             {
                 return NotFound();
@@ -49,8 +49,8 @@ namespace CakeCrafter.API.Controllers.Templates
             return Ok(dbModel);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<List<TModel>>> DeleteModelAsync([FromRoute] int id)
+        [HttpDelete]
+        public async Task<ActionResult<List<TModel>>> DeleteModelAsync([FromQuery] int id)
         {
             return Ok(await _service.Delete(id));
         }

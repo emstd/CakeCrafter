@@ -27,6 +27,7 @@ namespace CakeCrafter.API
             builder.Services.AddAutoMapper(cfg =>
             {
                 cfg.AddProfile<DataAccessMappingProfile>();
+                cfg.AddProfile<ApiMappingProfile>();
             });
 
             builder.Services.AddRepositories();

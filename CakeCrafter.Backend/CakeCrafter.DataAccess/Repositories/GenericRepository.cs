@@ -20,15 +20,9 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<List<TModel>> Get()
         {
-            var dbModels = await _table.ToListAsync();
-            var models = new List<TModel>();
+            var dbModels = await _table.Select(cake => _mapper.Map<TModel>(cake)).ToListAsync();
 
-            foreach (var dbModel in dbModels)
-            {
-                models.Add(_mapper.Map<TModel>(dbModel));
-            }
-
-            return models;
+            return dbModels;
         }
 
         public async Task<TModel?> GetById(int id)
@@ -40,8 +34,6 @@ namespace CakeCrafter.DataAccess.Repositories
             }
 
             var result = _mapper.Map<TModel>(dbModel);
-
-
             return result;
         }
 
@@ -61,9 +53,9 @@ namespace CakeCrafter.DataAccess.Repositories
                 return null;
             }
 
-            dbModel = _mapper.Map<TEntity>(model);
+            var newModel = _mapper.Map<TEntity>(model);
 
-            _context.Update(dbModel);
+            _context.Update(newModel);
             await _context.SaveChangesAsync();
             return model;
         }

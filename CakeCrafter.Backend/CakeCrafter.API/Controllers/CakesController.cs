@@ -1,4 +1,5 @@
-﻿using CakeCrafter.API.Contracts;
+﻿using AutoMapper;
+using CakeCrafter.API.Contracts;
 using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,88 +11,51 @@ namespace CakeCrafter.API.Controllers
     public class CakesController : ControllerBase
     {
         private readonly ICakeService _service;
+        private readonly IMapper _mapper;
 
-        public CakesController(ICakeService service)
+        public CakesController(ICakeService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Cake>>> GetCakes([FromQuery] int categoryId, [FromQuery] int skip, [FromQuery] int take)
+        public async Task<ActionResult<List<GetCakeResponse>>> GetCakes([FromQuery] int categoryId, [FromQuery] int skip, [FromQuery] int take)
         {
             var cakes = await _service.Get(categoryId, skip, take);
-            var result = cakes.Select(cake => new GetCakeResponse()
-            {
-                Id = cake.Id,
-                Name = cake.Name,
-                Description = cake.Description,
-                TasteId = cake.TasteId,
-                CategoryId = cake.CategoryId,
-                CookTimeInMinutes = cake.CookTimeInMinutes,
-                Level = cake.Level,
-                Weight = cake.Weight,
-            });
-            return Ok(await _service.Get(categoryId, skip, take));
+            var CakesResponse = cakes.Select(cake => _mapper.Map<GetCakeResponse>(cake)).ToList();
+            return Ok(CakesResponse);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cake>> GetCakeById(int id)
+        public async Task<ActionResult<GetCakeResponse>> GetCakeById(int id)
         {
-            var result = await _service.GetById(id);
-            if (result == null)
+            var cake = await _service.GetById(id);
+            if (cake == null)
             {
                 return NotFound();
             }
-            var cake = new GetCakeResponse
-            {
-                Id = result.Id,
-                Name = result.Name,
-                Description = result.Description,
-                TasteId = result.TasteId,
-                CategoryId = result.CategoryId,
-                CookTimeInMinutes = result.CookTimeInMinutes,
-                Level = result.Level,
-                Weight = result.Weight,
-            };
-            return Ok(cake);
+            var CakeResponse = _mapper.Map<GetCakeResponse>(cake);
+            return Ok(CakeResponse);
         }
 
         [HttpPost]
         public async Task<ActionResult<int>> CreateCake(CreateCakeRequest cakeRequest)
         {
-            var cake = new Cake{
-                Name = cakeRequest.Name,
-                Description = cakeRequest.Description,
-                TasteId = cakeRequest.TasteId,
-                CategoryId = cakeRequest.CategoryId,
-                CookTimeInMinutes = cakeRequest.CookTimeInMinutes,
-                Level = cakeRequest.Level,
-                Weight = cakeRequest.Weight
-            };
+            var cake = _mapper.Map<Cake>(cakeRequest);
             return Ok(await _service.Create(cake));
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<Cake>>> UpdateCake(CreateCakeRequest cakeRequest)
+        public async Task<ActionResult<CreateCakeRequest>> UpdateCake(CreateCakeRequest cakeRequest)
         {
-            var cake = new Cake
-            {
-                Name = cakeRequest.Name,
-                Description = cakeRequest.Description,
-                TasteId = cakeRequest.TasteId,
-                CategoryId = cakeRequest.CategoryId,
-                CookTimeInMinutes = cakeRequest.CookTimeInMinutes,
-                Level = cakeRequest.Level,
-                Weight = cakeRequest.Weight
-            };
-
-            var result = await _service.Update(cake);
-
-            return Ok(result);
+            var cake = _mapper.Map<Cake>(cakeRequest);
+            var CakeRequest = await _service.Update(cake);
+            return Ok(CakeRequest);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Cake>>> DeleteCake(int id)
+        [HttpDelete]
+        public async Task<ActionResult<List<Cake>>> DeleteCake([FromQuery] int id)
         {
             var result = await _service.Delete(id);
             return Ok(result);
