@@ -1,17 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-
-namespace CakeCrafter.Core.Models
+namespace CakeCrafter.DataAccess.Entites
 {
-    public class IngredientCategory
+    public class TasteEntity : IEntity
     {
         public int Id { get; set; }
 
-        [Column(TypeName = "varchar(100)")]
+        [Column(TypeName = "nvarchar(100)")]
         [Required]
         public string? Name { get; set; }
-
-        public List<Ingredient> Ingredients { get; set; } = new List<Ingredient>();
     }
 }

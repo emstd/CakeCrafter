@@ -1,4 +1,5 @@
-﻿using CakeCrafter.Core.Interfaces.Repositories;
+﻿using AutoMapper;
+using CakeCrafter.Core.Interfaces.Repositories;
 using CakeCrafter.Core.Models;
 using CakeCrafter.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
@@ -7,31 +8,23 @@ namespace CakeCrafter.DataAccess.Repositories
 {
     public class CakeRepository : ICakeRepository
     {
-        private const int AmountOfElements = 5;
         private readonly CakeCrafterDbContext _context;
-        public CakeRepository(CakeCrafterDbContext context)
+        private readonly IMapper _mapper;
+
+        public CakeRepository(CakeCrafterDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
 
-        public async Task<List<Cake>> Get(string category, int PageNumber)
+        public async Task<List<Cake>> Get(int categoryId, int skip, int take)
         {
             var cakes = await _context.Cakes
-                                      .Where(cake => cake.Category.Name == category)
-                                      .Skip((PageNumber - 1) * AmountOfElements)
-                                      .Take(AmountOfElements)
-                                      .Select(cake => new Cake
-                                      {
-                                          Id = cake.Id,
-                                          Name = cake.Name,
-                                          Description = cake.Description,
-                                          CookTime = cake.CookTime,
-                                          Level = cake.Level,
-                                          Weight = cake.Weight,
-                                          CategoryId = cake.CategoryId,
-                                          TasteId = cake.TasteId,
-                                      })
+                                      .Where(cake => cake.CategoryId == categoryId)
+                                      .Skip(skip)
+                                      .Take(take)
+                                      .Select(cake => _mapper.Map<Cake>(cake))
                                       .ToListAsync();
             return cakes;
         }
@@ -44,33 +37,14 @@ namespace CakeCrafter.DataAccess.Repositories
                 return null;
             }
 
-            var result = new Cake
-            {
-                Id = dbCake.Id,
-                Name = dbCake.Name,
-                Description = dbCake.Description,
-                CategoryId = dbCake.CategoryId,
-                TasteId = dbCake.TasteId,
-                CookTime = dbCake.CookTime,
-                Level = dbCake.Level,
-                Weight = dbCake.Weight,
-            };
+            var result = _mapper.Map<Cake>(dbCake);
 
             return result;
         }
 
         public async Task<int> Create(Cake cake)
         {
-            var dbCake = new CakeEntity
-            {
-                Name = cake.Name,
-                Description = cake.Description,
-                CategoryId = cake.CategoryId,
-                TasteId = cake.TasteId,
-                CookTime = cake.CookTime,
-                Level = cake.Level,
-                Weight = cake.Weight,
-            };
+            var dbCake = _mapper.Map<CakeEntity>(cake);
             _context.Cakes.Add(dbCake);
             await _context.SaveChangesAsync();
 
@@ -79,22 +53,13 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<Cake?> Update(Cake cake)
         {
-            var dbCake = await _context.Cakes.FindAsync(cake.Id);
-            if (dbCake == null)
-            {
-                return null;
-            }
+            //var dbCake = await _context.Cakes.FindAsync(cake.Id);
+            //if (dbCake == null)
+            //{
+            //    return null;
+            //}
 
-            dbCake = new CakeEntity
-            {
-                Name = cake.Name,
-                Description = cake.Description,
-                CategoryId = cake.CategoryId,
-                TasteId = cake.TasteId,
-                CookTime = cake.CookTime,
-                Level = cake.Level,
-                Weight = cake.Weight,
-            };
+            var dbCake = _mapper.Map<CakeEntity>(cake);
 
             _context.Cakes.Update(dbCake);
             await _context.SaveChangesAsync();
