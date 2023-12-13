@@ -1,10 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using CakeCrafter.Core.Models;
-
 namespace CakeCrafter.API.Contracts
 {
-    public class GetCakeResponse
+    public class CakeUpdate
     {
         public int Id { get; set; }
         public required string Name { get; set; }
