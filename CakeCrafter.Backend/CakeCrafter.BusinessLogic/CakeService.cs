@@ -1,6 +1,7 @@
 ﻿using CakeCrafter.Core.Interfaces.Repositories;
 using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
+using CakeCrafter.Core.Pages;
 
 namespace CakeCrafter.Domain
 {
@@ -13,7 +14,7 @@ namespace CakeCrafter.Domain
             _repository = repository;
         }
 
-        public async Task<List<Cake>> Get(int categoryId, int skip, int take)
+        public async Task<ItemsPage<Cake>> Get(int categoryId, int skip, int take)
         {
             return await _repository.Get(categoryId, skip, take);
         }
