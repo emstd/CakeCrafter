@@ -20,14 +20,14 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<List<TModel>> Get()
         {
-            var dbModels = await _table.Select(cake => _mapper.Map<TModel>(cake)).ToListAsync();
+            var dbModels = await _table.AsNoTracking().Select(cake => _mapper.Map<TModel>(cake)).ToListAsync();
 
             return dbModels;
         }
 
         public async Task<TModel?> GetById(int id)
         {
-            var dbModel = await _table.FindAsync(id);
+            var dbModel = await _table.AsNoTracking().FirstOrDefaultAsync(model => model.Id == id);
             if (dbModel == null)
             {
                 return null;
@@ -40,22 +40,22 @@ namespace CakeCrafter.DataAccess.Repositories
         public async Task<TModel> Create(TModel model)
         {
             var dbModel = _mapper.Map<TEntity>(model);
-            _table.Add(dbModel);
+            await _table.AddAsync(dbModel);
             await _context.SaveChangesAsync();
             return model;
         }
 
         public async Task<TModel?> Update(TModel model, int id)
         {
-            //var dbModel = await _table.FindAsync(id);
-            //if (dbModel == null)
-            //{
-            //    return null;
-            //}
+            var dbModel = await _table.AsNoTracking().FirstOrDefaultAsync(dbmodel => dbmodel.Id == id);
+            if (dbModel == null)
+            {
+                return null;
+            }
 
-            var newModel = _mapper.Map<TEntity>(model);
+            dbModel = _mapper.Map<TEntity>(model);
 
-            _context.Update(newModel);
+            _context.Update(dbModel);               //Имеет ли смысл использовать ExecuteUpdate()?
             await _context.SaveChangesAsync();
             return model;
         }
@@ -67,8 +67,7 @@ namespace CakeCrafter.DataAccess.Repositories
             {
                 return false;
             }
-            _table.Remove(dbModel);
-            await _context.SaveChangesAsync();
+            await _table.Where(model => model.Id == id).ExecuteDeleteAsync();
             return true;
         }
     }
