@@ -21,6 +21,7 @@ namespace CakeCrafter.DataAccess.Repositories
         public async Task<List<Cake>> Get(int categoryId, int skip, int take)
         {
             var cakes = await _context.Cakes
+                                      .AsNoTracking()
                                       .Where(cake => cake.CategoryId == categoryId)
                                       .Skip(skip)
                                       .Take(take)
@@ -31,7 +32,7 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<Cake?> GetById(int id)
         {
-            var dbCake = await _context.Cakes.FindAsync(id);
+            var dbCake = await _context.Cakes.AsNoTracking().FirstOrDefaultAsync(cake => cake.Id == id);
             if (dbCake == null)
             {
                 return null;
@@ -45,7 +46,7 @@ namespace CakeCrafter.DataAccess.Repositories
         public async Task<int> Create(Cake cake)
         {
             var dbCake = _mapper.Map<CakeEntity>(cake);
-            _context.Cakes.Add(dbCake);
+            await _context.Cakes.AddAsync(dbCake);
             await _context.SaveChangesAsync();
 
             return dbCake.Id;
@@ -53,15 +54,15 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<Cake?> Update(Cake cake)
         {
-            //var dbCake = await _context.Cakes.FindAsync(cake.Id);
-            //if (dbCake == null)
-            //{
-            //    return null;
-            //}
+            var dbCake = await _context.Cakes.AsNoTracking().FirstOrDefaultAsync(dbCake => dbCake.Id == cake.Id);
+            if (dbCake == null)
+            {
+                return null;
+            }
 
-            var dbCake = _mapper.Map<CakeEntity>(cake);
+            dbCake = _mapper.Map<CakeEntity>(cake);
 
-            _context.Cakes.Update(dbCake);
+            _context.Cakes.Update(dbCake);              //Имеет ли смысл использовать ExecuteUpdate()?
             await _context.SaveChangesAsync();
             return cake;
         }
@@ -73,8 +74,7 @@ namespace CakeCrafter.DataAccess.Repositories
             {
                 return false;
             }
-            _context.Cakes.Remove(dbCake);
-            await _context.SaveChangesAsync();
+            await _context.Cakes.Where(cake => cake.Id == id).ExecuteDeleteAsync();
             return true;
         }
     }
