@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Azure;
 using CakeCrafter.Core.Interfaces.Repositories;
 using CakeCrafter.Core.Models;
+using CakeCrafter.Core.Pages;
 using CakeCrafter.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,16 +20,20 @@ namespace CakeCrafter.DataAccess.Repositories
         }
 
 
-        public async Task<List<Cake>> Get(int categoryId, int skip, int take)
+        public async Task<ItemsPage<Cake>> Get(int categoryId, int skip, int take)
         {
-            var cakes = await _context.Cakes
+            var page = new ItemsPage<Cake>
+            {
+                Items = await _context.Cakes
                                       .AsNoTracking()
                                       .Where(cake => cake.CategoryId == categoryId)
                                       .Skip(skip)
                                       .Take(take)
                                       .Select(cake => _mapper.Map<Cake>(cake))
-                                      .ToListAsync();
-            return cakes;
+                                      .ToArrayAsync(),
+                TotalItems = await _context.Cakes.AsNoTracking().CountAsync()
+            };
+            return page;
         }
 
         public async Task<Cake?> GetById(int id)

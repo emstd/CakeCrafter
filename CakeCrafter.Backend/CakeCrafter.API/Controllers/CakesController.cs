@@ -2,6 +2,7 @@
 using CakeCrafter.API.Contracts;
 using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
+using CakeCrafter.Core.Pages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CakeCrafter.API.Controllers
@@ -20,11 +21,17 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CakeGet>>> GetCakes([FromQuery] int categoryId, [FromQuery] int skip, [FromQuery] int take)
+        public async Task<ActionResult<ItemsPage<CakeGet>>> GetCakes([FromQuery] int categoryId, [FromQuery] int skip, [FromQuery] int take)
         {
-            var cakes = await _service.Get(categoryId, skip, take);
-            var CakesResponse = cakes.Select(cake => _mapper.Map<CakeGet>(cake)).ToList();
-            return Ok(CakesResponse);
+            var cakesPage = await _service.Get(categoryId, skip, take);
+
+            var PageResponse = new ItemsPage<CakeGet>
+            {
+                Items = cakesPage.Items.Select(cake => _mapper.Map<CakeGet>(cake)).ToArray(),
+                TotalItems = cakesPage.TotalItems
+            };
+
+            return Ok(PageResponse);
         }
 
         [HttpGet("{id}")]
@@ -51,6 +58,10 @@ namespace CakeCrafter.API.Controllers
         {
             var cake = _mapper.Map<Cake>(cakeUpdate);
             var UpdatedCake = await _service.Update(cake);
+            if (UpdatedCake == null)
+            {
+                return NotFound();
+            }
             return Ok(UpdatedCake);
         }
 
