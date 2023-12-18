@@ -21,13 +21,13 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ItemsPage<CakeGet>>> GetCakes([FromQuery] int categoryId, [FromQuery] int skip, [FromQuery] int take)
+        public async Task<ActionResult<ItemsPage<CakeGetResponse>>> GetCakes([FromQuery] int categoryId, [FromQuery] int skip, [FromQuery] int take)
         {
             var cakesPage = await _service.Get(categoryId, skip, take);
 
-            var PageResponse = new ItemsPage<CakeGet>
+            var PageResponse = new ItemsPage<CakeGetResponse>
             {
-                Items = cakesPage.Items.Select(cake => _mapper.Map<CakeGet>(cake)).ToArray(),
+                Items = cakesPage.Items.Select(cake => _mapper.Map<CakeGetResponse>(cake)).ToArray(),
                 TotalItems = cakesPage.TotalItems
             };
 
@@ -35,26 +35,26 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CakeGet>> GetCakeById(int id)
+        public async Task<ActionResult<CakeGetResponse>> GetCakeById(int id)
         {
             var cake = await _service.GetById(id);
             if (cake == null)
             {
                 return NotFound();
             }
-            var CakeResponse = _mapper.Map<CakeGet>(cake);
+            var CakeResponse = _mapper.Map<CakeGetResponse>(cake);
             return Ok(CakeResponse);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateCake(CakeCreate cakeCreate)
+        public async Task<ActionResult<int>> CreateCake(CakeCreateRequest cakeCreate)
         {
             var cake = _mapper.Map<Cake>(cakeCreate);
             return Ok(await _service.Create(cake));
         }
 
         [HttpPut]
-        public async Task<ActionResult<CakeCreate>> UpdateCake(CakeUpdate cakeUpdate)
+        public async Task<ActionResult<CakeCreateRequest>> UpdateCake(CakeUpdateRequest cakeUpdate)
         {
             var cake = _mapper.Map<Cake>(cakeUpdate);
             var updatedCake = await _service.Update(cake);

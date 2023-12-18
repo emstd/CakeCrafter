@@ -8,9 +8,9 @@ namespace CakeCrafter.API
     {
         public ApiMappingProfile()
         {
-            CreateMap<CakeCreate, Cake>();
-            CreateMap<Cake, CakeGet>();
-            CreateMap<CakeUpdate, Cake>();
+            CreateMap<CakeCreateRequest, Cake>();
+            CreateMap<Cake, CakeGetResponse>();
+            CreateMap<CakeUpdateRequest, Cake>();
         }
     }
 }

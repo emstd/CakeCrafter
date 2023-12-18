@@ -1,6 +1,6 @@
 ﻿namespace CakeCrafter.API.Contracts
 {
-    public class CakeGet
+    public class CakeGetResponse
     {
         public int Id { get; set; }
         public required string Name { get; set; }
