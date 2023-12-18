@@ -55,7 +55,7 @@ namespace CakeCrafter.DataAccess.Repositories
 
             dbModel = _mapper.Map<TEntity>(model);
 
-            _context.Update(dbModel);               //Имеет ли смысл использовать ExecuteUpdate()?
+            _context.Update(dbModel);
             await _context.SaveChangesAsync();
             return model;
         }

@@ -57,12 +57,12 @@ namespace CakeCrafter.API.Controllers
         public async Task<ActionResult<CakeCreate>> UpdateCake(CakeUpdate cakeUpdate)
         {
             var cake = _mapper.Map<Cake>(cakeUpdate);
-            var UpdatedCake = await _service.Update(cake);
-            if (UpdatedCake == null)
+            var updatedCake = await _service.Update(cake);
+            if (updatedCake == null)
             {
                 return NotFound();
             }
-            return Ok(UpdatedCake);
+            return Ok(updatedCake);
         }
 
         [HttpDelete("{id}")]
