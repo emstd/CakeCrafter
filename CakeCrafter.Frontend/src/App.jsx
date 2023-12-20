@@ -1,34 +1,35 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
-  const [cake, setCake] = useState(null)
+  const [cake, setCake] = useState([])
+
+  const getApiData = async() => {
+    const response = await fetch("http://localhost:5239/api/Cakes?categoryId=1&skip=0&take=5").then(response => response.json());
+    setCake(response);
+  }
 
   useEffect(() => {
-    fetch("http://localhost:5239/api/cakes/1",{
-      method: "GET"
-    })
-    .then(response => response.json())
-    .then(data => {
-      setCake(data);
-    });
+    getApiData();
   }, []);
+
+
   return (
-    <>
-      <h2>Cake name:</h2>
-      {cake && (
-        <div>
-          <p>id: {cake.id}</p>
-          <p>name: {cake.name}</p>
-          <p>description: {cake.description}</p>
-          <p>taste id: {cake.tasteId}</p>
-          <p>category Id: {cake.categoryId}</p>
-          <p>cook Time In Minutes: {cake.cookTimeInMinutes}</p>
-          <p>level: {cake.level}</p>
-          <p>weight: {cake.weight}</p>
-        </div>
-      )}
-    </>
+    <div>
+          {cake.items && cake.items.map(item => (
+              <div key={item.id}>
+                <p>id: {item.id}</p>
+                <p>name: {item.name}</p>
+                <p>description: {item.description}</p>
+                <p>taste id: {item.tasteId}</p>
+                <p>category Id: {item.categoryId}</p>
+                <p>cook Time In Minutes: {item.cookTimeInMinutes}</p>
+                <p>level: {item.level}</p>
+                <p>weight: {item.weight}</p>
+  </div>
+))}
+
+</div>
   );
 }
 
