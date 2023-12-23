@@ -1,19 +1,19 @@
 ﻿namespace CakeCrafter.API.Contracts
 {
-    public class CakeGetResponse
+    public record CakeGetResponse
     {
-        public int Id { get; set; }
-        public required string Name { get; set; }
-        public required string Description { get; set; }
+        public int Id { get; init; }
+        public required string Name { get; init; }
+        public required string Description { get; init; }
 
-        public int TasteId { get; set; }
+        public int TasteId { get; init; }
 
-        public int CategoryId { get; set; }
+        public int CategoryId { get; init; }
 
-        public int CookTimeInMinutes { get; set; }
+        public int CookTimeInMinutes { get; init; }
 
-        public int Level { get; set; }
+        public int Level { get; init; }
 
-        public double Weight { get; set; }
+        public double Weight { get; init; }
     }
 }
