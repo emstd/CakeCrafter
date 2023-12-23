@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, Outlet } from 'react-router-dom';
 
 function MainPage() {
   const [categories, setCategories] = useState([])
@@ -14,13 +15,20 @@ function MainPage() {
 
 
   return (
-    <div>
-          {Object.keys(categories).map(categoryKey => (
-                <div key={categoryKey}>
-                    <p>{categories[categoryKey].name}</p>
-                </div>
-          ))}
-    </div>
+    <>
+      <div>
+            {Object.keys(categories).map(categoryKey => (
+                  <div key={categoryKey}>
+                    <Link to="categories/1">
+                      <p>{categories[categoryKey].name}</p>
+                    </Link>
+                  </div>
+            ))}
+      </div>
+      <div>
+        <Outlet />
+      </div>
+    </>
 );
 }
 

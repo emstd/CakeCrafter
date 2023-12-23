@@ -1,15 +1,30 @@
 import './App.css';
 import MainPage from './pages/MainPage/MainPage';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ErrorPage from "./pages/ErrorPage/error-page";
+import CakesPage from "./pages/CakesPage/CakesPage";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainPage />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "categories/:categoryId",
+        element: <CakesPage />,
+      }
+    ]
+  },
+]);
 
 function App() {
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-      </Routes>
-    </Router>
+    <RouterProvider router={router} />
 );
 }
 

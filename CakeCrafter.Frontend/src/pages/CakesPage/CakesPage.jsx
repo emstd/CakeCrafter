@@ -4,7 +4,7 @@ function CakesPage() {
   const [cake, setCake] = useState([])
 
   const getApiData = async() => {
-    const response = await fetch("http://localhost:5000/api/Cakes?categoryId=&skip=0&take=5").then(response => response.json());
+    const response = await fetch("http://localhost:5000/api/Cakes?categoryId=1&skip=0&take=5").then(response => response.json());
     setCake(response);
   }
 
