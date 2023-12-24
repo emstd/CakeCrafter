@@ -22,17 +22,19 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<ItemsPage<Cake>> Get(int categoryId, int skip, int take)
         {
+            var queryCakesInCategory = await _context.Cakes.AsNoTracking()
+                                                        .Where(cake => cake.CategoryId == categoryId)
+                                                        .ToArrayAsync();                //получаем все изделия в категории
+
             var page = new ItemsPage<Cake>
             {
-                Items = await _context.Cakes
-                                      .AsNoTracking()
-                                      .Where(cake => cake.CategoryId == categoryId)
-                                      .Skip(skip)
-                                      .Take(take)
-                                      .Select(cake => _mapper.Map<Cake>(cake))
-                                      .ToArrayAsync(),
-                TotalItems = await _context.Cakes.AsNoTracking().CountAsync()
-            };
+                Items = queryCakesInCategory.Skip(skip)                                 //берем столько изделий из категории,
+                                            .Take(take)                                 //сколько указано в запросе
+                                            .Select(_mapper.Map<CakeEntity, Cake>)
+                                            .ToArray(),                               
+
+                TotalItems = queryCakesInCategory.Length                                //указываем, солько всего
+            };                                                                          //изделий в категории
             return page;
         }
 

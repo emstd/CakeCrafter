@@ -17,7 +17,17 @@ namespace CakeCrafter.API
             });
 
             // Add services to the container.
-
+            builder.Services.AddCors(o =>
+            {
+                o.AddPolicy("AllowCakeCrafterApp", p =>
+                {
+                    p.WithOrigins("http://127.0.0.1:5173")
+                    .WithHeaders().AllowAnyHeader()
+                    .WithMethods().AllowAnyMethod()
+                    .AllowCredentials()
+                    .SetIsOriginAllowedToAllowWildcardSubdomains();
+                });
+            });
             builder.Services.AddControllers();
             builder.Services.AddDbContext<CakeCrafterDbContext>(options =>
             {
@@ -48,6 +58,7 @@ namespace CakeCrafter.API
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowCakeCrafterApp");
 
             app.UseAuthorization();
 
