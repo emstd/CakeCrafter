@@ -6,7 +6,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { GetCategories } from './components/CategoriesComponent';
+import { CreateCategory, GetCategories } from './components/CategoriesComponent';
 import { GetCakes } from './pages/CakesPage/CakesPage';
 
 const router = createBrowserRouter([
@@ -15,6 +15,7 @@ const router = createBrowserRouter([
     element: <MainPage />,
     errorElement: <ErrorPage />,
     loader: GetCategories,
+    action: CreateCategory,
     children: [
       {
         path: "categories/:categoryId",
