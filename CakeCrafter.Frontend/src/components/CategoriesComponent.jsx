@@ -8,12 +8,16 @@ export async function GetCategories(){
     return jsonResponse;
 }
 
-export async function CreateCategory(category){
+export async function CreateCategory({ request }){
+    const formData = await request.formData();
+    console.log(formData);
+    const newCategory = formData.get("NewCategory");
+    console.log(newCategory);
     const response = await fetch("http://localhost:5000/api/categories",
                                 {
                                     method: 'POST',
                                     headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({name: "string"}),
+                                    body: JSON.stringify({name: newCategory}),
                                 });
     return response;
 }
@@ -24,7 +28,7 @@ function CategoriesComponent() {
     return (
         <div>
             <div>
-                    <p><Link to='/'>Назад </Link></p>
+                    <p><Link to='/'>На главную</Link></p>
                     {categories.length ? (categories.map(category => (
                         <div key={category.id}>
                             <Link to={`categories/${category.id}`}>
@@ -33,16 +37,14 @@ function CategoriesComponent() {
                         </div>
                     )))
                         : (
-                            <p>No Categories</p>
+                            <p>Нет категорий</p>
                         )
                     }
             </div>
             <div>
-                <Form
-                    method='POST'
-                    action='/categories'>
+                <Form method='POST'>
 
-                        <input type='search' />
+                        <input type='search' name='NewCategory'/>
                         <button type='submit'>Добавить</button>
 
                 </Form>
