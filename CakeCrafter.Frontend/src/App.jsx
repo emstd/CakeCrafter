@@ -7,6 +7,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { GetCategories } from './components/CategoriesComponent';
+import { GetCakes } from './pages/CakesPage/CakesPage';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "categories/:categoryId",
+        loader: GetCakes,
         element: <CakesPage />,
       }
     ]

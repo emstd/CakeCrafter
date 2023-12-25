@@ -1,18 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useLoaderData } from "react-router-dom";
+
+export async function GetCakes({ params }){
+
+    const response = await fetch(`http://localhost:5000/api/Cakes?categoryId=${params.categoryId}&skip=0&take=5`);
+    const jsonResponse = await response.json();
+
+  return jsonResponse;
+}
 
 function CakesPage() {
-  const [cake, setCake] = useState([])
-
-  const getApiData = async() => {
-    const response = await fetch("http://localhost:5000/api/Cakes?categoryId=1&skip=0&take=5").then(response => response.json());
-    setCake(response);
-  }
-
-  useEffect(() => {
-    getApiData();
-  }, []);
-
-
+  const cake = useLoaderData();
   return (
     <div>
           {cake.items && cake.items.map(item => (
