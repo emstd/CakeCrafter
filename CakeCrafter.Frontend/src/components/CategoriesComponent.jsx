@@ -1,4 +1,4 @@
-import { Link, useLoaderData, Form } from 'react-router-dom';
+import { Link, useLoaderData, Form, redirect } from 'react-router-dom';
 
 export async function GetCategories(){
 
@@ -10,16 +10,22 @@ export async function GetCategories(){
 
 export async function CreateCategory({ request }){
     const formData = await request.formData();
-    console.log(formData);
     const newCategory = formData.get("NewCategory");
-    console.log(newCategory);
     const response = await fetch("http://localhost:5000/api/categories",
                                 {
                                     method: 'POST',
                                     headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify({name: newCategory}),
                                 });
-    return response;
+    return redirect('/');
+}
+
+export async function DeleteCategory({ params }){
+    const response = await fetch(`http://localhost:5000/api/categories/${params.categoryId}`,
+                                {
+                                    method: 'DELETE',
+                                });
+    return redirect('/');
 }
 
 function CategoriesComponent() {
@@ -34,6 +40,23 @@ function CategoriesComponent() {
                             <Link to={`categories/${category.id}`}>
                             <p>{category.name}</p>
                             </Link>
+
+                            <Form
+                                    method="post"
+                                    action={`/categories/delete/${category.id}`}
+                                    onSubmit={(event) => {
+                                    if (
+                                    !confirm(
+                                        "Please confirm you want to delete this record."
+                                        )
+                                    ) {
+                                        event.preventDefault();
+                                        }
+                                    }}
+                                    >
+                                    <button type="submit">Delete</button>
+                            </Form>
+
                         </div>
                     )))
                         : (
@@ -42,11 +65,9 @@ function CategoriesComponent() {
                     }
             </div>
             <div>
-                <Form method='POST'>
-
+                <Form method='POST' action='/categories/create'>
                         <input type='search' name='NewCategory'/>
                         <button type='submit'>Добавить</button>
-
                 </Form>
             </div>
         </div>
