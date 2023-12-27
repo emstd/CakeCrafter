@@ -17,7 +17,7 @@ export async function CreateCategory({ request }){
                                     headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify({name: newCategory}),
                                 });
-    return redirect('/');
+    return redirect('/categories');
 }
 
 export async function DeleteCategory({ params }){
@@ -25,19 +25,18 @@ export async function DeleteCategory({ params }){
                                 {
                                     method: 'DELETE',
                                 });
-    return redirect('/');
+    return redirect('/categories');
 }
 
-function CategoriesComponent() {
+function CakesCategories() {
     const categories = useLoaderData();
 
     return (
         <div>
             <div>
-                    <p><Link to='/'>На главную</Link></p>
                     {categories.length ? (categories.map(category => (
                         <div key={category.id}>
-                            <Link to={`categories/${category.id}`}>
+                            <Link to={`/categories/${category.id}`}>
                             <p>{category.name}</p>
                             </Link>
 
@@ -74,4 +73,4 @@ function CategoriesComponent() {
 );
 }
 
-export default CategoriesComponent
+export default CakesCategories

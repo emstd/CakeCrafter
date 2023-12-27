@@ -1,12 +1,16 @@
-import { Outlet } from 'react-router-dom';
-import CategoriesComponent from '../../components/CategoriesComponent';
+import { Outlet, Link } from 'react-router-dom';
 
 function MainPage() {
 
   return (
     <>
       <div>
-            <CategoriesComponent />
+        <p>
+             <Link to="/">Главная</Link>
+        </p>
+        <p>
+             <Link to="/categories">Карточки товаров</Link>
+        </p>
       </div>
       <div>
         <Outlet />

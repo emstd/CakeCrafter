@@ -6,31 +6,36 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { CreateCategory, DeleteCategory, GetCategories } from './components/CategoriesComponent';
+import { CreateCategory, DeleteCategory, GetCategories } from './pages/CakesCategories/CakesCategories';
 import { GetCakes } from './pages/CakesPage/CakesPage';
+import CakesCategories from './pages/CakesCategories/CakesCategories';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainPage />,
     errorElement: <ErrorPage />,
-    loader: GetCategories,
     children: [
+      {
+        path: "categories",
+        element: <CakesCategories />,
+        loader: GetCategories,
+      },
       {
         path: "categories/:categoryId",
         loader: GetCakes,
         element: <CakesPage />,
       },
-    ]
+      {
+        path: "/categories/create",
+        action: CreateCategory,
+      },
+      {
+        path: "categories/delete/:categoryId",
+        action: DeleteCategory,
+      },
+    ],
   },
-  {
-    path: "/categories/create",
-    action: CreateCategory,
-  },
-  {
-    path: "categories/delete/:categoryId",
-    action: DeleteCategory,
-  }
 ]);
 
 function App() {
