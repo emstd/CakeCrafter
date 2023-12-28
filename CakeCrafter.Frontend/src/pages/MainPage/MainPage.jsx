@@ -5,12 +5,12 @@ function MainPage() {
   return (
     <>
       <div>
-        <p>
-             <Link to="/">Главная</Link>
-        </p>
-        <p>
-             <Link to="/categories">Карточки товаров</Link>
-        </p>
+      <nav>
+            <ul>
+              <Link to="/"><li>Главная</li></Link>
+              <Link to="/categories"><li>Карточки товаров</li></Link>
+            </ul>
+        </nav>
       </div>
       <div>
         <Outlet />
