@@ -3,8 +3,8 @@ import { Outlet, Link } from 'react-router-dom';
 function MainPage() {
 
   return (
-    <>
-      <div>
+    <div id='main-page'>
+      <div id='nav-panel'>
       <nav>
             <ul>
               <Link to="/"><li>Главная</li></Link>
@@ -12,10 +12,10 @@ function MainPage() {
             </ul>
         </nav>
       </div>
-      <div>
+      <div id='content'>
         <Outlet />
       </div>
-    </>
+    </div>
 );
 }
 

@@ -1,4 +1,5 @@
-import { useLoaderData } from "react-router-dom";
+import './CakesPage.css'
+import { useLoaderData, Link } from "react-router-dom";
 
 export async function GetCakes({ params }){
 
@@ -11,20 +12,48 @@ export async function GetCakes({ params }){
 function CakesPage() {
   const cake = useLoaderData();
   return (
-    <div>
-          {cake.items && cake.items.map(item => (
-              <div key={item.id}>
-                <p>id: {item.id}</p>
-                <p>name: {item.name}</p>
-                <p>description: {item.description}</p>
-                <p>taste id: {item.tasteId}</p>
-                <p>category Id: {item.categoryId}</p>
-                <p>cook Time In Minutes: {item.cookTimeInMinutes}</p>
-                <p>level: {item.level}</p>
-                <p>weight: {item.weight}</p>
-              </div>))
-          }
-    </div>
+    <>
+      <p><Link to='/categories'>Назад</Link></p>
+      <div id='cakes-container'>
+            {cake.items && cake.items.map(item => (
+                <div id='cake-item' key={item.id}>
+
+                    <div id='cake-photo'>
+                      Фото
+                    </div>
+
+                    <div id='cake-name'>
+                      {item.name}
+                    </div>
+
+                    <div id='cake-desciption'>
+                      <p>{item.description}</p>
+                    </div>
+
+                    <div id='cake-taste'>
+                      <p>Вкус: {item.tasteId}</p>
+                    </div>
+
+                    <div id='cake-category'>
+                      <p>Категория: {item.categoryId}</p>
+                    </div>
+
+                    <div id='cake-cook-time'>
+                      <p>Время приготовления: {item.cookTimeInMinutes} минут</p>
+                    </div>
+
+                    <div id='cake-level'>
+                      <p>Сложность: {item.level}</p>
+                    </div>
+
+                    <div id='cake-weight'>
+                      <p>Вес: {item.weight}кг</p>
+                    </div>
+
+                </div>))
+            }
+      </div>
+    </>
 );
 }
 
