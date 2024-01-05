@@ -14,6 +14,9 @@ function CakesPage() {
   return (
     <>
       <p><Link to='/categories'>Назад</Link></p>
+      <div id='category-name'>
+        
+      </div>
       <div id='cakes-container'>
             {cake.items && cake.items.map(item => (
                 <div id='cake-item' key={item.id}>
