@@ -1,34 +1,21 @@
-import { useState, useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 
 function MainPage() {
-  const [categories, setCategories] = useState([])
-
-  const getApiData = async() => {
-    const response = await fetch("http://localhost:5000/api/categories").then(response => response.json());
-    setCategories(response);
-  }
-
-  useEffect(() => {
-    getApiData();
-  }, []);
-
 
   return (
-    <>
-      <div>
-            {Object.keys(categories).map(categoryKey => (
-                  <div key={categoryKey}>
-                    <Link to="categories/1">
-                      <p>{categories[categoryKey].name}</p>
-                    </Link>
-                  </div>
-            ))}
+    <div id='main-page'>
+      <div id='nav-panel'>
+      <nav>
+            <ul>
+              <Link to="/"><li>Главная</li></Link>
+              <Link to="/categories"><li>Карточки товаров</li></Link>
+            </ul>
+        </nav>
       </div>
-      <div>
+      <div id='content'>
         <Outlet />
       </div>
-    </>
+    </div>
 );
 }
 

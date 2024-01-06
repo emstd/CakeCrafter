@@ -54,3 +54,33 @@ h1 {
   justify-content: center;
   width: 100%;
 }
+
+
+
+/*
+//////////////////////
+*/
+
+#root{
+  width: 100%;
+}
+
+#main-page{
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#nav-panel {
+  border: 1px solid red;
+  width: 20%;
+}
+
+#content {
+  border: 2px solid red;
+  margin-left: 100px;
+  width: 75%;
+}
+
+
