@@ -8,10 +8,11 @@ import {
 } from "react-router-dom";
 import { CreateCategory, DeleteCategory, GetCategories, UpdateCategory } from './pages/CakesCategories/CakesCategories';
 import { CreateCake } from './pages/CakesPage/Components/CreateCakeCard';
-import { GetCakes } from './pages/CakesPage/CakesPage';
+import { GetCakes, GetCakeById } from './pages/CakesPage/CakesPage';
 import CakesCategories from './pages/CakesCategories/CakesCategories';
 import CreateCakeCard from './pages/CakesPage/Components/CreateCakeCard'
 import DeleteCakeCard from './pages/CakesPage/Components/DeleteCakeCard';
+import UpdateCakeCard, { UpdateCake } from './pages/CakesPage/Components/UpdateCakeCard';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,8 @@ const router = createBrowserRouter([
         action: UpdateCategory,
       },
 
+
+
       {
         path: "categories/cake/create",
         element: <CreateCakeCard />,
@@ -50,7 +53,14 @@ const router = createBrowserRouter([
       {
         path: "categories/cake/delete/:cakeId",
         action: DeleteCakeCard,
-      }
+      },
+      {
+        path: "categories/cake/update/:cakeId",
+        element: <UpdateCakeCard />,
+        loader: GetCakeById,
+        action: UpdateCake,
+      },
+
     ],
   },
 ]);

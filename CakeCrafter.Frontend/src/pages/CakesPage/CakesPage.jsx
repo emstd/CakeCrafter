@@ -9,6 +9,14 @@ export async function GetCakes({ params }){
   return jsonResponse;
 }
 
+export async function GetCakeById( {params} ){
+
+    const response = await fetch(`http://localhost:5000/api/Cakes/${params.cakeId}`);
+    const jsonResponse = await response.json();
+
+  return jsonResponse;
+}
+
 function CakesPage() {
   const cake = useLoaderData();
   return (
@@ -33,7 +41,12 @@ function CakesPage() {
                     </div>
 
                     <div id='cake-edit'>
-                      Ред. <br />
+                    <Form
+                        method="get"
+                        action={`/categories/cake/update/${item.id}`}
+                    >
+                        <button type="submit">Ред.</button>
+                    </Form>
                       <Form
                         method="post"
                         action={`/categories/cake/delete/${item.id}`}
