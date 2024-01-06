@@ -23,11 +23,15 @@
 
 #cake-name{
     width: 50%;
-    margin-right: 5%;
     text-align: center;
     font-size: 30px;
     align-self: flex-start;
     align-self: center;
+}
+
+#cake-edit{
+    margin-right: 15px;
+    margin-top: 5px;
 }
 
 #cake-desciption{

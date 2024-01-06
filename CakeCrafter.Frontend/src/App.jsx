@@ -6,7 +6,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { CreateCategory, DeleteCategory, GetCategories } from './pages/CakesCategories/CakesCategories';
+import { CreateCategory, DeleteCategory, GetCategories, UpdateCategory } from './pages/CakesCategories/CakesCategories';
 import { GetCakes } from './pages/CakesPage/CakesPage';
 import CakesCategories from './pages/CakesCategories/CakesCategories';
 
@@ -33,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "categories/delete/:categoryId",
         action: DeleteCategory,
+      },
+      {
+        path: "categories/update/:categoryId",
+        action: UpdateCategory,
       },
     ],
   },

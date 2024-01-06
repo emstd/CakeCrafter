@@ -1,4 +1,5 @@
-import { Link, useLoaderData, Form, redirect } from 'react-router-dom';
+import { useLoaderData, Form, redirect } from 'react-router-dom';
+import DisplayCategory from './Components/DisplayCategory';
 
 export async function GetCategories(){
 
@@ -20,6 +21,18 @@ export async function CreateCategory({ request }){
     return redirect('/categories');
 }
 
+export async function UpdateCategory({ params, request }){ //Почему это работает, даже если написать { request, params }
+    const formData = await request.formData();
+    const newCategoryName = formData.get("CategoryName");
+    const response = await fetch(`http://localhost:5000/api/categories/${params.categoryId}`,
+                                {
+                                    method: 'PUT',
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({id: params.categoryId, name: newCategoryName}),
+                                });
+    return redirect('/categories');
+}
+
 export async function DeleteCategory({ params }){
     const response = await fetch(`http://localhost:5000/api/categories/${params.categoryId}`,
                                 {
@@ -28,6 +41,7 @@ export async function DeleteCategory({ params }){
     return redirect('/categories');
 }
 
+
 function CakesCategories() {
     const categories = useLoaderData();
 
@@ -35,28 +49,7 @@ function CakesCategories() {
         <div>
             <div>
                     {categories.length ? (categories.map(category => (
-                        <div key={category.id}>
-                            <Link to={`/categories/${category.id}`}>
-                            <p>{category.name}</p>
-                            </Link>
-
-                            <Form
-                                    method="post"
-                                    action={`/categories/delete/${category.id}`}
-                                    onSubmit={(event) => {
-                                    if (
-                                    !confirm(
-                                        "Please confirm you want to delete this record."
-                                        )
-                                    ) {
-                                        event.preventDefault();
-                                        }
-                                    }}
-                                    >
-                                    <button type="submit">Delete</button>
-                            </Form>
-
-                        </div>
+                        <DisplayCategory key={category.id} category={category} />
                     )))
                         : (
                             <p>Нет категорий</p>
