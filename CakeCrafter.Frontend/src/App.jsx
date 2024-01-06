@@ -7,8 +7,11 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { CreateCategory, DeleteCategory, GetCategories, UpdateCategory } from './pages/CakesCategories/CakesCategories';
+import { CreateCake } from './pages/CakesPage/Components/CreateCakeCard';
 import { GetCakes } from './pages/CakesPage/CakesPage';
 import CakesCategories from './pages/CakesCategories/CakesCategories';
+import CreateCakeCard from './pages/CakesPage/Components/CreateCakeCard'
+import DeleteCakeCard from './pages/CakesPage/Components/DeleteCakeCard';
 
 const router = createBrowserRouter([
   {
@@ -23,11 +26,11 @@ const router = createBrowserRouter([
       },
       {
         path: "categories/:categoryId",
-        loader: GetCakes,
         element: <CakesPage />,
+        loader: GetCakes,
       },
       {
-        path: "/categories/create",
+        path: "categories/create",
         action: CreateCategory,
       },
       {
@@ -38,6 +41,16 @@ const router = createBrowserRouter([
         path: "categories/update/:categoryId",
         action: UpdateCategory,
       },
+
+      {
+        path: "categories/cake/create",
+        element: <CreateCakeCard />,
+        action: CreateCake,
+      },
+      {
+        path: "categories/cake/delete/:cakeId",
+        action: DeleteCakeCard,
+      }
     ],
   },
 ]);

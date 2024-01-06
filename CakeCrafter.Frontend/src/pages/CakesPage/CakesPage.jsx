@@ -1,5 +1,5 @@
 import './CakesPage.css'
-import { useLoaderData, Link } from "react-router-dom";
+import { useLoaderData, Link, Form } from "react-router-dom";
 
 export async function GetCakes({ params }){
 
@@ -18,7 +18,7 @@ function CakesPage() {
         
       </div>
       <div>
-        Создать новую карточку
+        <Link to='/categories/cake/create'>Создать новую карточку</Link>
       </div>
       <div id='cakes-container'>
             {cake.items && cake.items.map(item => (
@@ -34,7 +34,21 @@ function CakesPage() {
 
                     <div id='cake-edit'>
                       Ред. <br />
-                      Удалить
+                      <Form
+                        method="post"
+                        action={`/categories/cake/delete/${item.id}`}
+                        onSubmit={(event) => {
+                        if (
+                            !confirm(
+                                "Please confirm you want to delete this record."
+                            )
+                        ) {
+                            event.preventDefault();
+                        }
+                        }}
+                    >
+                        <button type="submit">Удалить</button>
+                    </Form>
                     </div>
 
                     <div id='cake-desciption'>
