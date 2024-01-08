@@ -27,7 +27,7 @@ namespace CakeCrafter.API.Controllers
 
             var PageResponse = new ItemsPage<CakeGetResponse>
             {
-                Items = cakesPage.Items.Select(cake => _mapper.Map<CakeGetResponse>(cake)).ToArray(),
+                Items = cakesPage.Items.Select(cake => _mapper.Map<Cake, CakeGetResponse>(cake)).ToArray(),
                 TotalItems = cakesPage.TotalItems
             };
 
@@ -42,21 +42,21 @@ namespace CakeCrafter.API.Controllers
             {
                 return NotFound();
             }
-            var CakeResponse = _mapper.Map<CakeGetResponse>(cake);
+            var CakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
             return Ok(CakeResponse);
         }
 
         [HttpPost]
         public async Task<ActionResult<int>> CreateCake(CakeCreateRequest cakeCreate)
         {
-            var cake = _mapper.Map<Cake>(cakeCreate);
+            var cake = _mapper.Map<CakeCreateRequest, Cake>(cakeCreate);
             return Ok(await _service.Create(cake));
         }
 
         [HttpPut]
         public async Task<ActionResult<CakeCreateRequest>> UpdateCake(CakeUpdateRequest cakeUpdate)
         {
-            var cake = _mapper.Map<Cake>(cakeUpdate);
+            var cake = _mapper.Map<CakeUpdateRequest, Cake>(cakeUpdate);
             var updatedCake = await _service.Update(cake);
             if (updatedCake == null)
             {
