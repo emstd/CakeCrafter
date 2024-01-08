@@ -51,7 +51,7 @@ const router = createBrowserRouter([
         action: CreateCake,
       },
       {
-        path: "categories/cake/delete/:cakeId",
+        path: "categories/cake/delete/:cakeId", //сюда надо писать categories/:categoryId/cake/delete/:cakeId чтобы работал redirect и там исправить
         action: DeleteCakeCard,
       },
       {

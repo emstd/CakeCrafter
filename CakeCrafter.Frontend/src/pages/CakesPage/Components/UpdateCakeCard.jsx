@@ -6,7 +6,7 @@ export async function UpdateCake( {request, params} ){
     const updatedCake = Object.fromEntries(formData);
     updatedCake.id = params.cakeId;
 
-    const response = await fetch(`http://localhost:5000/api/cakes/`,
+    const response = await fetch(`http://localhost:5000/api/cakes/`, //нужно добавить в конце /{id} и исправить на сервере, чтобы было по rest
                                 {
                                     method: 'PUT',
                                     headers: { "Content-Type": "application/json" },
