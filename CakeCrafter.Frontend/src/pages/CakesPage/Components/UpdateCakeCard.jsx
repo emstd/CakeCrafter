@@ -1,7 +1,7 @@
 import { useNavigate, Form, redirect, useLoaderData } from "react-router-dom";
 
 
-export async function UpdateCake( {request, params} ){
+export async function UpdateCake( {params, request} ){
     const formData = await request.formData();
     const updatedCake = Object.fromEntries(formData);
 

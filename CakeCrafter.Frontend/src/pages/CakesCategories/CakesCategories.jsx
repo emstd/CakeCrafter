@@ -21,7 +21,7 @@ export async function CreateCategory({ request }){
     return redirect('/categories');
 }
 
-export async function UpdateCategory({ params, request }){ //Почему это работает, даже если написать { request, params }
+export async function UpdateCategory({ params, request }){
     const formData = await request.formData();
     const newCategoryName = formData.get("CategoryName");
     const response = await fetch(`http://localhost:5000/api/categories/${params.categoryId}`,
