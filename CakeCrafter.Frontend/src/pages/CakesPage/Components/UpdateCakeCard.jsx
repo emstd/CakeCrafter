@@ -4,9 +4,8 @@ import { useNavigate, Form, redirect, useLoaderData } from "react-router-dom";
 export async function UpdateCake( {request, params} ){
     const formData = await request.formData();
     const updatedCake = Object.fromEntries(formData);
-    updatedCake.id = params.cakeId;
 
-    const response = await fetch(`http://localhost:5000/api/cakes/`, //нужно добавить в конце /{id} и исправить на сервере, чтобы было по rest
+    const response = await fetch(`http://localhost:5000/api/cakes/${params.cakeId}`,
                                 {
                                     method: 'PUT',
                                     headers: { "Content-Type": "application/json" },

@@ -53,10 +53,11 @@ namespace CakeCrafter.API.Controllers
             return Ok(await _service.Create(cake));
         }
 
-        [HttpPut]
-        public async Task<ActionResult<CakeCreateRequest>> UpdateCake(CakeUpdateRequest cakeUpdate)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<CakeCreateRequest>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
         {
             var cake = _mapper.Map<CakeUpdateRequest, Cake>(cakeUpdate);
+            cake.Id = id;
             var updatedCake = await _service.Update(cake);
             if (updatedCake == null)
             {
