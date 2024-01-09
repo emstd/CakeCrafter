@@ -1,7 +1,7 @@
-import { useNavigate, Form, redirect } from "react-router-dom";
+import { useNavigate, useParams, Form, redirect } from "react-router-dom";
 
 
-export async function CreateCake( {request} ){
+export async function CreateCake( {params, request} ){
     const formData = await request.formData();
     const newCake = Object.fromEntries(formData);
     const response = await fetch("http://localhost:5000/api/cakes",
@@ -10,7 +10,8 @@ export async function CreateCake( {request} ){
                                     headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify(newCake),
                                 });
-    return redirect('/categories');
+    console.log(params.categoryId);
+    return redirect(`/categories/${params.categoryId}`);
 }
 
 

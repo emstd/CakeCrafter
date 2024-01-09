@@ -6,5 +6,5 @@ export default async function DeleteCakeCard( {params} ){
                                         method: 'DELETE',
                                     });
 
-        return redirect('/categories');
+        return redirect(`/categories/${params.categoryId}`);
 }

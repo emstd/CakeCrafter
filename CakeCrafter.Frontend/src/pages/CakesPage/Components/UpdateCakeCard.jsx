@@ -12,7 +12,7 @@ export async function UpdateCake( {request, params} ){
                                     headers: { "Content-Type": "application/json" },
                                     body: JSON.stringify(updatedCake),
                                 });
-    return redirect('/categories');
+    return redirect(`/categories/${params.categoryId}`);
 }
 
 

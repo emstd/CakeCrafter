@@ -1,5 +1,5 @@
 import './CakesPage.css'
-import { useLoaderData, Link, Form } from "react-router-dom";
+import { useLoaderData, useParams, Link, Form } from "react-router-dom";
 
 export async function GetCakes({ params }){
 
@@ -19,6 +19,7 @@ export async function GetCakeById( {params} ){
 
 function CakesPage() {
   const cake = useLoaderData();
+  const categoryId = useParams().categoryId;
   return (
     <>
       <p><Link to='/categories'>Назад</Link></p>
@@ -26,7 +27,7 @@ function CakesPage() {
         
       </div>
       <div>
-        <Link to='/categories/cake/create'>Создать новую карточку</Link>
+        <Link to={`/categories/${categoryId}/cake/create`}>Создать новую карточку</Link>
       </div>
       <div id='cakes-container'>
             {cake.items && cake.items.map(item => (
@@ -43,13 +44,13 @@ function CakesPage() {
                     <div id='cake-edit'>
                     <Form
                         method="get"
-                        action={`/categories/cake/update/${item.id}`}
+                        action={`/categories/${categoryId}/cake/update/${item.id}`}
                     >
                         <button type="submit">Ред.</button>
                     </Form>
                       <Form
                         method="post"
-                        action={`/categories/cake/delete/${item.id}`}
+                        action={`/categories/${categoryId}/cake/delete/${item.id}`}
                         onSubmit={(event) => {
                         if (
                             !confirm(

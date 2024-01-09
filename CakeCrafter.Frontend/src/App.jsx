@@ -46,16 +46,16 @@ const router = createBrowserRouter([
 
 
       {
-        path: "categories/cake/create",
+        path: "categories/:categoryId/cake/create",
         element: <CreateCakeCard />,
         action: CreateCake,
       },
       {
-        path: "categories/cake/delete/:cakeId", //сюда надо писать categories/:categoryId/cake/delete/:cakeId чтобы работал redirect и там исправить
+        path: "categories/:categoryId/cake/delete/:cakeId", //сюда надо писать categories/:categoryId/cake/delete/:cakeId чтобы работал redirect и там исправить
         action: DeleteCakeCard,
       },
       {
-        path: "categories/cake/update/:cakeId",
+        path: "categories/:categoryId/cake/update/:cakeId",
         element: <UpdateCakeCard />,
         loader: GetCakeById,
         action: UpdateCake,
