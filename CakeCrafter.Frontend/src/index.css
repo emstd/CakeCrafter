@@ -68,17 +68,16 @@ h1 {
 #main-page{
   display: flex;
   align-items: start;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: start;
   width: 100%;
 }
 
 #nav-panel {
-  border: 1px solid red;
   width: 20%;
 }
 
 #content {
-  border: 2px solid red;
   margin-left: 100px;
   width: 75%;
 }

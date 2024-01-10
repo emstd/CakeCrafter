@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { Link, Form } from "react-router-dom";
-
+import { 
+    DeleteIcon,
+    EditIcon
+} from "@chakra-ui/icons";
+import { Box, Flex } from "@chakra-ui/react";
 
 function DisplayCategory( {category} ){
 
 const [isEdit, setIsEdit] = useState(false);
     return(
-    <div>
+        <Box display='flex'>
                     {
                         isEdit ? (
                             <Form
@@ -38,6 +42,8 @@ const [isEdit, setIsEdit] = useState(false);
                         )
                     }
 
+                    <button type='button' onClick={() => setIsEdit(!isEdit)}><EditIcon /></button>
+
                     <Form
                         method="post"
                         action={`/categories/delete/${category.id}`}
@@ -51,11 +57,9 @@ const [isEdit, setIsEdit] = useState(false);
                         }
                         }}
                     >
-                        <button type="submit">Delete</button>
+                        <button type="submit"><DeleteIcon /></button>
                     </Form>
-
-                    <button type='button' onClick={() => setIsEdit(!isEdit)}>Edit</button>
-        </div>
+        </Box>
     );
 }
 

@@ -1,5 +1,7 @@
 import './CakesPage.css'
 import { useLoaderData, useParams, Link, Form } from "react-router-dom";
+import { Button } from '@chakra-ui/react';
+import { ChevronLeftIcon } from '@chakra-ui/icons';
 
 export async function GetCakes({ params }){
 
@@ -22,7 +24,7 @@ function CakesPage() {
   const categoryId = useParams().categoryId;
   return (
     <>
-      <p><Link to='/categories'>Назад</Link></p>
+      <Link to='/categories'><Button><ChevronLeftIcon />Назад</Button></Link>
       <div id='category-name'>
         
       </div>

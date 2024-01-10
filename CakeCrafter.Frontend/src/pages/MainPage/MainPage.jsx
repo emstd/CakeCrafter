@@ -1,18 +1,42 @@
-import { Outlet, Link } from 'react-router-dom';
-import { useColorMode, Button } from '@chakra-ui/react';
+import { Outlet, useNavigate, Link } from 'react-router-dom';
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  IconButton,
+  Box
+} from '@chakra-ui/react'
+
+import {
+  HamburgerIcon,
+  StarIcon
+} from '@chakra-ui/icons'
 
 function MainPage() {
-
+  const navigate = useNavigate();
   return (
     <div id='main-page'>
-      <div id='nav-panel'>
-      <nav>
-            <ul>
-              <Link to="/"><li>Главная</li></Link>
-              <Link to="/categories"><li>Карточки товаров</li></Link>
-            </ul>
-        </nav>
-      </div>
+      <Box>
+        <Link to='/'><StarIcon />CCLogo<StarIcon /></Link>
+      </Box>
+      <Menu>
+        <MenuButton
+          as={IconButton}
+          aria-label='Options'
+          icon={<HamburgerIcon />}
+          variant='outline'
+        />
+        <MenuList>
+          <MenuItem onClick={() => navigate("/")}>
+            Главная
+          </MenuItem>
+          <MenuItem onClick={() => navigate("/categories")}>
+            Карточки товаров
+          </MenuItem>
+        </MenuList>
+      </Menu>
+
       <div id='content'>
         <Outlet />
       </div>
