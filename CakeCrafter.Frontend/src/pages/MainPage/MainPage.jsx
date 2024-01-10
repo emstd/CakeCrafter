@@ -1,4 +1,5 @@
 import { Outlet, Link } from 'react-router-dom';
+import { useColorMode, Button } from '@chakra-ui/react';
 
 function MainPage() {
 
@@ -18,5 +19,6 @@ function MainPage() {
     </div>
 );
 }
+
 
 export default MainPage
