@@ -24,7 +24,7 @@ function CakesPage() {
   const categoryId = useParams().categoryId;
   return (
     <>
-      <Link to='/categories'><Button><ChevronLeftIcon />Назад</Button></Link>
+      <Link to='/categories'><Button><ChevronLeftIcon mt={'3px'} mr={'2px'}/>Назад</Button></Link>
       <div id='category-name'>
         
       </div>
