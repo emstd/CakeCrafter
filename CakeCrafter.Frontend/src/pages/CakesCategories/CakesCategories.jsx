@@ -1,5 +1,7 @@
 import { useLoaderData, Form, redirect } from 'react-router-dom';
 import DisplayCategory from './Components/DisplayCategory';
+import { Input, Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 
 export async function GetCategories(){
 
@@ -57,10 +59,24 @@ function CakesCategories() {
                     }
             </div>
             <div>
-                <Form method='POST' action='/categories/create'>
-                        <input type='search' name='NewCategory'/>
-                        <button type='submit'>Добавить</button>
-                </Form>
+            <Menu>
+                <MenuButton size='sm' as={Button} rightIcon={<AddIcon />}>
+                    Добавить
+                </MenuButton>
+                <MenuList>
+                    <Form method='POST' action='/categories/create'>
+                        <Input size='md' placeholder='Название категории' name='NewCategory'/>
+                        <MenuItem mt='10px'>
+                            <Button width='100%' size='sm' type='submit'>Добавить</Button>
+                        </MenuItem>
+                    </Form>
+                </MenuList>
+            </Menu>
+
+                {/* <Form method='POST' action='/categories/create'>
+                    <Button size='sm' type='submit'>Добавить</Button>
+                    <Input size='sm' placeholder='Название категории' name='NewCategory'/>
+                </Form> */}
             </div>
         </div>
 );

@@ -5,16 +5,21 @@ import {
   MenuList,
   MenuItem,
   IconButton,
-  Box
+  Button,
+  Box,
+  useColorMode
 } from '@chakra-ui/react'
 
 import {
   HamburgerIcon,
-  StarIcon
+  StarIcon,
+  MoonIcon,
+  SunIcon
 } from '@chakra-ui/icons'
 
 function MainPage() {
   const navigate = useNavigate();
+  const { colorMode, toggleColorMode } = useColorMode()
   return (
     <div id='main-page'>
       <Box>
@@ -36,6 +41,10 @@ function MainPage() {
           </MenuItem>
         </MenuList>
       </Menu>
+
+      <Button width={'40px'} onClick={toggleColorMode}>
+        {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+      </Button>
 
       <div id='content'>
         <Outlet />
