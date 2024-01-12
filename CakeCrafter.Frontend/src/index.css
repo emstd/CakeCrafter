@@ -71,9 +71,7 @@ h1 {
 
 #main-page{
   display: flex;
-  align-items: start;
   justify-content: space-around;
-  align-items: start;
   width: 100%;
 }
 

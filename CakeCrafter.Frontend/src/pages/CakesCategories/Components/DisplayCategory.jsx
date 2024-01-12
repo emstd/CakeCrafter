@@ -4,7 +4,7 @@ import {
     DeleteIcon,
     EditIcon
 } from "@chakra-ui/icons";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Input } from "@chakra-ui/react";
 
 function DisplayCategory( {category} ){
 
@@ -30,14 +30,14 @@ const [isEdit, setIsEdit] = useState(false);
                             }}
                         >
         
-                            <input type='text' name="CategoryName"/>
+                            <Input size='xs' type='text' name="CategoryName"/>
                             <button type="submit">Save</button>
                             </Form>
                         ) 
                         : 
                         (
                             <Link to={`/categories/${category.id}`}>
-                                <p>{category.name}</p>
+                                {category.name}
                             </Link>
                         )
                     }

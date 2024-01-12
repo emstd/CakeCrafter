@@ -1,3 +1,4 @@
+import { Box, Button } from "@chakra-ui/react";
 import { useNavigate, useParams, Form, redirect } from "react-router-dom";
 
 
@@ -82,15 +83,15 @@ function CreateCakeCard(){
                     </div>
             </div>
 
-
-            <button type="submit">Сохранить</button>
-            <button 
-                type="button"
+            <Box width='30%' display='flex' justifyContent='space-between' ml='10%'>
+            <Button bgColor='green' type="submit">Сохранить</Button>
+            <Button bgColor='red'
                 onClick={() => {
                         navigate(-1);
                     }
                 }
-            >   Отмена  </button>
+            >   Отмена  </Button>
+            </Box>
         </Form>
     );
 }

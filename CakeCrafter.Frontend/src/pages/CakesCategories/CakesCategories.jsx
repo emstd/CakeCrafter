@@ -66,8 +66,8 @@ function CakesCategories() {
                 <MenuList>
                     <Form method='POST' action='/categories/create'>
                         <Input size='md' placeholder='Название категории' name='NewCategory'/>
-                        <MenuItem mt='10px'>
-                            <Button width='100%' size='sm' type='submit'>Добавить</Button>
+                        <MenuItem as={Button} type='submit' borderWidth='1px' borderColor='gray' mt='10px'>
+                            Добавить
                         </MenuItem>
                     </Form>
                 </MenuList>

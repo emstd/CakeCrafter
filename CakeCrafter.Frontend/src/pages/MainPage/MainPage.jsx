@@ -21,35 +21,41 @@ function MainPage() {
   const navigate = useNavigate();
   const { colorMode, toggleColorMode } = useColorMode()
   return (
-    <div id='main-page'>
-      <Box>
-        <Link to='/'><StarIcon />CCLogo<StarIcon /></Link>
+    <Box display='flex' flexDirection='column' width='100%' alignItems='stretch'>
+
+      <Box display='flex' alignItems='center' justifyContent='space-between' width='13%'>
+            <Box>
+              <Link to='/'><StarIcon />CCLogo<StarIcon /></Link>
+            </Box>
+
+            <Button width={'40px'} onClick={toggleColorMode} >
+              {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            </Button>
+
+            <Menu>
+              <MenuButton
+                as={IconButton}
+                aria-label='Options'
+                icon={<HamburgerIcon />}
+                variant='outline'
+              />
+              <MenuList>
+                <MenuItem onClick={() => navigate("/")}>
+                  Главная
+                </MenuItem>
+                <MenuItem onClick={() => navigate("/categories")}>
+                  Карточки товаров
+                </MenuItem>
+              </MenuList>
+            </Menu>
       </Box>
-      <Menu>
-        <MenuButton
-          as={IconButton}
-          aria-label='Options'
-          icon={<HamburgerIcon />}
-          variant='outline'
-        />
-        <MenuList>
-          <MenuItem onClick={() => navigate("/")}>
-            Главная
-          </MenuItem>
-          <MenuItem onClick={() => navigate("/categories")}>
-            Карточки товаров
-          </MenuItem>
-        </MenuList>
-      </Menu>
 
-      <Button width={'40px'} onClick={toggleColorMode}>
-        {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-      </Button>
 
-      <div id='content'>
+      <Box ml='20%' width='70%'>
         <Outlet />
-      </div>
-    </div>
+      </Box>
+
+    </Box>
 );
 }
 
