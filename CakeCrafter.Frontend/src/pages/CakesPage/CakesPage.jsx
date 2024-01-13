@@ -1,7 +1,7 @@
 import './CakesPage.css'
 import React, { useState, useEffect } from 'react';
 import { useLoaderData, useParams, Link, Form } from "react-router-dom";
-import { Box, Button, Text } from '@chakra-ui/react';
+import { Box, Button, Image, Text, Card, Stack, CardBody, Heading, CardFooter } from '@chakra-ui/react';
 import { ChevronLeftIcon, DeleteIcon, EditIcon, SmallAddIcon } from '@chakra-ui/icons';
 import { GetTastes } from './Components/CreateCakeCard';
 
@@ -33,7 +33,7 @@ async function GetCategoryNameById(cakeId){
 
 
 function CakesPage() {
-  const cake = useLoaderData();
+  const cakes = useLoaderData();
   const categoryId = useParams().categoryId;
 
   const [categoryName, setCategoryName] = useState('');
@@ -80,86 +80,97 @@ function CakesPage() {
         width='65%'
         mt='3vh'
       >
-            {cake.items && cake.items.map(item => (
-                <Box
-                  key={item.id}
-                  display='flex'
-                  flexDirection='column'
-                  justifyContent='space-between'
-                  width='100%'
-                  m='25px 0 50px 0px'
-                  border='1px solid white'
-                  borderRadius='20px'
-                >                                                                       
-                                                                                                    {/* 1 строка */}        
-                  <Box                                                                  
-                  display='flex'
-                  justifyContent='space-between'
-                  >                                                     
+            {cakes.items && cakes.items.map(item => (
+              <>
+                <Card
+                direction={{ base: 'column', sm: 'row' }}
+                overflow='hidden'
+                variant='outline'
+              >
+                <Image
+                  objectFit='cover'
+                  maxW={{ base: '100%', sm: '200px' }}
+                  src='https://mykaleidoscope.ru/uploads/posts/2022-11/1669403152_mykaleidoscope-ru-p-tort-s-yagodami-vkontakte-4.jpg'
+                  alt='Caffe Latte'
+                />
+  
+                <Stack>
+                  <CardBody>
+                    <Heading size='md'>The perfect latte</Heading>
+  
+                    <Box                                                                  
+                    display='flex'
+                    justifyContent='space-between'
+                    >                                                     
+                
+                        
+                      
+  
+                      <Box width='50%' alignSelf='center'>
+                        <Text fontSize='4xl' textAlign='center'>{item.name}</Text>
+                      </Box>
+  
+                      <Box display='flex' mt='1vh' mr='1vh'>
+                        <Form
+                          method="get"
+                          action={`/categories/${categoryId}/cake/update/${item.id}`}
+                        >
+                          <Button size='sm' type="submit"><EditIcon /></Button>
+                        </Form>
+  
+                        <Form
+                          method="post"
+                            action={`/categories/${categoryId}/cake/delete/${item.id}`}
+                            onSubmit={(event) => {
+                            if (
+                                !confirm(
+                                    "Please confirm you want to delete this record."
+                                )
+                            ) {
+                                event.preventDefault();
+                            }
+                            }}
+                        >
+                          <Button size='sm' ml='2vh' type="submit"><DeleteIcon color='red' /></Button>
+                        </Form>
+                      </Box>
+                    </Box>
+                                                                                                {/* 2 строка */}
+                    <Box mt='2vh' width='100%' textAlign='center'>                                                             
+                      <Text fontSize='xl'>{item.description}</Text>
+                    </Box>
+                                                                                                {/* 3 строка */}
                     <Box
-                      m='10px 0 0 10px'
-                      border='3px solid black'
-                      width='35%'
-                      height='150px'
-                      textAlign='center'
-                    >
-                      Фото
+                    mt='4vh'
+                    display='flex'
+                    justifyContent='space-around'
+                    flexWrap='wrap'
+                    >    
+                      <p>Вкус: {tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</p>
+                              
+                      <p>Категория: {item.categoryId}</p>
+  
+                      <p>Время приготовления: {item.cookTimeInMinutes} минут</p>
+  
+                      <p>Сложность: {item.level}</p>
+  
+                      <p>Вес: {item.weight}кг</p>
+  
                     </Box>
+  
+                  
+                  </CardBody>
+  
+                  <CardFooter>
+                    <Button variant='solid' colorScheme='blue'>
+                      Buy Latte
+                    </Button>
+                  </CardFooter>
+                </Stack>
+              </Card>
 
-                    <Box width='50%' alignSelf='center'>
-                      <Text fontSize='4xl' textAlign='center'>{item.name}</Text>
-                    </Box>
-
-                    <Box display='flex' mt='1vh' mr='1vh'>
-                      <Form
-                        method="get"
-                        action={`/categories/${categoryId}/cake/update/${item.id}`}
-                      >
-                        <Button size='sm' type="submit"><EditIcon /></Button>
-                      </Form>
-
-                      <Form
-                        method="post"
-                          action={`/categories/${categoryId}/cake/delete/${item.id}`}
-                          onSubmit={(event) => {
-                          if (
-                              !confirm(
-                                  "Please confirm you want to delete this record."
-                              )
-                          ) {
-                              event.preventDefault();
-                          }
-                          }}
-                      >
-                        <Button size='sm' ml='2vh' type="submit"><DeleteIcon color='red' /></Button>
-                      </Form>
-                    </Box>
-                  </Box>
-                                                                                              {/* 2 строка */}
-                  <Box mt='2vh' width='100%' textAlign='center'>                                                             
-                    <Text fontSize='xl'>{item.description}</Text>
-                  </Box>
-                                                                                              {/* 3 строка */}
-                  <Box
-                  mt='4vh'
-                  display='flex'
-                  justifyContent='space-around'
-                  flexWrap='wrap'
-                  >    
-
-                    <p>Вкус: {item.tasteId}{/*tastes && tastes.find(taste => taste.id == item.id).name*/}</p>
-                            {console.log(tastes)}
-                    <p>Категория: {item.categoryId}</p>
-
-                    <p>Время приготовления: {item.cookTimeInMinutes} минут</p>
-
-                    <p>Сложность: {item.level}</p>
-
-                    <p>Вес: {item.weight}кг</p>
-
-                  </Box>
-
-                </Box>))
+            </>
+                ))
             }
       </Box>
     </>

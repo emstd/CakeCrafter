@@ -52,8 +52,15 @@ function CreateCakeCard(){
             <Box display='flex' flexDirection='column' width='50%' mt='7vh' ml='10%'>
 
                     <Box display='flex' justifyContent='space-between' alignItems='center'> 
-                      <Text>Фотография: </Text>
-                      <Box width='100px' height='100px' border='1px solid white' borderRadius='20px' mr='10%'></Box>
+                        <Text>Фотография: </Text>
+                        
+                        <Input
+                        width='50%'
+                            placeholder="Select Date and Time"
+                            size="md"
+                            p='0.8vh'
+                            type="file"
+                        />
                     </Box>
 
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
