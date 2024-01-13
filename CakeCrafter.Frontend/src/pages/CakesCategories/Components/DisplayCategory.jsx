@@ -4,13 +4,13 @@ import {
     DeleteIcon,
     EditIcon
 } from "@chakra-ui/icons";
-import { Box, Flex, Input } from "@chakra-ui/react";
+import { Box, Button, Text, Input } from "@chakra-ui/react";
 
 function DisplayCategory( {category} ){
 
 const [isEdit, setIsEdit] = useState(false);
     return(
-        <Box display='flex'>
+        <Box display='flex' justifyContent='space-between' width='30%' mb='4vh'>
                     {
                         isEdit ? (
                             <Form
@@ -30,35 +30,49 @@ const [isEdit, setIsEdit] = useState(false);
                             }}
                         >
         
-                            <Input size='xs' type='text' name="CategoryName"/>
-                            <button type="submit">Save</button>
+                            <Input
+                                defaultValue={category.name}
+                                fontSize='2xl' 
+                                width='90%'
+                                size='sm'
+                                mt='1vh' 
+                                type='text' 
+                                name="CategoryName"
+                            />
+
+                            <Button mt='2vh' type="submit">Сохранить</Button>
+                            <Button onClick={() => setIsEdit(false)} mt='2vh' ml='2vw'>Отмена</Button>
+                            
                             </Form>
                         ) 
                         : 
                         (
                             <Link to={`/categories/${category.id}`}>
-                                {category.name}
+                                <Text fontSize='2xl'>{category.name}</Text>
                             </Link>
                         )
                     }
 
-                    <button type='button' onClick={() => setIsEdit(!isEdit)}><EditIcon /></button>
+                    <Box display='flex' minWidth='30%' justifyContent='space-between'>
+                        <Button type='button' onClick={() => setIsEdit(!isEdit)}><EditIcon /></Button>
 
-                    <Form
-                        method="post"
-                        action={`/categories/delete/${category.id}`}
-                        onSubmit={(event) => {
-                        if (
-                            !confirm(
-                                "Please confirm you want to delete this record."
-                            )
-                        ) {
-                            event.preventDefault();
-                        }
-                        }}
-                    >
-                        <button type="submit"><DeleteIcon /></button>
-                    </Form>
+                        <Form
+                            method="post"
+                            action={`/categories/delete/${category.id}`}
+                            onSubmit={(event) => {
+                            if (
+                                !confirm(
+                                    "Please confirm you want to delete this record."
+                                )
+                            ) {
+                                event.preventDefault();
+                            }
+                            }}
+                        >
+                            <Button type="submit"><DeleteIcon /></Button>
+                        </Form>
+
+                    </Box>
         </Box>
     );
 }
