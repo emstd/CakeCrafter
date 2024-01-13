@@ -35,7 +35,7 @@ const [isEdit, setIsEdit] = useState(false);
                                 fontSize='2xl' 
                                 width='90%'
                                 size='sm'
-                                mt='1vh' 
+                                mt='0.5vh' 
                                 type='text' 
                                 name="CategoryName"
                             />
