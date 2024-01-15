@@ -1,5 +1,7 @@
 import { useLoaderData, Form, redirect } from 'react-router-dom';
 import DisplayCategory from './Components/DisplayCategory';
+import { Input, Button, Menu, MenuButton, MenuList, MenuItem, Box } from '@chakra-ui/react';
+import { AddIcon } from '@chakra-ui/icons';
 
 export async function GetCategories(){
 
@@ -21,7 +23,7 @@ export async function CreateCategory({ request }){
     return redirect('/categories');
 }
 
-export async function UpdateCategory({ params, request }){ //Почему это работает, даже если написать { request, params }
+export async function UpdateCategory({ params, request }){
     const formData = await request.formData();
     const newCategoryName = formData.get("CategoryName");
     const response = await fetch(`http://localhost:5000/api/categories/${params.categoryId}`,
@@ -46,8 +48,8 @@ function CakesCategories() {
     const categories = useLoaderData();
 
     return (
-        <div>
-            <div>
+        <Box>
+            <Box>
                     {categories.length ? (categories.map(category => (
                         <DisplayCategory key={category.id} category={category} />
                     )))
@@ -55,14 +57,27 @@ function CakesCategories() {
                             <p>Нет категорий</p>
                         )
                     }
-            </div>
-            <div>
-                <Form method='POST' action='/categories/create'>
-                        <input type='search' name='NewCategory'/>
-                        <button type='submit'>Добавить</button>
-                </Form>
-            </div>
-        </div>
+            </Box>
+            <Box mt='2vh'>
+            <Menu>
+                <MenuButton size='sm' as={Button} rightIcon={<AddIcon />}>
+                    Добавить
+                </MenuButton>
+                <MenuList>
+                    <Form method='POST' action='/categories/create'>
+                        <Input size='md' placeholder='Название категории' name='NewCategory'/>
+                        <MenuItem as={Button} type='submit' borderWidth='1px' borderColor='gray' mt='10px'>
+                            Добавить
+                        </MenuItem>
+                    </Form>
+                </MenuList>
+            </Menu>
+                {/* <Form method='POST' action='/categories/create'>
+                    <Button size='sm' type='submit'>Добавить</Button>
+                    <Input size='sm' placeholder='Название категории' name='NewCategory'/>
+                </Form> */}
+            </Box>
+        </Box>
 );
 }
 

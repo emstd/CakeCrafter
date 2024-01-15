@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { Link, Form } from "react-router-dom";
-
+import { 
+    DeleteIcon,
+    EditIcon
+} from "@chakra-ui/icons";
+import { Box, Button, Text, Input } from "@chakra-ui/react";
 
 function DisplayCategory( {category} ){
 
 const [isEdit, setIsEdit] = useState(false);
     return(
-    <div>
+        <Box display='flex' justifyContent='space-between' width='30%' mb='4vh'>
                     {
                         isEdit ? (
                             <Form
@@ -26,36 +30,50 @@ const [isEdit, setIsEdit] = useState(false);
                             }}
                         >
         
-                            <input type='text' name="CategoryName"/>
-                            <button type="submit">Save</button>
+                            <Input
+                                defaultValue={category.name}
+                                fontSize='2xl' 
+                                width='90%'
+                                size='sm'
+                                mt='0.5vh' 
+                                type='text' 
+                                name="CategoryName"
+                            />
+
+                            <Button mt='2vh' type="submit">Сохранить</Button>
+                            <Button onClick={() => setIsEdit(false)} mt='2vh' ml='2vw'>Отмена</Button>
+                            
                             </Form>
                         ) 
                         : 
                         (
                             <Link to={`/categories/${category.id}`}>
-                                <p>{category.name}</p>
+                                <Text fontSize='2xl'>{category.name}</Text>
                             </Link>
                         )
                     }
 
-                    <Form
-                        method="post"
-                        action={`/categories/delete/${category.id}`}
-                        onSubmit={(event) => {
-                        if (
-                            !confirm(
-                                "Please confirm you want to delete this record."
-                            )
-                        ) {
-                            event.preventDefault();
-                        }
-                        }}
-                    >
-                        <button type="submit">Delete</button>
-                    </Form>
+                    <Box display='flex' minWidth='30%' justifyContent='space-between'>
+                        <Button type='button' onClick={() => setIsEdit(!isEdit)}><EditIcon /></Button>
 
-                    <button type='button' onClick={() => setIsEdit(!isEdit)}>Edit</button>
-        </div>
+                        <Form
+                            method="post"
+                            action={`/categories/delete/${category.id}`}
+                            onSubmit={(event) => {
+                            if (
+                                !confirm(
+                                    "Please confirm you want to delete this record."
+                                )
+                            ) {
+                                event.preventDefault();
+                            }
+                            }}
+                        >
+                            <Button type="submit"><DeleteIcon /></Button>
+                        </Form>
+
+                    </Box>
+        </Box>
     );
 }
 
