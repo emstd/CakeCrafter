@@ -1,7 +1,7 @@
 import './CakesPage.css'
 import React, { useState, useEffect } from 'react';
 import { useLoaderData, useParams, Link, Form } from "react-router-dom";
-import { Box, Button, Image, Text, Card, Stack, CardBody, Heading, CardFooter } from '@chakra-ui/react';
+import { Box, Button, Image, Text, Card, Stack, CardBody, Heading, CardFooter, CardHeader, Flex } from '@chakra-ui/react';
 import { ChevronLeftIcon, DeleteIcon, EditIcon, SmallAddIcon } from '@chakra-ui/icons';
 import { GetTastes } from './Components/CreateCakeCard';
 
@@ -75,99 +75,77 @@ function CakesPage() {
 
       <Box
         display='flex'
-        flexDirection='column'
+        flexDirection='row'
         justifyContent='space-between'
         width='80%'
+        flexWrap='wrap'
         mt='3vh'
       >
             {cakes.items && cakes.items.map(item => (
               <>
                 <Card
-                direction={{ base: 'column', sm: 'row' }}
+                direction={{ base: 'column', sm: 'column' }}
                 overflow='hidden'
                 variant='outline'
                 mt='3vh'
+                width='100%'
               >
-                <Image
-                  objectFit='cover'
-                  maxW={{ base: '100%', sm: '200px' }}
-                  src='https://placehold.co/600x400'
-                  alt='Caffe Latte'
-                />
-  
-                <Stack>
-                  <CardBody>
-                    <Heading size='md'>The perfect latte</Heading>
-  
-                    <Box                                                                  
-                    display='flex'
-                    justifyContent='space-between'
-                    >                                                     
-                
-                        
-                      
-  
-                      <Box width='50%' alignSelf='center'>
-                        <Text fontSize='4xl' textAlign='center'>{item.name}</Text>
-                      </Box>
-  
-                      <Box display='flex' mt='1vh' mr='1vh'>
-                        <Form
-                          method="get"
-                          action={`/categories/${categoryId}/cake/update/${item.id}`}
-                        >
-                          <Button size='sm' type="submit"><EditIcon /></Button>
-                        </Form>
-  
-                        <Form
-                          method="post"
-                            action={`/categories/${categoryId}/cake/delete/${item.id}`}
-                            onSubmit={(event) => {
-                            if (
-                                !confirm(
-                                    "Please confirm you want to delete this record."
-                                )
-                            ) {
-                                event.preventDefault();
-                            }
-                            }}
-                        >
-                          <Button size='sm' ml='2vh' type="submit"><DeleteIcon color='red' /></Button>
-                        </Form>
-                      </Box>
-                    </Box>
-                                                                                                {/* 2 строка */}
-                    <Box mt='2vh' width='100%' textAlign='center'>                                                             
-                      <Text fontSize='xl'>{item.description}</Text>
-                    </Box>
-                                                                                                {/* 3 строка */}
-                    <Box
-                    mt='4vh'
-                    display='flex'
-                    justifyContent='space-around'
-                    flexWrap='wrap'
-                    >    
-                      <p>Вкус: {tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</p>
+                  <CardHeader>
+                    <Flex justifyContent='space-between'>
+                      <Image
+                        objectFit='cover'
+                        maxW={{ base: '100%', sm: '70%' }}
+                        src='https://avatars.mds.yandex.net/i?id=2fbc66771f649edcff38adb884efe85248287e67-4554202-images-thumbs&n=13'
+                        alt='Caffe Latte'
+                      />
+                      <Flex flex='1' flexDirection='column' alignItems='center'>
+                        <Heading size='lg' textAlign='center'>{item.name}</Heading>
+                        <Text textAlign='center' mt='5vh' fontSize='xl'>{item.description}</Text>
+                      </Flex>
+                    </Flex>
+                  </CardHeader>
+
+                <CardBody>
+
+                  <p>Вкус: {tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</p>
                               
-                      <p>Категория: {item.categoryId}</p>
+                  <p>Категория: {item.categoryId}</p>
   
-                      <p>Время приготовления: {item.cookTimeInMinutes} минут</p>
+                  <p>Время приготовления: {item.cookTimeInMinutes} минут</p>
   
-                      <p>Сложность: {item.level}</p>
+                  <p>Сложность: {item.level}</p>
   
-                      <p>Вес: {item.weight}кг</p>
+                  <p>Вес: {item.weight}кг</p>
+
+                </CardBody>
+
+                <CardFooter>
+
+                  <Form
+                    method="get"
+                    action={`/categories/${categoryId}/cake/update/${item.id}`}
+                  >
+                    <Button size='sm' type="submit"><EditIcon /></Button>
+                  </Form>
   
-                    </Box>
-  
-                  
-                  </CardBody>
-  
-                  <CardFooter>
-                    <Button variant='solid' colorScheme='blue'>
-                      Buy Latte
-                    </Button>
-                  </CardFooter>
-                </Stack>
+                  <Form
+                    method="post"
+                    action={`/categories/${categoryId}/cake/delete/${item.id}`}
+                    onSubmit={(event) => {
+                      if (
+                          !confirm(
+                            "Please confirm you want to delete this record."
+                          )
+                      ) {
+                        event.preventDefault();
+                      }
+                      }}
+                    >
+                      <Button size='sm' ml='2vh' type="submit"><DeleteIcon color='red' /></Button>
+                    </Form>
+
+                </CardFooter>
+
               </Card>
 
             </>
