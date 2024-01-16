@@ -84,71 +84,67 @@ function CakesPage() {
             {cakes.items && cakes.items.map(item => (
               <>
                 <Card
-                direction={{ base: 'column', sm: 'column' }}
+                direction={{ base: 'column', sm: 'column', md: 'row' }}
                 overflow='hidden'
                 variant='outline'
                 mt='3vh'
                 width='100%'
               >
-                  <CardHeader>
-                    <Flex justifyContent='space-between'>
-                      <Image
-                        objectFit='cover'
-                        maxW={{ base: '100%', sm: '70%' }}
-                        src='https://avatars.mds.yandex.net/i?id=2fbc66771f649edcff38adb884efe85248287e67-4554202-images-thumbs&n=13'
-                        alt='Caffe Latte'
-                      />
-                      <Flex flex='1' flexDirection='column' alignItems='center'>
-                        <Heading size='lg' textAlign='center'>{item.name}</Heading>
-                        <Text textAlign='center' mt='5vh' fontSize='xl'>{item.description}</Text>
-                      </Flex>
-                    </Flex>
-                  </CardHeader>
+                 <Image
+                    objectFit='cover'
+                    maxW={{ base: '100%', sm: '100%', md: '30%' }}
+                    src='https://o-tendencii.com/uploads/posts/2022-02/1645679812_20-o-tendencii-com-p-tort-na-svadbu-odnoyarusnii-kremovii-foto-20.jpg'
+                    alt='Caffe Latte'
+                  />
+                  <Stack>
+                    <Heading size='lg' textAlign='center'>{item.name}</Heading>
+                    <Text textAlign='center' mt='5vh' fontSize='xl'>{item.description}</Text>
 
-                <CardBody>
+                    <CardBody>
 
-                  <p>Вкус: {tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</p>
-                              
-                  <p>Категория: {item.categoryId}</p>
-  
-                  <p>Время приготовления: {item.cookTimeInMinutes} минут</p>
-  
-                  <p>Сложность: {item.level}</p>
-  
-                  <p>Вес: {item.weight}кг</p>
+                      <p>Вкус: {tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</p>
+                                  
+                      <p>Категория: {item.categoryId}</p>
+      
+                      <p>Время приготовления: {item.cookTimeInMinutes} минут</p>
+      
+                      <p>Сложность: {item.level}</p>
+      
+                      <p>Вес: {item.weight}кг</p>
 
-                </CardBody>
+                    </CardBody>
 
-                <CardFooter>
+                    <CardFooter>
 
-                  <Form
-                    method="get"
-                    action={`/categories/${categoryId}/cake/update/${item.id}`}
-                  >
-                    <Button size='sm' type="submit"><EditIcon /></Button>
-                  </Form>
-  
-                  <Form
-                    method="post"
-                    action={`/categories/${categoryId}/cake/delete/${item.id}`}
-                    onSubmit={(event) => {
-                      if (
-                          !confirm(
-                            "Please confirm you want to delete this record."
-                          )
-                      ) {
-                        event.preventDefault();
-                      }
-                      }}
-                    >
-                      <Button size='sm' ml='2vh' type="submit"><DeleteIcon color='red' /></Button>
-                    </Form>
+                      <Form
+                        method="get"
+                        action={`/categories/${categoryId}/cake/update/${item.id}`}
+                      >
+                        <Button size='sm' type="submit"><EditIcon /></Button>
+                      </Form>
+      
+                      <Form
+                        method="post"
+                        action={`/categories/${categoryId}/cake/delete/${item.id}`}
+                        onSubmit={(event) => {
+                          if (
+                              !confirm(
+                                "Please confirm you want to delete this record."
+                              )
+                          ) {
+                            event.preventDefault();
+                          }
+                          }}
+                        >
+                          <Button size='sm' ml='2vh' type="submit"><DeleteIcon color='red' /></Button>
+                        </Form>
 
-                </CardFooter>
+                    </CardFooter>
 
-              </Card>
+                  </Stack>
 
-            </>
+                </Card>
+              </>
                 ))
             }
       </Box>
