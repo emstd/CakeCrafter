@@ -58,24 +58,20 @@ function CakesCategories() {
                         )
                     }
             </Box>
-            <Box mt='2vh'>
-            <Menu>
-                <MenuButton size='sm' as={Button} rightIcon={<AddIcon />}>
-                    Добавить
-                </MenuButton>
-                <MenuList>
-                    <Form method='POST' action='/categories/create'>
-                        <Input size='md' placeholder='Название категории' name='NewCategory'/>
-                        <MenuItem as={Button} type='submit' borderWidth='1px' borderColor='gray' mt='10px'>
-                            Добавить
-                        </MenuItem>
-                    </Form>
-                </MenuList>
-            </Menu>
-                {/* <Form method='POST' action='/categories/create'>
-                    <Button size='sm' type='submit'>Добавить</Button>
-                    <Input size='sm' placeholder='Название категории' name='NewCategory'/>
-                </Form> */}
+            <Box mt='6vh'>
+                <Menu>
+                    <MenuButton size='sm' as={Button} rightIcon={<AddIcon />}>
+                        Добавить
+                    </MenuButton>
+                    <MenuList>
+                        <Form method='POST' action='/categories/create'>
+                            <Input size='md' placeholder='Название категории' name='NewCategory'/>
+                            <MenuItem as={Button} type='submit' borderWidth='1px' borderColor='gray' mt='10px'>
+                                Добавить
+                            </MenuItem>
+                        </Form>
+                    </MenuList>
+                </Menu>
             </Box>
         </Box>
 );

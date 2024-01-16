@@ -59,7 +59,7 @@ function CakesPage() {
       <Box
         display='flex'
         justifyContent='space-between'
-        width='65%'
+        width='80%'
         alignItems='center'
       >
         <Link to='/categories'><Button><ChevronLeftIcon mt={'3px'} mr={'2px'}/>Назад</Button></Link>
@@ -77,7 +77,7 @@ function CakesPage() {
         display='flex'
         flexDirection='column'
         justifyContent='space-between'
-        width='65%'
+        width='80%'
         mt='3vh'
       >
             {cakes.items && cakes.items.map(item => (
@@ -86,11 +86,12 @@ function CakesPage() {
                 direction={{ base: 'column', sm: 'row' }}
                 overflow='hidden'
                 variant='outline'
+                mt='3vh'
               >
                 <Image
                   objectFit='cover'
                   maxW={{ base: '100%', sm: '200px' }}
-                  src='https://mykaleidoscope.ru/uploads/posts/2022-11/1669403152_mykaleidoscope-ru-p-tort-s-yagodami-vkontakte-4.jpg'
+                  src='https://placehold.co/600x400'
                   alt='Caffe Latte'
                 />
   

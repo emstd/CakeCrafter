@@ -10,7 +10,7 @@ function DisplayCategory( {category} ){
 
 const [isEdit, setIsEdit] = useState(false);
     return(
-        <Box display='flex' justifyContent='space-between' width='30%' mb='4vh'>
+        <Box display='flex' justifyContent='space-between' width='40%' mb='4vh'>
                     {
                         isEdit ? (
                             <Form
@@ -53,7 +53,7 @@ const [isEdit, setIsEdit] = useState(false);
                         )
                     }
 
-                    <Box display='flex' minWidth='30%' justifyContent='space-between'>
+                    <Box display='flex' minWidth='40%' justifyContent='space-between'>
                         <Button type='button' onClick={() => setIsEdit(!isEdit)}><EditIcon /></Button>
 
                         <Form
@@ -69,7 +69,7 @@ const [isEdit, setIsEdit] = useState(false);
                             }
                             }}
                         >
-                            <Button type="submit"><DeleteIcon /></Button>
+                            <Button type="submit"><DeleteIcon color='red' /></Button>
                         </Form>
 
                     </Box>
