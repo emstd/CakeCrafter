@@ -30,7 +30,7 @@ export async function GetCakeById( {params} ){
 }
 
 
-async function GetCategoryNameById(cakeId){
+export async function GetCategoryNameById(cakeId){
   const response = await fetch(`http://localhost:5000/api/Categories/${cakeId}`);
   const responseJson = await response.json();
   const categoryName = responseJson.name;
@@ -149,14 +149,14 @@ function CakesPage() {
                     <Divider />
 
                     <CardBody>
-                      <Text mt='5vh' fontSize='xl'>{item.description}</Text>
+                      <Text mt='1vh' fontSize='xl'>{item.description} Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam fugit dolore sit ipsa, ipsam facilis obcaecati sapiente cumque, porro illum temporibus et reiciendis esse odio optio hic architecto, rem culpa?</Text>
                     </CardBody>
 
                     <Divider />
 
                     <CardFooter>
                       <Flex justifyContent='space-around' w='100%' flexWrap='wrap'>
-                        <Text>Категория: {item.categoryId}</Text>
+                        <Text>{categoryName}</Text>
                         <Flex alignItems='center'><LiaGrinTongueSquint style={{fontSize:'3vh'}}/><Text ml='0.5vw'>{tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</Text></Flex>
                         <Text><TimeIcon mb='0.5vh' mr='0.5vw' />{item.cookTimeInMinutes} минут</Text>
                         <Text>Сложность: {item.level}</Text>

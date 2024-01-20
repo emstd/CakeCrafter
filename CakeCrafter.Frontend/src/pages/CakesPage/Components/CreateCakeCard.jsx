@@ -12,7 +12,8 @@ import{ Box,
         } 
     from "@chakra-ui/react";
 
-import { useNavigate, Form, redirect } from "react-router-dom";
+import { useNavigate, Form, redirect, useParams } from "react-router-dom";
+import { GetCategoryNameById } from '../CakesPage';
 
 
 export async function CreateCake( {params, request} ){
@@ -34,7 +35,25 @@ export async function GetTastes(){
     return tastesJson;
 }
 
+async function GetCategories(){
+
+    const response = await fetch("http://localhost:5000/api/categories");
+    const jsonResponse = await response.json();
+
+  return jsonResponse;
+}
+
 function CreateCakeCard(){
+    const categoryId = useParams().categoryId;
+    const [categoryName, setCategoryName] = useState('');
+    useEffect(() => {
+      async function fetchCategoryName() {
+        const name = await GetCategoryNameById(categoryId);
+        setCategoryName(name);
+      }
+      fetchCategoryName();
+    }, []);
+
     const navigate = useNavigate();
 
     const [tastes, setTastes] = useState([]);
@@ -45,6 +64,15 @@ function CreateCakeCard(){
       }
       fetchGetTastes();
     }, []);
+
+    const [cakesCategories, setCakesCategories] = useState([]);
+    useEffect(() => {
+        async function fetchGetCategories() {
+          const categoriesResponse = await GetCategories();
+          setCakesCategories(categoriesResponse);
+        }
+        fetchGetCategories();
+      }, []);
 
     return(
         <Form method="post" id="create-cake-form">
@@ -106,12 +134,19 @@ function CreateCakeCard(){
 
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Категория:</Text>
-                        <Input
+                        <Select
                             width='50%'
-                            type="text"
-                            name="categoryId"
-                            placeholder="Категория"
-                        />
+                            type='text'
+                            name='categoryId'
+                        >
+                            {
+                                cakesCategories && cakesCategories.map(category =>
+                                    (
+                                        <option key={category.id} value={category.id} selected={category.id==categoryId}>{category.name}</option>
+                                    )
+                                )
+                            }
+                        </Select>
                     </Box>
 
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
