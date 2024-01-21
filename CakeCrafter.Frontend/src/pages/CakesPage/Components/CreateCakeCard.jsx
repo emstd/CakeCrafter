@@ -8,7 +8,8 @@ import{ Box,
         NumberInputStepper, 
         NumberIncrementStepper, 
         NumberDecrementStepper, 
-        Select
+        Select,
+        Divider
         } 
     from "@chakra-ui/react";
 
@@ -90,7 +91,7 @@ function CreateCakeCard(){
                             type="file"
                         />
                     </Box>
-
+                    <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Название:</Text>
                         <Input
@@ -100,7 +101,7 @@ function CreateCakeCard(){
                             placeholder="Название"
                         />
                     </Box>
-
+                    <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Описание:</Text>
                         <Input
@@ -111,7 +112,7 @@ function CreateCakeCard(){
                             placeholder="Описание"
                         />
                     </Box>
-
+                    <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Вкус:</Text>
                         
@@ -131,7 +132,7 @@ function CreateCakeCard(){
 
                         </Select>
                     </Box>
-
+                    <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Категория:</Text>
                         <Select
@@ -148,7 +149,7 @@ function CreateCakeCard(){
                             }
                         </Select>
                     </Box>
-
+                    <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Время приготовления, мин:</Text>
                         <NumberInput
@@ -168,7 +169,7 @@ function CreateCakeCard(){
                             </NumberInputStepper>
                         </NumberInput>
                     </Box>
-
+                    <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Сложность:</Text>
                         <Input
@@ -178,7 +179,7 @@ function CreateCakeCard(){
                             placeholder="Сложность"
                         />
                     </Box>
-
+                    <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Вес, кг:</Text>
 
@@ -199,6 +200,7 @@ function CreateCakeCard(){
                             </NumberInputStepper>
                         </NumberInput>
                     </Box>
+                    <Divider mt='1vh'/>
             </Box>
 
             <Box width='30%' display='flex' justifyContent='space-between' ml='20%' mt='10vh'>

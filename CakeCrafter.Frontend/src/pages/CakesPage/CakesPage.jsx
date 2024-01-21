@@ -171,13 +171,13 @@ function CakesPage() {
         <Box display='flex' justifyContent='space-around' width='30%' mt='10vh' ml='35%'>
           {
             PagesArray.length > 1 && 
-            <Link to={`/categories/${categoryId}&skip=0&take=5`}><Button><ChevronLeftIcon /></Button></Link>
+            <Button as='a' href={`${categoryId}&skip=0&take=5`}><ChevronLeftIcon /></Button>
           }
 
           {
             PagesArray.length > 1 && 
             PagesArray.map((page) => 
-              <Link to={`/categories/${categoryId}&skip=${startPage+5}&take=5`} key={page}><Button>{page}</Button></Link>
+              <Link to={`/categories/${categoryId}&skip=5&take=5`} key={page}><Button>{page}</Button></Link>
             )
           }
 
@@ -185,7 +185,7 @@ function CakesPage() {
             PagesArray.length > 1 && 
             <Button><ChevronRightIcon /></Button>
           }
-      </Box>
+        </Box>
       </Box>
     </>
 );

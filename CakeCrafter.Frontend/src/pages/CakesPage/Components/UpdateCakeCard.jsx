@@ -7,7 +7,8 @@ import{ Box,
         NumberInputField, 
         NumberInputStepper, 
         NumberIncrementStepper, 
-        NumberDecrementStepper 
+        NumberDecrementStepper, 
+        Divider
         } 
     from "@chakra-ui/react";
 
@@ -91,7 +92,7 @@ function UpdateCakeCard(){
                             type="file"
                         />
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Название:</Text>
                     <Input
@@ -102,7 +103,7 @@ function UpdateCakeCard(){
                         defaultValue={cake.name}
                     />
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Описание:</Text>
                     <Input
@@ -114,7 +115,7 @@ function UpdateCakeCard(){
                         defaultValue={cake.description}
                     />
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Вкус:</Text>
                     <Select
@@ -133,7 +134,7 @@ function UpdateCakeCard(){
 
                     </Select>
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Категория:</Text>
                     <Select
@@ -150,7 +151,7 @@ function UpdateCakeCard(){
                             }
                     </Select>
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Время приготовления, мин:</Text>
                     <NumberInput
@@ -170,7 +171,7 @@ function UpdateCakeCard(){
                         </NumberInputStepper>
                     </NumberInput>
                 </Box>
-
+                <Divider mt='1vh' />
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Сложность:</Text>
                     <Input
@@ -181,7 +182,7 @@ function UpdateCakeCard(){
                         defaultValue={cake.level}
                     />
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Вес, кг:</Text>
 
@@ -202,6 +203,7 @@ function UpdateCakeCard(){
                         </NumberInputStepper>
                     </NumberInput>
                 </Box>
+                <Divider mt='1vh'/>
         </Box>
 
         <Box width='30%' display='flex' justifyContent='space-between' ml='20%' mt='10vh'>
