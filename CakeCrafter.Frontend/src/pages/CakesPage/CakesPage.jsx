@@ -181,7 +181,7 @@ function CakesPage() {
 
           {
             PagesArray.length > 1 && 
-            <Button><ChevronRightIcon /></Button>
+            <Button as='a' href={`/categories/${categoryId}?skip=${(PagesArray.length-1)*5}&take=5`}><ChevronRightIcon /></Button>
           }
         </Box>
       </Box>
