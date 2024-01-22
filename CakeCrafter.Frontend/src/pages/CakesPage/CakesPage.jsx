@@ -8,14 +8,12 @@ import { LiaGrinTongueSquint } from "react-icons/lia";
 import { MdOutlineScale } from "react-icons/md";
 
 export async function GetCakes({ params, request }){
-    let skip = 0;
     let take = 5;
-    if (request.skip > 0)
-    {
-      skip = request.skip;
-      take = request.take;
-    }
-    const response = await fetch(`http://localhost:5000/api/Cakes?categoryId=${params.categoryId}&skip=${skip}&take=${take}`);
+
+    const url = new URL(request.url);
+    const skip = url.searchParams.get("skip");
+
+    const response = await fetch(`http://localhost:5000/api/Cakes?categoryId=${params.categoryId}&skip=${skip ?? 0}&take=${take}`);
     const jsonResponse = await response.json();
 
   return jsonResponse;
@@ -171,13 +169,13 @@ function CakesPage() {
         <Box display='flex' justifyContent='space-around' width='30%' mt='10vh' ml='35%'>
           {
             PagesArray.length > 1 && 
-            <Button as='a' href={`${categoryId}&skip=0&take=5`}><ChevronLeftIcon /></Button>
+            <Button as='a' href={`/categories/${categoryId}?skip=0&take=5`}><ChevronLeftIcon /></Button>
           }
 
           {
             PagesArray.length > 1 && 
             PagesArray.map((page) => 
-              <Link to={`/categories/${categoryId}&skip=5&take=5`} key={page}><Button>{page}</Button></Link>
+              <Link to={`/categories/${categoryId}?skip=${(page-1)*5}&take=5`} key={page}><Button>{page}</Button></Link>
             )
           }
 
