@@ -23,7 +23,7 @@ function MainPage() {
   return (
     <Box display='flex' flexDirection='column' width='100%' alignItems='stretch'>
 
-      <Box display='flex' alignItems='center' justifyContent='space-between' width='13%'>
+      <Box display='flex' alignItems='center' justifyContent='space-between' width='15%'>
             <Box>
               <Link to='/'><StarIcon />CCLogo<StarIcon /></Link>
             </Box>
@@ -51,7 +51,7 @@ function MainPage() {
       </Box>
 
 
-      <Box ml='20%' width='70%'>
+      <Box ml='20%' width='80%'>
         <Outlet />
       </Box>
 

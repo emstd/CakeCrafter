@@ -1,15 +1,20 @@
-import { useNavigate, Form, redirect, useLoaderData } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import{ Box, 
-    Button, 
-    Text, 
-    Input, 
-    NumberInput,  
-    NumberInputField, 
-    NumberInputStepper, 
-    NumberIncrementStepper, 
-    NumberDecrementStepper 
-    } 
-from "@chakra-ui/react";
+        Button, 
+        Text, 
+        Input, 
+        NumberInput,  
+        NumberInputField, 
+        NumberInputStepper, 
+        NumberIncrementStepper, 
+        NumberDecrementStepper, 
+        Divider
+        } 
+    from "@chakra-ui/react";
+
+import { useNavigate, Form, redirect, useLoaderData, useParams } from "react-router-dom";
+import { GetCategoryNameById } from '../CakesPage';
+import { Select } from '@chakra-ui/react';
 
 
 export async function UpdateCake( {params, request} ){
@@ -25,11 +30,52 @@ export async function UpdateCake( {params, request} ){
     return redirect(`/categories/${params.categoryId}`);
 }
 
+export async function GetTastes(){
+    const response = await fetch(`http://localhost:5000/api/Tastes/`);
+    const tastesJson = await response.json();
+    return tastesJson;
+}
+async function GetCategories(){
+
+    const response = await fetch("http://localhost:5000/api/categories");
+    const jsonResponse = await response.json();
+
+  return jsonResponse;
+}
 
 
 function UpdateCakeCard(){
     const cake = useLoaderData();
     const navigate = useNavigate();
+
+    const categoryId = useParams().categoryId;
+    const [categoryName, setCategoryName] = useState('');
+    useEffect(() => {
+      async function fetchCategoryName() {
+        const name = await GetCategoryNameById(categoryId);
+        setCategoryName(name);
+      }
+      fetchCategoryName();
+    }, []);
+
+    const [tastes, setTastes] = useState([]);
+    useEffect(() => {
+      async function fetchGetTastes() {
+        const tastesResponse = await GetTastes();
+        setTastes(tastesResponse);
+      }
+      fetchGetTastes();
+    }, []);    
+
+    const [cakesCategories, setCakesCategories] = useState([]);
+    useEffect(() => {
+        async function fetchGetCategories() {
+          const categoriesResponse = await GetCategories();
+          setCakesCategories(categoriesResponse);
+        }
+        fetchGetCategories();
+      }, []);    
+
     return(
         <Form method="post" id="create-cake-form">
 
@@ -37,9 +83,16 @@ function UpdateCakeCard(){
 
                 <Box display='flex' justifyContent='space-between' alignItems='center'> 
                   <Text>Фотография: </Text>
-                  <Box width='100px' height='100px' border='1px solid white' borderRadius='20px' mr='10%'></Box>
+                  
+                  <Input
+                        width='50%'
+                            placeholder="Select Date and Time"
+                            size="md"
+                            p='0.8vh'
+                            type="file"
+                        />
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Название:</Text>
                     <Input
@@ -50,7 +103,7 @@ function UpdateCakeCard(){
                         defaultValue={cake.name}
                     />
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Описание:</Text>
                     <Input
@@ -62,29 +115,43 @@ function UpdateCakeCard(){
                         defaultValue={cake.description}
                     />
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Вкус:</Text>
-                    <Input
-                        width='50%'
-                        type="text"
-                        name="tasteId"
-                        placeholder="Вкус"
-                        defaultValue={cake.tasteId}
-                    />
-                </Box>
+                    <Select
+                            width='50%'
+                            type="text"
+                            name="tasteId"
+                        >
+                            {
+                                tastes && tastes.map(taste => 
+                                    (
+                                        <option key={taste.id} value={taste.id} selected={taste.id===cake.tasteId}>{taste.name}</option>
+                                    )
+  
+                                )
+                            }
 
+                    </Select>
+                </Box>
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Категория:</Text>
-                    <Input
-                        width='50%'
-                        type="text"
-                        name="categoryId"
-                        placeholder="Категория"
-                        defaultValue={cake.categoryId}
-                    />
+                    <Select
+                            width='50%'
+                            type='text'
+                            name='categoryId'
+                        >
+                            {
+                                cakesCategories && cakesCategories.map(category =>
+                                    (
+                                        <option key={category.id} value={category.id} selected={category.id==categoryId}>{category.name}</option>
+                                    )
+                                )
+                            }
+                    </Select>
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Время приготовления, мин:</Text>
                     <NumberInput
@@ -104,7 +171,7 @@ function UpdateCakeCard(){
                         </NumberInputStepper>
                     </NumberInput>
                 </Box>
-
+                <Divider mt='1vh' />
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Сложность:</Text>
                     <Input
@@ -115,7 +182,7 @@ function UpdateCakeCard(){
                         defaultValue={cake.level}
                     />
                 </Box>
-
+                <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Вес, кг:</Text>
 
@@ -136,6 +203,7 @@ function UpdateCakeCard(){
                         </NumberInputStepper>
                     </NumberInput>
                 </Box>
+                <Divider mt='1vh'/>
         </Box>
 
         <Box width='30%' display='flex' justifyContent='space-between' ml='20%' mt='10vh'>

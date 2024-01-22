@@ -1,13 +1,21 @@
 import './CakesPage.css'
 import React, { useState, useEffect } from 'react';
 import { useLoaderData, useParams, Link, Form } from "react-router-dom";
-import { Box, Button, Text } from '@chakra-ui/react';
-import { ChevronLeftIcon, DeleteIcon, EditIcon, SmallAddIcon } from '@chakra-ui/icons';
+import { Box, Button, Image, Text, Card, Stack, CardBody, Heading, CardFooter, CardHeader, Flex, Divider } from '@chakra-ui/react';
+import { ChevronLeftIcon, ChevronRightIcon, DeleteIcon, EditIcon, SmallAddIcon, TimeIcon } from '@chakra-ui/icons';
 import { GetTastes } from './Components/CreateCakeCard';
+import { LiaGrinTongueSquint } from "react-icons/lia";
+import { MdOutlineScale } from "react-icons/md";
 
-export async function GetCakes({ params }){
-
-    const response = await fetch(`http://localhost:5000/api/Cakes?categoryId=${params.categoryId}&skip=0&take=5`);
+export async function GetCakes({ params, request }){
+    let skip = 0;
+    let take = 5;
+    if (request.skip > 0)
+    {
+      skip = request.skip;
+      take = request.take;
+    }
+    const response = await fetch(`http://localhost:5000/api/Cakes?categoryId=${params.categoryId}&skip=${skip}&take=${take}`);
     const jsonResponse = await response.json();
 
   return jsonResponse;
@@ -22,7 +30,7 @@ export async function GetCakeById( {params} ){
 }
 
 
-async function GetCategoryNameById(cakeId){
+export async function GetCategoryNameById(cakeId){
   const response = await fetch(`http://localhost:5000/api/Categories/${cakeId}`);
   const responseJson = await response.json();
   const categoryName = responseJson.name;
@@ -33,7 +41,7 @@ async function GetCategoryNameById(cakeId){
 
 
 function CakesPage() {
-  const cake = useLoaderData();
+  const cakes = useLoaderData();
   const categoryId = useParams().categoryId;
 
   const [categoryName, setCategoryName] = useState('');
@@ -54,12 +62,22 @@ function CakesPage() {
     fetchGetTastes();
   }, []);
 
+  const CakesOnPage = 5;
+  let Pages = 0;
+  let PagesArray = [];
+  let startPage = -5;
+  if (cakes.totalItems > 5)
+  {
+    Pages = Math.ceil(cakes.totalItems/CakesOnPage);
+    PagesArray = Array.from({ length: Pages }, (_, index) => index + 1);
+  }
+
   return (
     <>
       <Box
         display='flex'
         justifyContent='space-between'
-        width='65%'
+        width='80%'
         alignItems='center'
       >
         <Link to='/categories'><Button><ChevronLeftIcon mt={'3px'} mr={'2px'}/>Назад</Button></Link>
@@ -75,92 +93,99 @@ function CakesPage() {
 
       <Box
         display='flex'
-        flexDirection='column'
+        flexDirection='row'
         justifyContent='space-between'
-        width='65%'
+        width='80%'
+        flexWrap='wrap'
         mt='3vh'
       >
-            {cake.items && cake.items.map(item => (
-                <Box
-                  key={item.id}
-                  display='flex'
-                  flexDirection='column'
-                  justifyContent='space-between'
-                  width='100%'
-                  m='25px 0 50px 0px'
-                  border='1px solid white'
-                  borderRadius='20px'
-                >                                                                       
-                                                                                                    {/* 1 строка */}        
-                  <Box                                                                  
-                  display='flex'
-                  justifyContent='space-between'
-                  >                                                     
-                    <Box
-                      m='10px 0 0 10px'
-                      border='3px solid black'
-                      width='35%'
-                      height='150px'
-                      textAlign='center'
-                    >
-                      Фото
-                    </Box>
+            {cakes.items && cakes.items.map(item => (
+                <Card
+                key={item.id}
+                direction={{ base: 'column', sm: 'column', md: 'row' }}
+                overflow='hidden'
+                variant='outline'
+                mt='3vh'
+                width='100%'
+              >
+                 <Image
+                    objectFit='cover'
+                    maxW={{ base: '100%', sm: '100%', md: '30%' }}
+                    src='https://o-tendencii.com/uploads/posts/2022-02/1645679812_20-o-tendencii-com-p-tort-na-svadbu-odnoyarusnii-kremovii-foto-20.jpg'
+                    alt='Caffe Latte'
+                  />
 
-                    <Box width='50%' alignSelf='center'>
-                      <Text fontSize='4xl' textAlign='center'>{item.name}</Text>
-                    </Box>
+                  <Stack width='100%'>
 
-                    <Box display='flex' mt='1vh' mr='1vh'>
-                      <Form
-                        method="get"
-                        action={`/categories/${categoryId}/cake/update/${item.id}`}
-                      >
-                        <Button size='sm' type="submit"><EditIcon /></Button>
-                      </Form>
-
-                      <Form
-                        method="post"
+                    <CardHeader>
+                      <Flex justifyContent='space-around'>
+                        <Heading flex='1' size='xl' textAlign='center'>{item.name}</Heading>
+ 
+                        <Form
+                          method="get"
+                          action={`/categories/${categoryId}/cake/update/${item.id}`}
+                        >
+                          <Button size='sm' type="submit" mt='1vh'><EditIcon /></Button>
+                        </Form>
+        
+                        <Form
+                          method="post"
                           action={`/categories/${categoryId}/cake/delete/${item.id}`}
                           onSubmit={(event) => {
-                          if (
-                              !confirm(
+                            if (
+                                !confirm(
                                   "Please confirm you want to delete this record."
-                              )
-                          ) {
+                                )
+                            ) {
                               event.preventDefault();
-                          }
-                          }}
-                      >
-                        <Button size='sm' ml='2vh' type="submit"><DeleteIcon color='red' /></Button>
-                      </Form>
-                    </Box>
-                  </Box>
-                                                                                              {/* 2 строка */}
-                  <Box mt='2vh' width='100%' textAlign='center'>                                                             
-                    <Text fontSize='xl'>{item.description}</Text>
-                  </Box>
-                                                                                              {/* 3 строка */}
-                  <Box
-                  mt='4vh'
-                  display='flex'
-                  justifyContent='space-around'
-                  flexWrap='wrap'
-                  >    
+                            }
+                            }}
+                          >
+                            <Button size='sm' ml='2vh' mt='1vh' type="submit"><DeleteIcon color='red' /></Button>
+                          </Form>
+                      </Flex>
+                    </CardHeader>
 
-                    <p>Вкус: {item.tasteId}{/*tastes && tastes.find(taste => taste.id == item.id).name*/}</p>
-                            {console.log(tastes)}
-                    <p>Категория: {item.categoryId}</p>
+                    <Divider />
 
-                    <p>Время приготовления: {item.cookTimeInMinutes} минут</p>
+                    <CardBody>
+                      <Text mt='1vh' fontSize='xl'>{item.description} Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam fugit dolore sit ipsa, ipsam facilis obcaecati sapiente cumque, porro illum temporibus et reiciendis esse odio optio hic architecto, rem culpa?</Text>
+                    </CardBody>
 
-                    <p>Сложность: {item.level}</p>
+                    <Divider />
 
-                    <p>Вес: {item.weight}кг</p>
+                    <CardFooter>
+                      <Flex justifyContent='space-around' w='100%' flexWrap='wrap'>
+                        <Text>{categoryName}</Text>
+                        <Flex alignItems='center'><LiaGrinTongueSquint style={{fontSize:'3vh'}}/><Text ml='0.5vw'>{tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</Text></Flex>
+                        <Text><TimeIcon mb='0.5vh' mr='0.5vw' />{item.cookTimeInMinutes} минут</Text>
+                        <Text>Сложность: {item.level}</Text>
+                        <Flex alignItems='center'><MdOutlineScale /><Text ml='0.5vw'>{item.weight}кг</Text></Flex>
+                      </Flex>
+                    </CardFooter>
 
-                  </Box>
-
-                </Box>))
+                  </Stack>
+                </Card>
+                ))
             }
+        <Box display='flex' justifyContent='space-around' width='30%' mt='10vh' ml='35%'>
+          {
+            PagesArray.length > 1 && 
+            <Button as='a' href={`${categoryId}&skip=0&take=5`}><ChevronLeftIcon /></Button>
+          }
+
+          {
+            PagesArray.length > 1 && 
+            PagesArray.map((page) => 
+              <Link to={`/categories/${categoryId}&skip=5&take=5`} key={page}><Button>{page}</Button></Link>
+            )
+          }
+
+          {
+            PagesArray.length > 1 && 
+            <Button><ChevronRightIcon /></Button>
+          }
+        </Box>
       </Box>
     </>
 );
