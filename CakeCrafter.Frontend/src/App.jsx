@@ -6,13 +6,15 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { CreateCategory, DeleteCategory, GetCategories, UpdateCategory } from './pages/CakesCategories/CakesCategories';
 import { CreateCake } from './pages/CakesPage/Components/CreateCakeCard';
 import { GetCakes, GetCakeById } from './pages/CakesPage/CakesPage';
 import CakesCategories from './pages/CakesCategories/CakesCategories';
 import CreateCakeCard from './pages/CakesPage/Components/CreateCakeCard'
 import DeleteCakeCard from './pages/CakesPage/Components/DeleteCakeCard';
 import UpdateCakeCard, { UpdateCake } from './pages/CakesPage/Components/UpdateCakeCard';
+import { APIClient } from './APIClient';
+
+const api = new APIClient();
 
 const router = createBrowserRouter([
   {
@@ -23,28 +25,27 @@ const router = createBrowserRouter([
       {
         path: "categories",
         element: <CakesCategories />,
-        loader: GetCategories,
+        loader: api.GetCategories,
       },
+      {
+        path: "categories/create",
+        action: api.CreateCategory,
+      },
+      {
+        path: "categories/delete/:categoryId",
+        action: api.DeleteCategory,
+      },
+      {
+        path: "categories/update/:categoryId",
+        action: api.UpdateCategory,
+      },
+
+
       {
         path: "categories/:categoryId",
         element: <CakesPage />,
         loader: GetCakes,
       },
-      {
-        path: "categories/create",
-        action: CreateCategory,
-      },
-      {
-        path: "categories/delete/:categoryId",
-        action: DeleteCategory,
-      },
-      {
-        path: "categories/update/:categoryId",
-        action: UpdateCategory,
-      },
-
-
-
       {
         path: "categories/:categoryId/cake/create",
         element: <CreateCakeCard />,
