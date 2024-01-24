@@ -3,49 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { useLoaderData, useParams, Link, Form } from "react-router-dom";
 import { Box, Button, Image, Text, Card, Stack, CardBody, Heading, CardFooter, CardHeader, Flex, Divider } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon, DeleteIcon, EditIcon, SmallAddIcon, TimeIcon } from '@chakra-ui/icons';
-import { GetTastes } from './Components/CreateCakeCard';
+import { APIClient } from '../../APIClient';
 import { LiaGrinTongueSquint } from "react-icons/lia";
 import { MdOutlineScale } from "react-icons/md";
 
-export async function GetCakes({ params, request }){
-    let take = 5;
-
-    const url = new URL(request.url);
-    const skip = url.searchParams.get("skip");
-
-    const response = await fetch(`http://localhost:5000/api/Cakes?categoryId=${params.categoryId}&skip=${skip ?? 0}&take=${take}`);
-    const jsonResponse = await response.json();
-
-  return jsonResponse;
-}
-
-export async function GetCakeById( {params} ){
-
-    const response = await fetch(`http://localhost:5000/api/Cakes/${params.cakeId}`);
-    const jsonResponse = await response.json();
-
-  return jsonResponse;
-}
-
-
-export async function GetCategoryNameById(cakeId){
-  const response = await fetch(`http://localhost:5000/api/Categories/${cakeId}`);
-  const responseJson = await response.json();
-  const categoryName = responseJson.name;
-  return categoryName;
-}
-
-
-
 
 function CakesPage() {
+  const api = new APIClient();
+
   const cakes = useLoaderData();
   const categoryId = useParams().categoryId;
 
   const [categoryName, setCategoryName] = useState('');
   useEffect(() => {
     async function fetchCategoryName() {
-      const name = await GetCategoryNameById(categoryId);
+      const name = await api.GetCategoryNameById(categoryId);
       setCategoryName(name);
     }
     fetchCategoryName();
@@ -54,7 +26,7 @@ function CakesPage() {
   const [tastes, setTastes] = useState([]);
   useEffect(() => {
     async function fetchGetTastes() {
-      const tastesResponse = await GetTastes();
+      const tastesResponse = await api.GetTastes();
       setTastes(tastesResponse);
     }
     fetchGetTastes();

@@ -13,54 +13,20 @@ import{ Box,
         } 
     from "@chakra-ui/react";
 
-import { useNavigate, Form, redirect, useParams } from "react-router-dom";
-import { GetCategoryNameById } from '../CakesPage';
+import { useNavigate, Form, useParams } from "react-router-dom";
+import { APIClient } from '../../../APIClient';
 
-
-export async function CreateCake( {params, request} ){
-    const formData = await request.formData();
-    const newCake = Object.fromEntries(formData);
-    const response = await fetch("http://localhost:5000/api/cakes",
-                                {
-                                    method: 'POST',
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify(newCake),
-                                });
-    console.log(params.categoryId);
-    return redirect(`/categories/${params.categoryId}`);
-}
-
-export async function GetTastes(){
-    const response = await fetch(`http://localhost:5000/api/Tastes/`);
-    const tastesJson = await response.json();
-    return tastesJson;
-}
-
-async function GetCategories(){
-
-    const response = await fetch("http://localhost:5000/api/categories");
-    const jsonResponse = await response.json();
-
-  return jsonResponse;
-}
 
 function CreateCakeCard(){
-    const categoryId = useParams().categoryId;
-    const [categoryName, setCategoryName] = useState('');
-    useEffect(() => {
-      async function fetchCategoryName() {
-        const name = await GetCategoryNameById(categoryId);
-        setCategoryName(name);
-      }
-      fetchCategoryName();
-    }, []);
+    const api = new APIClient();
 
+    const categoryId = useParams().categoryId;
     const navigate = useNavigate();
 
     const [tastes, setTastes] = useState([]);
     useEffect(() => {
       async function fetchGetTastes() {
-        const tastesResponse = await GetTastes();
+        const tastesResponse = await api.GetTastes();
         setTastes(tastesResponse);
       }
       fetchGetTastes();
@@ -69,7 +35,7 @@ function CreateCakeCard(){
     const [cakesCategories, setCakesCategories] = useState([]);
     useEffect(() => {
         async function fetchGetCategories() {
-          const categoriesResponse = await GetCategories();
+          const categoriesResponse = await api.GetCategories();
           setCakesCategories(categoriesResponse);
         }
         fetchGetCategories();

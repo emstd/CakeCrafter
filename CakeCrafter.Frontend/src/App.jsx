@@ -6,12 +6,9 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { CreateCake } from './pages/CakesPage/Components/CreateCakeCard';
-import { GetCakes, GetCakeById } from './pages/CakesPage/CakesPage';
 import CakesCategories from './pages/CakesCategories/CakesCategories';
 import CreateCakeCard from './pages/CakesPage/Components/CreateCakeCard'
-import DeleteCakeCard from './pages/CakesPage/Components/DeleteCakeCard';
-import UpdateCakeCard, { UpdateCake } from './pages/CakesPage/Components/UpdateCakeCard';
+import UpdateCakeCard from './pages/CakesPage/Components/UpdateCakeCard';
 import { APIClient } from './APIClient';
 
 const api = new APIClient();
@@ -44,22 +41,22 @@ const router = createBrowserRouter([
       {
         path: "categories/:categoryId",
         element: <CakesPage />,
-        loader: GetCakes,
+        loader: api.GetCakes,
       },
       {
         path: "categories/:categoryId/cake/create",
         element: <CreateCakeCard />,
-        action: CreateCake,
+        action: api.CreateCake,
       },
       {
         path: "categories/:categoryId/cake/delete/:cakeId",
-        action: DeleteCakeCard,
+        action: api.DeleteCakeCard,
       },
       {
         path: "categories/:categoryId/cake/update/:cakeId",
         element: <UpdateCakeCard />,
-        loader: GetCakeById,
-        action: UpdateCake,
+        loader: api.GetCakeById,
+        action: api.UpdateCake,
       },
 
     ],
