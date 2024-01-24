@@ -127,7 +127,16 @@ function CakesPage() {
                     <CardFooter>
                       <Flex justifyContent='space-around' w='100%' flexWrap='wrap'>
                         <Text>{categoryName}</Text>
-                        <Flex alignItems='center'><LiaGrinTongueSquint style={{fontSize:'3vh'}}/><Text ml='0.5vw'>{tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</Text></Flex>
+
+                        <Flex alignItems='center'>
+                          <LiaGrinTongueSquint style={{fontSize:'3vh'}}/>
+                          <Text ml='0.5vw'>
+                            {tastes.length && (
+                              tastes.find(taste => taste.id == item.tasteId) === undefined ? <Text>Вкус не указан</Text> : tastes.find(taste => taste.id == item.tasteId).name
+                            )}
+                            </Text>
+                        </Flex>
+
                         <Text><TimeIcon mb='0.5vh' mr='0.5vw' />{item.cookTimeInMinutes} минут</Text>
                         <Text>Сложность: {item.level}</Text>
                         <Flex alignItems='center'><MdOutlineScale /><Text ml='0.5vw'>{item.weight}кг</Text></Flex>

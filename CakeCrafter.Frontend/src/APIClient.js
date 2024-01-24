@@ -62,9 +62,44 @@ export class APIClient
 
     GetTastes = async () =>
     {
-        const response = await fetch(`${this.URL}/api/Tastes/`);
+        const response = await fetch(`${this.URL}/api/tastes/`);
         const tastesJson = await response.json();
         return tastesJson;
+    };
+
+    CreateTaste = async({ request }) =>
+    {
+        const formData = await request.formData();
+        const newTaste = formData.get("NewTaste");
+        const response = await fetch(`${this.URL}/api/tastes`,
+                                    {
+                                        method: 'POST',
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({name: newTaste}),
+                                    });
+        return redirect('/tastes');
+    };
+
+    UpdateTaste = async({ params, request }) =>
+    {
+        const formData = await request.formData();
+        const newTasteName = formData.get("TasteName");
+        const response = await fetch(`${this.URL}/api/tastes/${params.tasteId}`,
+                                    {
+                                        method: 'PUT',
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({id: params.tasteId, name: newTasteName}),
+                                    });
+        return redirect('/tastes');
+    };
+
+    DeleteTaste = async({ params }) =>
+    {
+        const response = await fetch(`${this.URL}/api/tastes/${params.tasteId}`,
+                                    {
+                                        method: 'DELETE',
+                                    });
+        return redirect('/tastes');
     };
 
 

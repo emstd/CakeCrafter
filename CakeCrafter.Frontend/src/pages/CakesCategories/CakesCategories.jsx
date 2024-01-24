@@ -1,4 +1,4 @@
-import { useLoaderData, Form, redirect } from 'react-router-dom';
+import { useLoaderData, Form } from 'react-router-dom';
 import DisplayCategory from './Components/DisplayCategory';
 import { Input, Button, Menu, MenuButton, MenuList, MenuItem, Box } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';

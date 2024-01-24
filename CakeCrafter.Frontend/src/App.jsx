@@ -10,6 +10,7 @@ import CakesCategories from './pages/CakesCategories/CakesCategories';
 import CreateCakeCard from './pages/CakesPage/Components/CreateCakeCard'
 import UpdateCakeCard from './pages/CakesPage/Components/UpdateCakeCard';
 import { APIClient } from './APIClient';
+import Tastes from './pages/Tastes/Tastes';
 
 const api = new APIClient();
 
@@ -58,7 +59,25 @@ const router = createBrowserRouter([
         loader: api.GetCakeById,
         action: api.UpdateCake,
       },
+      
 
+      {
+        path: "tastes",
+        element: <Tastes />,
+        loader: api.GetTastes,
+      },
+      {
+        path: "tastes/update/:tasteId",
+        action: api.UpdateTaste,
+      },
+      {
+        path: "tastes/delete/:tasteId",
+        action: api.DeleteTaste,
+      },
+      {
+        path: "tastes/create",
+        action: api.CreateTaste,
+      },
     ],
   },
 ]);
