@@ -12,9 +12,10 @@ import{ Box,
         } 
     from "@chakra-ui/react";
 
-import { useNavigate, Form, useLoaderData, useParams } from "react-router-dom";
+import { useNavigate, Form, useLoaderData, useParams, Link } from "react-router-dom";
 import { Select } from '@chakra-ui/react';
 import { APIClient } from '../../../APIClient';
+import { AddIcon, EditIcon, SmallAddIcon } from '@chakra-ui/icons';
 
 
 function UpdateCakeCard(){
@@ -85,21 +86,22 @@ function UpdateCakeCard(){
                 <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                     <Text>Вкус:</Text>
-                    <Select
-                            width='50%'
+                    <Box display='flex' width='50%' justifyContent='space-between'>
+                        <Select
                             type="text"
                             name="tasteId"
-                        >
-                            {
-                                tastes && tastes.map(taste => 
-                                    (
-                                        <option key={taste.id} value={taste.id} selected={taste.id===cake.tasteId}>{taste.name}</option>
+                            >
+                                {
+                                    tastes && tastes.map(taste => 
+                                        (
+                                            <option key={taste.id} value={taste.id} selected={taste.id===cake.tasteId}>{taste.name}</option>
+                                        )
+    
                                     )
-  
-                                )
-                            }
-
-                    </Select>
+                                }  
+                        </Select>
+                        <Link to='/tastes'><Button ml='1vw'><AddIcon boxSize={3} /></Button></Link>
+                    </Box>
                 </Box>
                 <Divider mt='1vh'/>
                 <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>

@@ -1,13 +1,17 @@
-import { useLoaderData, Form } from "react-router-dom";
+import { useLoaderData, Form, useNavigate } from "react-router-dom";
 import { Input, Button, Menu, MenuButton, MenuList, MenuItem, Box } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, ChevronLeftIcon } from '@chakra-ui/icons';
 import DisplayTaste from "./Components/DisplayTaste";
 
 export default function Tastes(){
   const tastes = useLoaderData();
+  const navigate = useNavigate();
   return(
     <Box>
       <Box>
+        <Button onClick={() => {navigate(-1)}}><ChevronLeftIcon mt={'3px'} mr={'2px'} />Назад</Button>
+      </Box>
+      <Box mt='6vh'>
             {tastes.length ? (tastes.map(taste => (
                 <DisplayTaste key={taste.id} taste={taste} />
             )))

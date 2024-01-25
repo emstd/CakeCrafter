@@ -46,9 +46,6 @@ function MainPage() {
                 <MenuItem onClick={() => navigate("/categories")}>
                   Карточки товаров
                 </MenuItem>
-                <MenuItem onClick={() => navigate("/tastes")}>
-                  Вкусы
-                </MenuItem>
               </MenuList>
             </Menu>
       </Box>
