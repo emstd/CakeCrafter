@@ -35,7 +35,6 @@ function CakesPage() {
   const CakesOnPage = 5;
   let Pages = 0;
   let PagesArray = [];
-  let startPage = -5;
   if (cakes.totalItems > 5)
   {
     Pages = Math.ceil(cakes.totalItems/CakesOnPage);
@@ -81,8 +80,8 @@ function CakesPage() {
                  <Image
                     objectFit='cover'
                     maxW={{ base: '100%', sm: '100%', md: '30%' }}
-                    src='https://o-tendencii.com/uploads/posts/2022-02/1645679812_20-o-tendencii-com-p-tort-na-svadbu-odnoyarusnii-kremovii-foto-20.jpg'
-                    alt='Caffe Latte'
+                    src={`http://localhost:5000/${item.imageURL ?? 'no_image.png'}`}
+                    alt='NoPhoto'
                   />
 
                   <Stack width='100%'>

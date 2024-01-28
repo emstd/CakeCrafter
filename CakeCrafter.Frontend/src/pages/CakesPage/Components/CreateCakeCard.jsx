@@ -51,7 +51,7 @@ function CreateCakeCard(){
                         <Text>Фотография: </Text>
                         
                         <Input
-                        width='50%'
+                            width='50%'
                             placeholder="Select Date and Time"
                             size="md"
                             p='0.8vh'

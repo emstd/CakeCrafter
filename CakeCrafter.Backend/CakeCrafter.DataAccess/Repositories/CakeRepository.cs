@@ -46,14 +46,14 @@ namespace CakeCrafter.DataAccess.Repositories
                 return null;
             }
 
-            var result = _mapper.Map<Cake>(dbCake);
+            var result = _mapper.Map<CakeEntity, Cake>(dbCake);
 
             return result;
         }
 
         public async Task<int> Create(Cake cake)
         {
-            var dbCake = _mapper.Map<CakeEntity>(cake);
+            var dbCake = _mapper.Map<Cake, CakeEntity>(cake);
             await _context.Cakes.AddAsync(dbCake);
             await _context.SaveChangesAsync();
 
@@ -68,9 +68,9 @@ namespace CakeCrafter.DataAccess.Repositories
                 return null;
             }
 
-            dbCake = _mapper.Map<CakeEntity>(cake);
+            dbCake = _mapper.Map<Cake, CakeEntity>(cake);
 
-            _context.Cakes.Update(dbCake);              //Имеет ли смысл использовать ExecuteUpdate()?
+            _context.Cakes.Update(dbCake);
             await _context.SaveChangesAsync();
             return cake;
         }

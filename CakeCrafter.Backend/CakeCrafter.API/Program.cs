@@ -57,6 +57,8 @@ namespace CakeCrafter.API
                 app.UseSwaggerUI();
             }
 
+            app.UseStaticFiles();
+
             app.UseHttpsRedirection();
             app.UseCors("AllowCakeCrafterApp");
 
