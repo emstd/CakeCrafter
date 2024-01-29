@@ -3,51 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { useLoaderData, useParams, Link, Form } from "react-router-dom";
 import { Box, Button, Image, Text, Card, Stack, CardBody, Heading, CardFooter, CardHeader, Flex, Divider } from '@chakra-ui/react';
 import { ChevronLeftIcon, ChevronRightIcon, DeleteIcon, EditIcon, SmallAddIcon, TimeIcon } from '@chakra-ui/icons';
-import { GetTastes } from './Components/CreateCakeCard';
+import { APIClient } from '../../APIClient';
 import { LiaGrinTongueSquint } from "react-icons/lia";
 import { MdOutlineScale } from "react-icons/md";
 
-export async function GetCakes({ params, request }){
-    let skip = 0;
-    let take = 5;
-    if (request.skip > 0)
-    {
-      skip = request.skip;
-      take = request.take;
-    }
-    const response = await fetch(`http://localhost:5000/api/Cakes?categoryId=${params.categoryId}&skip=${skip}&take=${take}`);
-    const jsonResponse = await response.json();
-
-  return jsonResponse;
-}
-
-export async function GetCakeById( {params} ){
-
-    const response = await fetch(`http://localhost:5000/api/Cakes/${params.cakeId}`);
-    const jsonResponse = await response.json();
-
-  return jsonResponse;
-}
-
-
-export async function GetCategoryNameById(cakeId){
-  const response = await fetch(`http://localhost:5000/api/Categories/${cakeId}`);
-  const responseJson = await response.json();
-  const categoryName = responseJson.name;
-  return categoryName;
-}
-
-
-
 
 function CakesPage() {
+  const api = new APIClient();
+
   const cakes = useLoaderData();
   const categoryId = useParams().categoryId;
 
   const [categoryName, setCategoryName] = useState('');
   useEffect(() => {
     async function fetchCategoryName() {
-      const name = await GetCategoryNameById(categoryId);
+      const name = await api.GetCategoryNameById(categoryId);
       setCategoryName(name);
     }
     fetchCategoryName();
@@ -56,7 +26,7 @@ function CakesPage() {
   const [tastes, setTastes] = useState([]);
   useEffect(() => {
     async function fetchGetTastes() {
-      const tastesResponse = await GetTastes();
+      const tastesResponse = await api.GetTastes();
       setTastes(tastesResponse);
     }
     fetchGetTastes();
@@ -65,7 +35,6 @@ function CakesPage() {
   const CakesOnPage = 5;
   let Pages = 0;
   let PagesArray = [];
-  let startPage = -5;
   if (cakes.totalItems > 5)
   {
     Pages = Math.ceil(cakes.totalItems/CakesOnPage);
@@ -111,8 +80,8 @@ function CakesPage() {
                  <Image
                     objectFit='cover'
                     maxW={{ base: '100%', sm: '100%', md: '30%' }}
-                    src='https://o-tendencii.com/uploads/posts/2022-02/1645679812_20-o-tendencii-com-p-tort-na-svadbu-odnoyarusnii-kremovii-foto-20.jpg'
-                    alt='Caffe Latte'
+                    src={`http://localhost:5000/${item.imageURL ?? 'no_image.png'}`}
+                    alt='NoPhoto'
                   />
 
                   <Stack width='100%'>
@@ -157,7 +126,16 @@ function CakesPage() {
                     <CardFooter>
                       <Flex justifyContent='space-around' w='100%' flexWrap='wrap'>
                         <Text>{categoryName}</Text>
-                        <Flex alignItems='center'><LiaGrinTongueSquint style={{fontSize:'3vh'}}/><Text ml='0.5vw'>{tastes.length && tastes.find(taste => taste.id == item.tasteId).name}</Text></Flex>
+
+                        <Flex alignItems='center'>
+                          <LiaGrinTongueSquint style={{fontSize:'3vh'}}/>
+                          <Text ml='0.5vw'>
+                            {tastes.length && (
+                              tastes.find(taste => taste.id == item.tasteId) === undefined ? <Text>Вкус не указан</Text> : tastes.find(taste => taste.id == item.tasteId).name
+                            )}
+                            </Text>
+                        </Flex>
+
                         <Text><TimeIcon mb='0.5vh' mr='0.5vw' />{item.cookTimeInMinutes} минут</Text>
                         <Text>Сложность: {item.level}</Text>
                         <Flex alignItems='center'><MdOutlineScale /><Text ml='0.5vw'>{item.weight}кг</Text></Flex>
@@ -171,19 +149,19 @@ function CakesPage() {
         <Box display='flex' justifyContent='space-around' width='30%' mt='10vh' ml='35%'>
           {
             PagesArray.length > 1 && 
-            <Button as='a' href={`${categoryId}&skip=0&take=5`}><ChevronLeftIcon /></Button>
+            <Button as='a' href={`/categories/${categoryId}?skip=0&take=5`}><ChevronLeftIcon /></Button>
           }
 
           {
             PagesArray.length > 1 && 
             PagesArray.map((page) => 
-              <Link to={`/categories/${categoryId}&skip=5&take=5`} key={page}><Button>{page}</Button></Link>
+              <Link to={`/categories/${categoryId}?skip=${(page-1)*5}&take=5`} key={page}><Button>{page}</Button></Link>
             )
           }
 
           {
             PagesArray.length > 1 && 
-            <Button><ChevronRightIcon /></Button>
+            <Button as='a' href={`/categories/${categoryId}?skip=${(PagesArray.length-1)*5}&take=5`}><ChevronRightIcon /></Button>
           }
         </Box>
       </Box>

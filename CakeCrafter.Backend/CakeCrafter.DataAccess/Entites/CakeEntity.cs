@@ -12,6 +12,7 @@ namespace CakeCrafter.DataAccess.Entites
         [Column(TypeName = "nvarchar(200)")]
         public required string Description { get; set; }
 
+        public string? ImageURL { get; set; }
         public int CategoryId { get; set; }
         public int TasteId { get; set; }
         public int CookTimeInMinutes { get; set; }

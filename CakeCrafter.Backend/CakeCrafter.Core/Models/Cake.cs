@@ -7,6 +7,7 @@ namespace CakeCrafter.Core.Models
         public int Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
+        public string? ImageURL { get; set; }
         public int CategoryId { get; set; }
         public int TasteId { get; set; }
         public int CookTimeInMinutes { get; set; }

@@ -18,4 +18,8 @@
     <ProjectReference Include="..\CakeCrafter.DataAccess\CakeCrafter.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

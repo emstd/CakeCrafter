@@ -6,13 +6,13 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { CreateCategory, DeleteCategory, GetCategories, UpdateCategory } from './pages/CakesCategories/CakesCategories';
-import { CreateCake } from './pages/CakesPage/Components/CreateCakeCard';
-import { GetCakes, GetCakeById } from './pages/CakesPage/CakesPage';
 import CakesCategories from './pages/CakesCategories/CakesCategories';
 import CreateCakeCard from './pages/CakesPage/Components/CreateCakeCard'
-import DeleteCakeCard from './pages/CakesPage/Components/DeleteCakeCard';
-import UpdateCakeCard, { UpdateCake } from './pages/CakesPage/Components/UpdateCakeCard';
+import UpdateCakeCard from './pages/CakesPage/Components/UpdateCakeCard';
+import { APIClient } from './APIClient';
+import Tastes from './pages/Tastes/Tastes';
+
+const api = new APIClient();
 
 const router = createBrowserRouter([
   {
@@ -23,44 +23,61 @@ const router = createBrowserRouter([
       {
         path: "categories",
         element: <CakesCategories />,
-        loader: GetCategories,
-      },
-      {
-        path: "categories/:categoryId",
-        element: <CakesPage />,
-        loader: GetCakes,
+        loader: api.GetCategories,
       },
       {
         path: "categories/create",
-        action: CreateCategory,
+        action: api.CreateCategory,
       },
       {
         path: "categories/delete/:categoryId",
-        action: DeleteCategory,
+        action: api.DeleteCategory,
       },
       {
         path: "categories/update/:categoryId",
-        action: UpdateCategory,
+        action: api.UpdateCategory,
       },
 
 
-
+      {
+        path: "categories/:categoryId",
+        element: <CakesPage />,
+        loader: api.GetCakes,
+      },
       {
         path: "categories/:categoryId/cake/create",
         element: <CreateCakeCard />,
-        action: CreateCake,
+        action: api.CreateCake,
       },
       {
         path: "categories/:categoryId/cake/delete/:cakeId",
-        action: DeleteCakeCard,
+        action: api.DeleteCakeCard,
       },
       {
         path: "categories/:categoryId/cake/update/:cakeId",
         element: <UpdateCakeCard />,
-        loader: GetCakeById,
-        action: UpdateCake,
+        loader: api.GetCakeById,
+        action: api.UpdateCake,
       },
+      
 
+      {
+        path: "tastes",
+        element: <Tastes />,
+        loader: api.GetTastes,
+      },
+      {
+        path: "tastes/update/:tasteId",
+        action: api.UpdateTaste,
+      },
+      {
+        path: "tastes/delete/:tasteId",
+        action: api.DeleteTaste,
+      },
+      {
+        path: "tastes/create",
+        action: api.CreateTaste,
+      },
     ],
   },
 ]);

@@ -53,8 +53,8 @@ const [isEdit, setIsEdit] = useState(false);
                 )
             }
 
-            <Box display='flex' minWidth='40%' justifyContent='space-between'>
-                <Button type='button' onClick={() => setIsEdit(!isEdit)}><EditIcon /></Button>
+            <Box display='flex' minWidth='40%' justifyContent='flex-end'>
+                <Button mr='2vw' type='button' onClick={() => setIsEdit(!isEdit)}><EditIcon /></Button>
 
                 <Form
                     method="post"
