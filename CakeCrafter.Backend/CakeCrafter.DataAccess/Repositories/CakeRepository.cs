@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure;
 using CakeCrafter.Core.Interfaces.Repositories;
 using CakeCrafter.Core.Models;
 using CakeCrafter.Core.Pages;

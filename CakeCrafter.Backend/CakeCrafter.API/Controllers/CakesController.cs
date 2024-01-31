@@ -4,7 +4,6 @@ using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 using CakeCrafter.Core.Pages;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CakeCrafter.API.Controllers
 {
@@ -15,12 +14,17 @@ namespace CakeCrafter.API.Controllers
         private readonly ICakeService _service;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IImageService _imageService;
 
-        public CakesController(ICakeService service, IMapper mapper, IWebHostEnvironment _host)
+        public CakesController(ICakeService service, 
+                               IMapper mapper, 
+                               IWebHostEnvironment _host, 
+                               IImageService imageService)
         {
             _service = service;
             _mapper = mapper;
             _webHostEnvironment = _host;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -53,21 +57,34 @@ namespace CakeCrafter.API.Controllers
         public async Task<ActionResult<int>> CreateCake([FromForm] CakeCreateRequest cakeCreate)
         {
             var cake = _mapper.Map<CakeCreateRequest, Cake>(cakeCreate);
+            return Ok(await _service.Create(cake));
+        }
 
-            if (cakeCreate.Image != null && cakeCreate.Image.Length > 0)
+        [HttpPost("image")]
+        public async Task<ActionResult<Guid>> DownloadImage(IFormFile image)
+        {
+            if (image != null && image.Length > 0)
             {
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(cakeCreate.Image.FileName);
-                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, fileName);
-
+                string imgExtension = Path.GetExtension(image.FileName);
+                Guid imgGuid = Guid.NewGuid();
+                string fileName = imgGuid.ToString() + imgExtension;
+                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Resources", "Images", fileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    await cakeCreate.Image.CopyToAsync(fileStream);
+                    await image.CopyToAsync(fileStream);
                 }
-                cake.ImageURL = fileName;
-            }
 
-            return Ok(await _service.Create(cake));
+                Image img = new Image()
+                {
+                    Id = imgGuid,
+                    Extension = imgExtension,
+                };
+
+                Guid ImageId = await _imageService.CreateImage(img);
+                return Ok(ImageId);
+            }
+            return BadRequest();
         }
 
         [HttpPut("{id}")]

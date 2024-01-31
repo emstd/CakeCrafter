@@ -363,3 +363,6 @@ _themes.VS.Modern/
 
 # Custom added by ghogen
 settings.json
+
+# Custom added by emstd
+/CakeCrafter.Backend/CakeCrafter.API/wwwroot/Resources/*
