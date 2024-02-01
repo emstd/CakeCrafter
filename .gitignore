@@ -365,4 +365,5 @@ _themes.VS.Modern/
 settings.json
 
 # Custom added by emstd
-/CakeCrafter.Backend/CakeCrafter.API/wwwroot/Resources/*
+/CakeCrafter.Backend/CakeCrafter.API/wwwroot/Resources/Images/*
+!/CakeCrafter.Backend/CakeCrafter.API/wwwroot/Resources/Images/.gitkeep
