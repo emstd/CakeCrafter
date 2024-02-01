@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace CakeCrafter.Core.Models
 {
     public class Cake
@@ -8,6 +6,7 @@ namespace CakeCrafter.Core.Models
         public required string Name { get; set; }
         public required string Description { get; set; }
         public Guid? ImageId { get; set; }
+        public string? ImageUrl { get; set; }
         public int? CategoryId { get; set; }
         public int? TasteId { get; set; }
         public int CookTimeInMinutes { get; set; }

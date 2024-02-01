@@ -54,7 +54,7 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateCake([FromForm] CakeCreateRequest cakeCreate)
+        public async Task<ActionResult<int>> CreateCake(CakeCreateRequest cakeCreate)
         {
             var cake = _mapper.Map<CakeCreateRequest, Cake>(cakeCreate);
             return Ok(await _service.Create(cake));
@@ -88,22 +88,10 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CakeCreateRequest>> UpdateCake([FromForm] CakeUpdateRequest cakeUpdate, int id)
+        public async Task<ActionResult<CakeCreateRequest>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
         {
             var cake = _mapper.Map<CakeUpdateRequest, Cake>(cakeUpdate);
             cake.Id = id;
-            if (cakeUpdate.Image != null && cakeUpdate.Image.Length > 0)
-            {
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(cakeUpdate.Image.FileName);
-                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, fileName);
-
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await cakeUpdate.Image.CopyToAsync(fileStream);
-                }
-                cake.ImageURL = fileName;
-            }
             var updatedCake = await _service.Update(cake);
             if (updatedCake == null)
             {

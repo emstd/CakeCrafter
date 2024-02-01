@@ -12,7 +12,10 @@ namespace CakeCrafter.DataAccess.Entites
         [Column(TypeName = "nvarchar(200)")]
         public required string Description { get; set; }
 
+        [Column(TypeName = "nvarchar(500)")]
         public Guid? ImageId { get; set; }
+        public ImageEntity? Image { get; set; }
+        public string? ImageURL { get; set; }
 
         public int? CategoryId { get; set; }
         public CategoryEntity? Category { get; set; }

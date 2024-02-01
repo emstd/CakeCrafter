@@ -22,8 +22,25 @@ namespace CakeCrafter.DataAccess.Repositories
         public async Task<ItemsPage<Cake>> Get(int categoryId, int skip, int take)
         {
             var queryCakesInCategory = await _context.Cakes.AsNoTracking()
-                                                        .Where(cake => cake.CategoryId == categoryId)
-                                                        .ToArrayAsync();                //получаем все изделия в категории
+                                                           .Include(C => C.Image)
+                                                           .Where(cake => cake.CategoryId == categoryId)
+                                                           .ToArrayAsync();                //получаем все изделия в категории
+
+            foreach (CakeEntity cake in queryCakesInCategory)
+            {
+                if (cake.Image == null)
+                {
+                    cake.ImageURL = null;
+                }
+                else if (cake.Image.Extension == null)
+                {
+                    cake.ImageURL = cake.Image.Id.ToString();
+                }
+                else
+                {
+                    cake.ImageURL = cake.Image.Id.ToString() + cake.Image.Extension;
+                }
+            }
 
             var page = new ItemsPage<Cake>
             {
