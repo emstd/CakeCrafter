@@ -49,7 +49,7 @@ namespace CakeCrafter.API.Controllers
             {
                 return NotFound();
             }
-            var CakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
+            var CakeResponse = _mapper.Map<Cake, CakeGetByIdResponse>(cake);
             return Ok(CakeResponse);
         }
 
@@ -88,7 +88,7 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CakeCreateRequest>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
+        public async Task<ActionResult<CakeGetByIdResponse>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
         {
             var cake = _mapper.Map<CakeUpdateRequest, Cake>(cakeUpdate);
             cake.Id = id;
@@ -97,7 +97,8 @@ namespace CakeCrafter.API.Controllers
             {
                 return NotFound();
             }
-            return Ok(updatedCake);
+            var result = _mapper.Map<Cake, CakeGetByIdResponse>(updatedCake);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]

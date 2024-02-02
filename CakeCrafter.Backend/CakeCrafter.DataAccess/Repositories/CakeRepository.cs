@@ -56,10 +56,25 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<Cake?> GetById(int id)
         {
-            var dbCake = await _context.Cakes.AsNoTracking().FirstOrDefaultAsync(cake => cake.Id == id);
+            var dbCake = await _context.Cakes.AsNoTracking()
+                                             .Include(cake => cake.Image)
+                                             .FirstOrDefaultAsync(cake => cake.Id == id);
             if (dbCake == null)
             {
                 return null;
+            }
+
+            if (dbCake.Image == null)
+            {
+                dbCake.ImageURL = null;
+            }
+            else if (dbCake.Image.Extension == null)
+            {
+                dbCake.ImageURL = dbCake.Image.Id.ToString();
+            }
+            else
+            {
+                dbCake.ImageURL = dbCake.Image.Id.ToString() + dbCake.Image.Extension;
             }
 
             var result = _mapper.Map<CakeEntity, Cake>(dbCake);
