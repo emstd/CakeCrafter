@@ -162,4 +162,17 @@ export class APIClient
 
         return redirect(`/categories/${params.categoryId}`);
     };
+
+    /////***** Image *****/////
+    CreateImage = async( {request} ) =>
+    {
+        const formData = await request.formData();
+        const newImage = Object.fromEntries(formData);
+        const response = await fetch(`${this.URL}/api/cakes/image`,
+                                    {
+                                        method: 'POST',
+                                        body: newImage,
+                                    });
+        return response;
+    };
 };

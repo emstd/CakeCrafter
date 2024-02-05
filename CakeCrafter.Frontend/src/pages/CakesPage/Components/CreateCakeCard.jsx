@@ -42,22 +42,46 @@ function CreateCakeCard(){
         fetchGetCategories();
       }, []);
 
+      const [imageId, setImageId] = useState(null);
+      const imageHandle = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        console.log(e);
+        console.log(e.target);
+        console.log(formData);
+        console.log(...formData.values());
+        const response = await fetch('http://localhost:5000/api/cakes/image', {
+            method: 'POST',
+            body: formData,
+          });
+        const { image } = await response.json();
+        setImageId(image);
+        console.log(imageId);
+      }
+
     return(
+        <>
+        <Box display='flex' justifyContent='space-between' alignItems='center'> 
+                        <Text>Фотография: </Text>
+                        <Form method='post' id='create-image' onSubmit={imageHandle}>
+                            <Input
+                                name='image'
+                                width='50%'
+                                placeholder="Select Date and Time"
+                                size="md"
+                                p='0.8vh'
+                                type="file"
+                                form="create-image"
+                            />
+                            <Button type='submit'>ОК</Button>
+                        </Form>
+        </Box>
+
         <Form method="post" id="create-cake-form">
 
             <Box display='flex' flexDirection='column' width='50%' mt='7vh' ml='10%'>
 
-                    <Box display='flex' justifyContent='space-between' alignItems='center'> 
-                        <Text>Фотография: </Text>
-                        
-                        <Input
-                            width='50%'
-                            placeholder="Select Date and Time"
-                            size="md"
-                            p='0.8vh'
-                            type="file"
-                        />
-                    </Box>
+                    
                     <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Название:</Text>
@@ -181,7 +205,7 @@ function CreateCakeCard(){
             </Box>
 
         </Form>
-    );
+        </>);
 }
 
 

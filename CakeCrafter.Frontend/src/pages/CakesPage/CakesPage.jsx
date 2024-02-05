@@ -80,7 +80,7 @@ function CakesPage() {
                  <Image
                     objectFit='cover'
                     maxW={{ base: '100%', sm: '100%', md: '30%' }}
-                    src={`http://localhost:5000/${item.imageURL ?? 'no_image.png'}`}
+                    src={`http://localhost:5000/Resources/Images/${item.imageURL ?? 'no_image.png'}`}
                     alt='NoPhoto'
                   />
 
@@ -131,7 +131,7 @@ function CakesPage() {
                           <LiaGrinTongueSquint style={{fontSize:'3vh'}}/>
                           <Text ml='0.5vw'>
                             {tastes.length && (
-                              tastes.find(taste => taste.id == item.tasteId) === undefined ? <Text>Вкус не указан</Text> : tastes.find(taste => taste.id == item.tasteId).name
+                              tastes.find(taste => taste.id == item.tasteId) === undefined ? "Вкус не указан" : tastes.find(taste => taste.id == item.tasteId).name
                             )}
                             </Text>
                         </Flex>
