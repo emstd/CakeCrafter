@@ -9,7 +9,12 @@ import{ Box,
         NumberIncrementStepper, 
         NumberDecrementStepper, 
         Select,
-        Divider
+        Divider,
+        Tabs,
+        TabList,
+        Tab,
+        TabPanels,
+        TabPanel
         } 
     from "@chakra-ui/react";
 
@@ -43,7 +48,7 @@ function CreateCakeCard(){
       }, []);
 
     const [imageId, setImageId] = useState(null);
-    const imageHandle = async (e) => {
+    const imageIdHandle = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
@@ -55,21 +60,49 @@ function CreateCakeCard(){
         setImageId(image);
     }
 
+    const [imageURL, setImageURL] = useState(null);
+    const imageURLHandle = () => {
+        console.log("changed")
+    }
+
     return(
         <>
             <Form method='post' id='create-image'>
                 <Box display='flex' justifyContent='space-between' width='50%' mt='5vh' ml='10%' alignItems='center'> 
                     <Text>Фотография: </Text>
-                    <Input
-                        name='image'
-                        width='50%'
-                        placeholder="Select Date and Time"
-                        size="md"
-                        p='0.8vh'
-                        type="file"
-                        form="create-image"
-                        onChange={imageHandle}
-                    />              
+                    <Tabs width='50%' isFitted>
+                        <TabList>
+                            <Tab>Файл</Tab>
+                            <Tab>URL</Tab>
+                        </TabList>
+
+                        <TabPanels>
+                            <TabPanel padding='0' pt='2vh'>
+                                <Input
+                                    name='image'
+                                    width='100%'
+                                    placeholder="Select Date and Time"
+                                    size="md"
+                                    p='0.8vh'
+                                    type="file"
+                                    form="create-image"
+                                    onChange={imageIdHandle}
+                                />  
+                            </TabPanel>
+                            <TabPanel padding='0' pt='2vh'>
+                                <Input
+                                    name='image'
+                                    width='100%'
+                                    placeholder="Select Date and Time"
+                                    size="md"
+                                    p='0.8vh'
+                                    type="text"
+                                    form="create-image"
+                                    onChange={imageURLHandle}
+                                />
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>        
                 </Box>
             </Form>
             <Form method="post" id="create-cake-form">
@@ -82,6 +115,7 @@ function CreateCakeCard(){
                             type="text"
                             name="imageId"
                             defaultValue={imageId}
+                            readonly="readonly"
                         />
                     </Box>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>

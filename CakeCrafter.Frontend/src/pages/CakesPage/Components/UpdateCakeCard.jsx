@@ -86,6 +86,7 @@ function UpdateCakeCard(){
                             name="imageId"
                             defaultValue={cake.imageId}
                             value={imageId}
+                            readonly="readonly"
                         />
                     </Box>
                 <Divider mt='1vh'/>
