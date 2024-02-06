@@ -11,6 +11,7 @@ namespace CakeCrafter.DataAccess
             CreateMap<Category, CategoryEntity>().ReverseMap();
             CreateMap<Taste, TasteEntity>().ReverseMap();
             CreateMap<Cake, CakeEntity>().ReverseMap();
+            CreateMap<Image, ImageEntity>();
         }
     }
 }

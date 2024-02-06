@@ -13,5 +13,6 @@ namespace CakeCrafter.DataAccess
         public DbSet<CategoryEntity> Categories { get; set; }
         public DbSet<TasteEntity> Tastes { get; set; }
         public DbSet<CakeEntity> Cakes { get; set; }
+        public DbSet<ImageEntity> Images { get; set; }
     }
 }

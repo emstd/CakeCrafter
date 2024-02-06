@@ -4,7 +4,6 @@ using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 using CakeCrafter.Core.Pages;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CakeCrafter.API.Controllers
 {
@@ -15,12 +14,17 @@ namespace CakeCrafter.API.Controllers
         private readonly ICakeService _service;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IImageService _imageService;
 
-        public CakesController(ICakeService service, IMapper mapper, IWebHostEnvironment _host)
+        public CakesController(ICakeService service, 
+                               IMapper mapper, 
+                               IWebHostEnvironment _host, 
+                               IImageService imageService)
         {
             _service = service;
             _mapper = mapper;
             _webHostEnvironment = _host;
+            _imageService = imageService;
         }
 
         [HttpGet]
@@ -45,54 +49,56 @@ namespace CakeCrafter.API.Controllers
             {
                 return NotFound();
             }
-            var CakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
+            var CakeResponse = _mapper.Map<Cake, CakeGetByIdResponse>(cake);
             return Ok(CakeResponse);
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateCake([FromForm] CakeCreateRequest cakeCreate)
+        public async Task<ActionResult<int>> CreateCake(CakeCreateRequest cakeCreate)
         {
             var cake = _mapper.Map<CakeCreateRequest, Cake>(cakeCreate);
-
-            if (cakeCreate.Image != null && cakeCreate.Image.Length > 0)
-            {
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(cakeCreate.Image.FileName);
-                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, fileName);
-
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await cakeCreate.Image.CopyToAsync(fileStream);
-                }
-                cake.ImageURL = fileName;
-            }
-
             return Ok(await _service.Create(cake));
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<CakeCreateRequest>> UpdateCake([FromForm] CakeUpdateRequest cakeUpdate, int id)
+        [HttpPost("image")]
+        public async Task<ActionResult<Guid>> DownloadImage(IFormFile image)
         {
-            var cake = _mapper.Map<CakeUpdateRequest, Cake>(cakeUpdate);
-            cake.Id = id;
-            if (cakeUpdate.Image != null && cakeUpdate.Image.Length > 0)
+            if (image != null && image.Length > 0)
             {
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(cakeUpdate.Image.FileName);
-                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, fileName);
-
+                string imgExtension = Path.GetExtension(image.FileName);
+                Guid imgGuid = Guid.NewGuid();
+                string fileName = imgGuid.ToString() + imgExtension;
+                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Resources", "Images", fileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
-                    await cakeUpdate.Image.CopyToAsync(fileStream);
+                    await image.CopyToAsync(fileStream);
                 }
-                cake.ImageURL = fileName;
+
+                Image img = new Image()
+                {
+                    Id = imgGuid,
+                    Extension = imgExtension,
+                };
+
+                Guid ImageId = await _imageService.CreateImage(img);
+                return Ok(ImageId);
             }
+            return BadRequest();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<CakeGetByIdResponse>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
+        {
+            var cake = _mapper.Map<CakeUpdateRequest, Cake>(cakeUpdate);
+            cake.Id = id;
             var updatedCake = await _service.Update(cake);
             if (updatedCake == null)
             {
                 return NotFound();
             }
-            return Ok(updatedCake);
+            var result = _mapper.Map<Cake, CakeGetByIdResponse>(updatedCake);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
