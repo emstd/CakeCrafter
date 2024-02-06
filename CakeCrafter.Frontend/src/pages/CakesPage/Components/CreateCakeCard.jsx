@@ -81,7 +81,7 @@ function CreateCakeCard(){
                                 <Input
                                     name='image'
                                     width='100%'
-                                    placeholder="Select Date and Time"
+                                    placeholder="Select file"
                                     size="md"
                                     p='0.8vh'
                                     type="file"
@@ -93,7 +93,7 @@ function CreateCakeCard(){
                                 <Input
                                     name='image'
                                     width='100%'
-                                    placeholder="Select Date and Time"
+                                    placeholder="Введите URL"
                                     size="md"
                                     p='0.8vh'
                                     type="text"
@@ -118,6 +118,7 @@ function CreateCakeCard(){
                             readonly="readonly"
                         />
                     </Box>
+                    <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Название:</Text>
                         <Input

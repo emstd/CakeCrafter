@@ -8,14 +8,19 @@ import{ Box,
         NumberInputStepper, 
         NumberIncrementStepper, 
         NumberDecrementStepper, 
-        Divider
+        Divider,
+        Tabs,
+        TabList,
+        Tab,
+        TabPanels,
+        TabPanel
         } 
     from "@chakra-ui/react";
 
 import { useNavigate, Form, useLoaderData, useParams, Link } from "react-router-dom";
 import { Select } from '@chakra-ui/react';
 import { APIClient } from '../../../APIClient';
-import { AddIcon, EditIcon, SmallAddIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 
 
 function UpdateCakeCard(){
@@ -45,7 +50,7 @@ function UpdateCakeCard(){
     }, []);    
     
     const [imageId, setImageId] = useState(null);
-    const imageHandle = async (e) => {
+    const imageIdHandle = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
@@ -57,28 +62,54 @@ function UpdateCakeCard(){
         setImageId(image);
     }
 
+    const imageURLHandle = () => {
+        console.log("changed")
+    }
+
     return(
         <>
             <Form method='post' id='create-image'>
                 <Box display='flex' justifyContent='space-between' width='50%' mt='5vh' ml='10%' alignItems='center'> 
                     <Text>Фотография: </Text>
-                    <Input
-                        name='image'
-                        width='50%'
-                        placeholder="Select Date and Time"
-                        size="md"
-                        p='0.8vh'
-                        type="file"
-                        form="create-image"
-                        onChange={imageHandle}
-                    />              
+                    <Tabs width='50%' isFitted>
+                        <TabList>
+                            <Tab>Файл</Tab>
+                            <Tab>URL</Tab>
+                        </TabList>
+                        <TabPanels>
+                            <TabPanel padding='0' pt='2vh'>
+                                <Input
+                                    name='image'
+                                    width='100%'
+                                    placeholder="Select file"
+                                    size="md"
+                                    p='0.8vh'
+                                    type="file"
+                                    form="create-image"
+                                    onChange={imageIdHandle}
+                                />  
+                            </TabPanel>
+                            <TabPanel padding='0' pt='2vh'>
+                                <Input
+                                    name='image'
+                                    width='100%'
+                                    placeholder="Введите URL"
+                                    size="md"
+                                    p='0.8vh'
+                                    type="text"
+                                    form="create-image"
+                                    onChange={imageURLHandle}
+                                />
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>                    
                 </Box>
             </Form>
 
             <Form method="post" id="create-cake-form">
                 <Box display='flex' flexDirection='column' width='50%' ml='10%'>
                     <Divider mt='1vh'/>
-                    <Box display='flex' justifyContent='space-between' alignItems='center'>
+                    <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>ImageId:</Text>
                         <Input
                             width='50%'
