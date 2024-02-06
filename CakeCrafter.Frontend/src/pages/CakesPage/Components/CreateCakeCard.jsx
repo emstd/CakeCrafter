@@ -47,6 +47,10 @@ function CreateCakeCard(){
         fetchGetCategories();
       }, []);
 
+
+    const [isImageInput, setIsImageInput] = useState(true);
+    const [isURLInput, setIsURLInput] = useState(true);
+
     const [imageId, setImageId] = useState(null);
     const imageIdHandle = async (e) => {
         e.preventDefault();
@@ -58,11 +62,23 @@ function CreateCakeCard(){
           });
         const image = await response.json();
         setImageId(image);
+        setIsImageInput(true);
+        setIsURLInput(false);
     }
 
     const [imageURL, setImageURL] = useState(null);
-    const imageURLHandle = () => {
-        console.log("changed")
+    const imageURLHandle = (e) => {
+        const res = e.target.value;
+        setImageURL(res);
+        console.log(imageURL);
+        if(e.target.value !== ''){
+            setIsImageInput(false);
+            setIsURLInput(true);
+        }
+        else{
+            setIsImageInput(true);
+            setIsURLInput(true);
+        }
     }
 
     return(
@@ -87,11 +103,12 @@ function CreateCakeCard(){
                                     type="file"
                                     form="create-image"
                                     onChange={imageIdHandle}
+                                    disabled={!isImageInput}
                                 />  
                             </TabPanel>
                             <TabPanel padding='0' pt='2vh'>
                                 <Input
-                                    name='image'
+                                    name='imageURL'
                                     width='100%'
                                     placeholder="Введите URL"
                                     size="md"
@@ -99,6 +116,7 @@ function CreateCakeCard(){
                                     type="text"
                                     form="create-image"
                                     onChange={imageURLHandle}
+                                    disabled={!isURLInput}
                                 />
                             </TabPanel>
                         </TabPanels>
@@ -115,7 +133,18 @@ function CreateCakeCard(){
                             type="text"
                             name="imageId"
                             defaultValue={imageId}
-                            readonly="readonly"
+                            readOnly="readonly"
+                        />
+                    </Box>
+                    <Divider mt='1vh'/>
+                    <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
+                        <Text>ImageURL:</Text>
+                        <Input
+                            width='50%'
+                            type="text"
+                            name="imageURL"
+                            defaultValue={imageURL}
+                            readOnly="readonly"
                         />
                     </Box>
                     <Divider mt='1vh'/>

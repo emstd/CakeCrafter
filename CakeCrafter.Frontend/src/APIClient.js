@@ -131,8 +131,10 @@ export class APIClient
         const formData = await request.formData();
         let imageId = formData.get('imageId');
         imageId = imageId === "" ? null : imageId; //сервер требует Guid? ImageId, а пустая строка автоматически не серриализуется в null
+        let imageURL = formData.get('imageURL');
+        imageURL = imageURL === "" ? null : imageURL;
 
-        const newCake = { ...Object.fromEntries(formData), imageId: imageId };
+        const newCake = { ...Object.fromEntries(formData), imageId: imageId, imageURL: imageURL };
         const response = await fetch(`${this.URL}/api/cakes`,
                                     {
                                         method: 'POST',
@@ -146,9 +148,11 @@ export class APIClient
     {
         const formData = await request.formData();
         let imageId = formData.get('imageId');
-        imageId = imageId === "" ? null : imageId;
-
-        const updatedCake = { ...Object.fromEntries(formData), imageId: imageId };
+        imageId = imageId === '' ? null : imageId;
+        let imageURL = formData.get('imageURL');
+        imageURL = imageURL === '' ? null : imageURL;
+        console.log(imageURL);
+        const updatedCake = { ...Object.fromEntries(formData), imageId: imageId, imageURL: imageURL };
         const response = await fetch(`${this.URL}/api/cakes/${params.cakeId}`,
                                     {
                                         method: 'PUT',

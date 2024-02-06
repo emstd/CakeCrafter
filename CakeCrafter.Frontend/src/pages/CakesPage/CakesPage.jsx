@@ -80,7 +80,7 @@ function CakesPage() {
                  <Image
                     objectFit='cover'
                     maxW={{ base: '100%', sm: '100%', md: '30%' }}
-                    src={`http://localhost:5000/Resources/Images/${item.imageURL ?? 'no_image.png'}`}
+                    src={`${item.imageURL ?? 'no_image.png'}`}
                     alt='NoPhoto'
                   />
 

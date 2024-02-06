@@ -5,6 +5,7 @@ namespace CakeCrafter.API.Contracts
         public required string Name { get; init; }
         public required string Description { get; init; }
         public Guid? ImageId { get; set; }
+        public string? ImageURL { get; set; }
         public int? TasteId { get; init; }
         public int? CategoryId { get; init; }
 

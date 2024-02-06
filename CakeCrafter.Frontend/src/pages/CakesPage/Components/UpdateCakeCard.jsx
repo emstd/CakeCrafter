@@ -47,7 +47,11 @@ function UpdateCakeCard(){
           setCakesCategories(categoriesResponse);
         }
         fetchGetCategories();
-    }, []);    
+    }, []);
+
+
+    const [isImageInput, setIsImageInput] = useState(true);
+    const [isURLInput, setIsURLInput] = useState(true);
     
     const [imageId, setImageId] = useState(null);
     const imageIdHandle = async (e) => {
@@ -60,10 +64,25 @@ function UpdateCakeCard(){
           });
         const image = await response.json();
         setImageId(image);
+        setImageURL('');
+        setIsImageInput(true);
+        setIsURLInput(false);
     }
 
-    const imageURLHandle = () => {
-        console.log("changed")
+    const [imageURL, setImageURL] = useState(null);
+    const imageURLHandle = (e) => {
+        const res = e.target.value;
+        setImageURL(res);
+        setImageId('');
+        console.log(imageURL);
+        if(e.target.value !== ''){
+            setIsImageInput(false);
+            setIsURLInput(true);
+        }
+        else{
+            setIsImageInput(true);
+            setIsURLInput(true);
+        }
     }
 
     return(
@@ -87,6 +106,7 @@ function UpdateCakeCard(){
                                     type="file"
                                     form="create-image"
                                     onChange={imageIdHandle}
+                                    disabled={!isImageInput}
                                 />  
                             </TabPanel>
                             <TabPanel padding='0' pt='2vh'>
@@ -99,6 +119,8 @@ function UpdateCakeCard(){
                                     type="text"
                                     form="create-image"
                                     onChange={imageURLHandle}
+                                    defaultValue={cake.imageURL}
+                                    disabled={!isURLInput}
                                 />
                             </TabPanel>
                         </TabPanels>
@@ -117,7 +139,19 @@ function UpdateCakeCard(){
                             name="imageId"
                             defaultValue={cake.imageId}
                             value={imageId}
-                            readonly="readonly"
+                            readOnly="readonly"
+                        />
+                    </Box>
+                    <Divider mt='1vh'/>
+                    <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
+                        <Text>ImageURL:</Text>
+                        <Input
+                            width='50%'
+                            type="text"
+                            name="imageURL"
+                            defaultValue={cake.imageURL}
+                            value={imageURL}
+                            readOnly="readonly"
                         />
                     </Box>
                 <Divider mt='1vh'/>

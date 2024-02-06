@@ -28,17 +28,17 @@ namespace CakeCrafter.DataAccess.Repositories
 
             foreach (CakeEntity cake in queryCakesInCategory)
             {
-                if (cake.Image == null)
+                if (cake.ImageURL == null)
                 {
-                    cake.ImageURL = null;
-                }
-                else if (cake.Image.Extension == null)
-                {
-                    cake.ImageURL = cake.Image.Id.ToString();
-                }
-                else
-                {
-                    cake.ImageURL = cake.Image.Id.ToString() + cake.Image.Extension;
+                    if (cake.Image == null)
+                    {
+                        cake.ImageURL = null;
+                    }
+                    else
+                    {
+                        string HostURL = "http://localhost:5000/Resources/Images/";
+                        cake.ImageURL = HostURL + cake.Image.Id.ToString() + cake.Image.Extension;
+                    }
                 }
             }
 
@@ -64,17 +64,16 @@ namespace CakeCrafter.DataAccess.Repositories
                 return null;
             }
 
-            if (dbCake.Image == null)
+            if (dbCake.ImageURL == null)
             {
-                dbCake.ImageURL = null;
-            }
-            else if (dbCake.Image.Extension == null)
-            {
-                dbCake.ImageURL = dbCake.Image.Id.ToString();
+                if (dbCake.Image == null)
+                {
+                    dbCake.ImageURL = null;
+                }
             }
             else
             {
-                dbCake.ImageURL = dbCake.Image.Id.ToString() + dbCake.Image.Extension;
+                dbCake.ImageId = null;
             }
 
             var result = _mapper.Map<CakeEntity, Cake>(dbCake);
