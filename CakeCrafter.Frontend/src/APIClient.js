@@ -129,7 +129,12 @@ export class APIClient
     CreateCake = async( {params, request} ) =>
     {
         const formData = await request.formData();
-        const newCake = Object.fromEntries(formData);
+        let imageId = formData.get('imageId');
+        imageId = imageId === "" ? null : imageId; //сервер требует Guid? ImageId, а пустая строка автоматически не серриализуется в null
+        let imageURL = formData.get('imageURL');
+        imageURL = imageURL === "" ? null : imageURL;
+
+        const newCake = { ...Object.fromEntries(formData), imageId: imageId, imageURL: imageURL };
         const response = await fetch(`${this.URL}/api/cakes`,
                                     {
                                         method: 'POST',
@@ -142,8 +147,12 @@ export class APIClient
     UpdateCake = async( {params, request} ) =>
     {
         const formData = await request.formData();
-        const updatedCake = Object.fromEntries(formData);
-    
+        let imageId = formData.get('imageId');
+        imageId = imageId === '' ? null : imageId;
+        let imageURL = formData.get('imageURL');
+        imageURL = imageURL === '' ? null : imageURL;
+        console.log(imageURL);
+        const updatedCake = { ...Object.fromEntries(formData), imageId: imageId, imageURL: imageURL };
         const response = await fetch(`${this.URL}/api/cakes/${params.cakeId}`,
                                     {
                                         method: 'PUT',
@@ -161,5 +170,18 @@ export class APIClient
                                     });
 
         return redirect(`/categories/${params.categoryId}`);
+    };
+
+    /////***** Image *****/////
+    CreateImage = async( {request} ) =>
+    {
+        const formData = await request.formData();
+        const newImage = Object.fromEntries(formData);
+        const response = await fetch(`${this.URL}/api/cakes/image`,
+                                    {
+                                        method: 'POST',
+                                        body: newImage,
+                                    });
+        return response;
     };
 };

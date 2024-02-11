@@ -9,7 +9,12 @@ import{ Box,
         NumberIncrementStepper, 
         NumberDecrementStepper, 
         Select,
-        Divider
+        Divider,
+        Tabs,
+        TabList,
+        Tab,
+        TabPanels,
+        TabPanel
         } 
     from "@chakra-ui/react";
 
@@ -42,20 +47,104 @@ function CreateCakeCard(){
         fetchGetCategories();
       }, []);
 
+
+    const [isImageInput, setIsImageInput] = useState(true);
+    const [isURLInput, setIsURLInput] = useState(true);
+
+    const [imageId, setImageId] = useState(null);
+    const imageIdHandle = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('image', e.target.files[0]);
+        const response = await fetch('http://localhost:5000/api/cakes/image', {
+            method: 'POST',
+            body: formData,
+          });
+        const image = await response.json();
+        setImageId(image);
+        setIsImageInput(true);
+        setIsURLInput(false);
+    }
+
+    const [imageURL, setImageURL] = useState(null);
+    const imageURLHandle = (e) => {
+        const res = e.target.value;
+        setImageURL(res);
+        console.log(imageURL);
+        if(e.target.value !== ''){
+            setIsImageInput(false);
+            setIsURLInput(true);
+        }
+        else{
+            setIsImageInput(true);
+            setIsURLInput(true);
+        }
+    }
+
     return(
-        <Form method="post" id="create-cake-form">
+        <>
+            <Form method='post' id='create-image'>
+                <Box display='flex' justifyContent='space-between' width='50%' mt='5vh' ml='10%' alignItems='center'> 
+                    <Text>Фотография: </Text>
+                    <Tabs width='50%' isFitted>
+                        <TabList>
+                            <Tab>Файл</Tab>
+                            <Tab>URL</Tab>
+                        </TabList>
 
-            <Box display='flex' flexDirection='column' width='50%' mt='7vh' ml='10%'>
-
-                    <Box display='flex' justifyContent='space-between' alignItems='center'> 
-                        <Text>Фотография: </Text>
-                        
+                        <TabPanels>
+                            <TabPanel padding='0' pt='2vh'>
+                                <Input
+                                    name='image'
+                                    width='100%'
+                                    placeholder="Select file"
+                                    size="md"
+                                    p='0.8vh'
+                                    type="file"
+                                    form="create-image"
+                                    onChange={imageIdHandle}
+                                    disabled={!isImageInput}
+                                />  
+                            </TabPanel>
+                            <TabPanel padding='0' pt='2vh'>
+                                <Input
+                                    name='imageURL'
+                                    width='100%'
+                                    placeholder="Введите URL"
+                                    size="md"
+                                    p='0.8vh'
+                                    type="text"
+                                    form="create-image"
+                                    onChange={imageURLHandle}
+                                    disabled={!isURLInput}
+                                />
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>        
+                </Box>
+            </Form>
+            <Form method="post" id="create-cake-form">
+                <Box display='flex' flexDirection='column' width='50%' ml='10%'>
+                    <Divider mt='1vh'/>
+                    <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
+                        <Text>ImageId:</Text>
                         <Input
                             width='50%'
-                            placeholder="Select Date and Time"
-                            size="md"
-                            p='0.8vh'
-                            type="file"
+                            type="text"
+                            name="imageId"
+                            defaultValue={imageId}
+                            readOnly="readonly"
+                        />
+                    </Box>
+                    <Divider mt='1vh'/>
+                    <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
+                        <Text>ImageURL:</Text>
+                        <Input
+                            width='50%'
+                            type="text"
+                            name="imageURL"
+                            defaultValue={imageURL}
+                            readOnly="readonly"
                         />
                     </Box>
                     <Divider mt='1vh'/>
@@ -92,7 +181,6 @@ function CreateCakeCard(){
                                         (
                                             <option key={taste.id} value={taste.id}>{taste.name}</option>
                                         )
-    
                                     )
                                 }
                             </Select>
@@ -130,11 +218,11 @@ function CreateCakeCard(){
                             placeholder="Время приготовления"
                         >
                             <NumberInputField />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
                     </Box>
                     <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
@@ -149,7 +237,6 @@ function CreateCakeCard(){
                     <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
                         <Text>Вес, кг:</Text>
-
                         <NumberInput
                             defaultValue={1}
                             min={0.5}
@@ -168,20 +255,19 @@ function CreateCakeCard(){
                         </NumberInput>
                     </Box>
                     <Divider mt='1vh'/>
-            </Box>
+                </Box>
 
-            <Box width='30%' display='flex' justifyContent='space-between' ml='20%' mt='10vh'>
-                <Button bgColor='green' type="submit">Сохранить</Button>
-                <Button bgColor='red'
-                    onClick={() => {
-                            navigate(-1);
+                <Box width='30%' display='flex' justifyContent='space-between' ml='20%' mt='10vh'>
+                    <Button bgColor='green' type="submit">Сохранить</Button>
+                    <Button bgColor='red'
+                        onClick={() => {
+                                navigate(-1);
+                            }
                         }
-                    }
-                >   Отмена  </Button>
-            </Box>
-
-        </Form>
-    );
+                    >   Отмена  </Button>
+                </Box>
+            </Form>
+        </>);
 }
 
 
