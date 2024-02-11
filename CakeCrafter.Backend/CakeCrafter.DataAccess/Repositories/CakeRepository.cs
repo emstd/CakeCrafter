@@ -24,9 +24,11 @@ namespace CakeCrafter.DataAccess.Repositories
             var queryCakesInCategory = await _context.Cakes.AsNoTracking()
                                                            .Include(C => C.Image)
                                                            .Where(cake => cake.CategoryId == categoryId)
+                                                           .Skip(skip)
+                                                           .Take(take)
                                                            .ToArrayAsync();                //получаем все изделия в категории
 
-            foreach (CakeEntity cake in queryCakesInCategory)
+            foreach (var cake in queryCakesInCategory)
             {
                 if (cake.ImageURL == null)
                 {
@@ -44,9 +46,7 @@ namespace CakeCrafter.DataAccess.Repositories
 
             var page = new ItemsPage<Cake>
             {
-                Items = queryCakesInCategory.Skip(skip)                                 //берем столько изделий из категории,
-                                            .Take(take)                                 //сколько указано в запросе
-                                            .Select(_mapper.Map<CakeEntity, Cake>)
+                Items = queryCakesInCategory.Select(_mapper.Map<CakeEntity, Cake>)
                                             .ToArray(),                               
 
                 TotalItems = queryCakesInCategory.Length                                //указываем, солько всего
