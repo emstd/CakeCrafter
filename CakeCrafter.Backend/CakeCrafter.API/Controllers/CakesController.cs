@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CakeCrafter.API.Contracts;
+using CakeCrafter.BusinessLogic;
 using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 using CakeCrafter.Core.Pages;
@@ -16,9 +17,9 @@ namespace CakeCrafter.API.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IImageService _imageService;
 
-        public CakesController(ICakeService service, 
-                               IMapper mapper, 
-                               IWebHostEnvironment _host, 
+        public CakesController(ICakeService service,
+                               IMapper mapper,
+                               IWebHostEnvironment _host,
                                IImageService imageService)
         {
             _service = service;
@@ -86,6 +87,46 @@ namespace CakeCrafter.API.Controllers
             }
             return BadRequest();
         }
+
+        [HttpPost("ImageByUrl")]
+        public async Task<ActionResult<string>> CreateImage([FromBody] string imageUrl)
+        {
+            if (string.IsNullOrEmpty(imageUrl))
+            {
+                return BadRequest();
+            }
+            try
+            {
+                using (var httpClient = new HttpClient())                               //Загружаем картинку с указанного URL и сохраняем на сервер,
+                {                                                                       //генерируя вместо названия GUID
+                    var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
+
+                    string imgExtension = ".jpg";                                                       //Расширение .jpg будет у всех скаченных картинок
+                    Guid imgId = Guid.NewGuid();
+                    string fileName = imgId.ToString() + imgExtension;
+                    var path = Path.Combine(_webHostEnvironment.WebRootPath, "Resources", "Images", fileName);    //Путь: /wwwroot/Resources/Images
+
+                    /*using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await fileStream.WriteAsync(imageBytes, 0, imageBytes.Length);
+                    }*/
+                    System.IO.File.WriteAllBytes(path, imageBytes);                 //Сохраняем картинку на сервере
+
+                    Image image = new Image()
+                    {
+                        Id = imgId,
+                        Extension = imgExtension,
+                    };
+                    Guid imageId = await _imageService.CreateImage(image);
+                    return Ok(imageId);
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult<CakeGetByIdResponse>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
