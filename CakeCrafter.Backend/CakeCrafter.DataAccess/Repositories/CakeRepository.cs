@@ -27,6 +27,18 @@ namespace CakeCrafter.DataAccess.Repositories
                                                            .Skip(skip)
                                                            .Take(take)
                                                            .ToArrayAsync();                //получаем все изделия в категории
+             
+            foreach (var cake in queryCakesInCategory)
+            {
+                if(cake.ImageId == null)
+                {
+                    cake.ImageUrl = null;
+                }
+                else
+                {
+                    cake.ImageUrl = cake.Image.Id.ToString() + cake.Image.Extension;
+                }
+            }
 
             var page = new ItemsPage<Cake>
             {
@@ -40,14 +52,22 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<Cake?> GetById(int id)
         {
-            var dbCake = await _context.Cakes.AsNoTracking()
+            var cake = await _context.Cakes.AsNoTracking()
                                              .Include(cake => cake.Image)
                                              .FirstOrDefaultAsync(cake => cake.Id == id);
-            if (dbCake == null)
+            if (cake == null)
             {
                 return null;
             }
-            var result = _mapper.Map<CakeEntity, Cake>(dbCake);
+            if (cake.ImageId == null)
+            {
+                cake.ImageUrl = null;
+            }
+            else
+            {
+                cake.ImageUrl = cake.Image.Id.ToString() + cake.Image.Extension;
+            }
+            var result = _mapper.Map<CakeEntity, Cake>(cake);
 
             return result;
         }
@@ -73,6 +93,7 @@ namespace CakeCrafter.DataAccess.Repositories
 
             _context.Cakes.Update(dbCake);
             await _context.SaveChangesAsync();
+            //Нужно подумать, что тут возвращать
             return cake;
         }
 

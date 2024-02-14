@@ -43,7 +43,7 @@ namespace CakeCrafter.API.Controllers
                 Items = cakesPage.Items.Select(cake => _mapper.Map<Cake, CakeGetResponse>(cake))
                                        .Select(cake =>
                                        {
-                                           cake.ImageURL = cake.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + cake.ImageId.ToString();
+                                           cake.ImageUrl = cake.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + cake.ImageUrl;
                                            return cake;
                                        })
                                        .ToArray(),
@@ -62,7 +62,7 @@ namespace CakeCrafter.API.Controllers
                 return NotFound();
             }
             var CakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
-            CakeResponse.ImageURL = CakeResponse.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + CakeResponse.ImageId;
+            CakeResponse.ImageUrl = CakeResponse.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + CakeResponse.ImageUrl;
             return Ok(CakeResponse);
         }
 
@@ -152,7 +152,7 @@ namespace CakeCrafter.API.Controllers
                 return NotFound();
             }
             var CakeResponse = _mapper.Map<Cake, CakeGetResponse>(updatedCake);
-            CakeResponse.ImageURL = CakeResponse.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + CakeResponse.ImageId;
+            CakeResponse.ImageUrl = CakeResponse.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + CakeResponse.ImageId;
             return Ok(CakeResponse);
         }
 

@@ -15,6 +15,9 @@ namespace CakeCrafter.DataAccess.Entites
         public Guid? ImageId { get; set; }
         public ImageEntity? Image { get; set; }
 
+        [NotMapped]
+        public string? ImageUrl { get; set; }
+
         public int? CategoryId { get; set; }
         public CategoryEntity? Category { get; set; }
 
