@@ -28,26 +28,10 @@ namespace CakeCrafter.DataAccess.Repositories
                                                            .Take(take)
                                                            .ToArrayAsync();                //получаем все изделия в категории
 
-            foreach (var cake in queryCakesInCategory)
-            {
-                if (cake.ImageURL == null)
-                {
-                    if (cake.Image == null)
-                    {
-                        cake.ImageURL = null;
-                    }
-                    else
-                    {
-                        string HostURL = "http://localhost:5000/Resources/Images/";
-                        cake.ImageURL = HostURL + cake.Image.Id.ToString() + cake.Image.Extension;
-                    }
-                }
-            }
-
             var page = new ItemsPage<Cake>
             {
                 Items = queryCakesInCategory.Select(_mapper.Map<CakeEntity, Cake>)
-                                            .ToArray(),                               
+                                            .ToArray(),
 
                 TotalItems = queryCakesInCategory.Length                                //указываем, солько всего
             };                                                                          //изделий в категории
@@ -63,19 +47,6 @@ namespace CakeCrafter.DataAccess.Repositories
             {
                 return null;
             }
-
-            if (dbCake.ImageURL == null)
-            {
-                if (dbCake.Image == null)
-                {
-                    dbCake.ImageURL = null;
-                }
-            }
-            else
-            {
-                dbCake.ImageId = null;
-            }
-
             var result = _mapper.Map<CakeEntity, Cake>(dbCake);
 
             return result;

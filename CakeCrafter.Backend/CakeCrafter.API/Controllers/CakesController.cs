@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using CakeCrafter.API.Contracts;
+using CakeCrafter.API.Options;
 using CakeCrafter.BusinessLogic;
 using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
 using CakeCrafter.Core.Pages;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace CakeCrafter.API.Controllers
 {
@@ -29,28 +31,38 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ItemsPage<CakeGetResponse>>> GetCakes([FromQuery] int categoryId, [FromQuery] int skip, [FromQuery] int take)
+        public async Task<ActionResult<ItemsPage<CakeGetResponse>>> GetCakes([FromQuery] int categoryId, 
+                                                                             [FromQuery] int skip, 
+                                                                             [FromQuery] int take, 
+                                                                             [FromServices]IOptions<URLs> _URLs)
         {
             var cakesPage = await _service.Get(categoryId, skip, take);
-
+            URLs urls = _URLs.Value;
             var PageResponse = new ItemsPage<CakeGetResponse>
             {
-                Items = cakesPage.Items.Select(cake => _mapper.Map<Cake, CakeGetResponse>(cake)).ToArray(),
+                Items = cakesPage.Items.Select(cake => _mapper.Map<Cake, CakeGetResponse>(cake))
+                                       .Select(cake =>
+                                       {
+                                           cake.ImageURL = cake.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + cake.ImageId.ToString();
+                                           return cake;
+                                       })
+                                       .ToArray(),
                 TotalItems = cakesPage.TotalItems
             };
-
             return Ok(PageResponse);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CakeGetResponse>> GetCakeById(int id)
+        public async Task<ActionResult<CakeGetResponse>> GetCakeById(int id, [FromServices] IOptions<URLs> _URLs)
         {
+            URLs urls = _URLs.Value;
             var cake = await _service.GetById(id);
             if (cake == null)
             {
                 return NotFound();
             }
-            var CakeResponse = _mapper.Map<Cake, CakeGetByIdResponse>(cake);
+            var CakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
+            CakeResponse.ImageURL = CakeResponse.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + CakeResponse.ImageId;
             return Ok(CakeResponse);
         }
 
@@ -129,8 +141,9 @@ namespace CakeCrafter.API.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CakeGetByIdResponse>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
+        public async Task<ActionResult<CakeGetResponse>> UpdateCake(CakeUpdateRequest cakeUpdate, int id, [FromServices]IOptions<URLs> _URLs)
         {
+            URLs urls = _URLs.Value;
             var cake = _mapper.Map<CakeUpdateRequest, Cake>(cakeUpdate);
             cake.Id = id;
             var updatedCake = await _service.Update(cake);
@@ -138,8 +151,9 @@ namespace CakeCrafter.API.Controllers
             {
                 return NotFound();
             }
-            var result = _mapper.Map<Cake, CakeGetByIdResponse>(updatedCake);
-            return Ok(result);
+            var CakeResponse = _mapper.Map<Cake, CakeGetResponse>(updatedCake);
+            CakeResponse.ImageURL = CakeResponse.ImageId == null ? urls.ImagesURL + "NoImage.png" : urls.ImagesURL + CakeResponse.ImageId;
+            return Ok(CakeResponse);
         }
 
         [HttpDelete("{id}")]

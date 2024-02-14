@@ -1,4 +1,5 @@
 using CakeCrafter.API.Extensions;
+using CakeCrafter.API.Options;
 using CakeCrafter.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +47,7 @@ namespace CakeCrafter.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.Configure<URLs>(builder.Configuration.GetSection("URLs"));
 
             var app = builder.Build();
             app.UseHttpLogging();
