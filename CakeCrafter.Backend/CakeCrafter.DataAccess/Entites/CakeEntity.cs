@@ -9,7 +9,7 @@ namespace CakeCrafter.DataAccess.Entites
         [Column(TypeName = "nvarchar(100)")]
         public required string Name { get; set; }
 
-        [Column(TypeName = "nvarchar(200)")]
+        [Column(TypeName = "nvarchar(500)")]
         public required string Description { get; set; }
 
         public Guid? ImageId { get; set; }

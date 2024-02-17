@@ -90,10 +90,9 @@ namespace CakeCrafter.DataAccess.Repositories
             }
 
             dbCake = _mapper.Map<Cake, CakeEntity>(cake);
-
             _context.Cakes.Update(dbCake);
             await _context.SaveChangesAsync();
-            //Нужно подумать, что тут возвращать
+
             return cake;
         }
 
