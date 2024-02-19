@@ -129,12 +129,27 @@ export class APIClient
     CreateCake = async( {params, request} ) =>
     {
         const formData = await request.formData();
+        const resultId = formData.get('imageResult');
         let imageId = formData.get('imageId');
-        imageId = imageId === "" ? null : imageId; //сервер требует Guid? ImageId, а пустая строка автоматически не серриализуется в null
+        imageId = imageId === "" ? null : imageId;
         let imageURL = formData.get('imageURL');
         imageURL = imageURL === "" ? null : imageURL;
 
-        const newCake = { ...Object.fromEntries(formData), imageId: imageId, imageURL: imageURL };
+        let ImageRequestId = null;
+
+        if(resultId == 0)
+        {
+            ImageRequestId = imageId;
+        }
+        else
+        {
+            ImageRequestId = imageURL;
+        }
+        
+        console.log(resultId);
+        console.log(ImageRequestId);
+
+        const newCake = { ...Object.fromEntries(formData), imageId: ImageRequestId};
         const response = await fetch(`${this.URL}/api/cakes`,
                                     {
                                         method: 'POST',
@@ -147,12 +162,37 @@ export class APIClient
     UpdateCake = async( {params, request} ) =>
     {
         const formData = await request.formData();
-        let imageId = formData.get('imageId');
-        imageId = imageId === '' ? null : imageId;
-        let imageURL = formData.get('imageURL');
-        imageURL = imageURL === '' ? null : imageURL;
-        console.log(imageURL);
-        const updatedCake = { ...Object.fromEntries(formData), imageId: imageId, imageURL: imageURL };
+
+        let defaultId = formData.get('defaultImageId');     //Получаем ID картинки, которая была, если не было, то null
+        defaultId = defaultId === '' ? null : defaultId;    
+
+        const resultId = formData.get('imageResult');       //Получаем какой TAB был выбран (File или URL)
+
+        let imageId = formData.get('imageId');              //Смотрим загрузил ли пользователь файл
+        imageId = imageId === '' ? null : imageId;  
+
+        let imageURL = formData.get('imageURL');            //Смотрим загрузил ли пользователь картинку по URL
+        imageURL = imageURL === '' ? null : imageURL;   
+
+        let ImageRequestId = null;                          //инициализация Id картинки, который будет записан в итоге в запрос
+
+        if(imageId === null && imageURL === null)           //Если пользователь не загрузил изображением ни файлом, ни по URL, то оставляем дефолтный ID картинки, которой был (возможно null если картинки и не было)
+        {
+            ImageRequestId = defaultId;
+        }
+        else
+        {
+            if(resultId == 0)                               //Если был выбран TAB с файлом, то в запрос пишем ID файла изображения
+            {
+                ImageRequestId = imageId;
+            }
+            else                                            //В другом случае был выбран TAB с URL, тогда пишем в запрос ID URL-изображения
+            {
+                ImageRequestId = imageURL;
+            }
+        }
+
+        const updatedCake = { ...Object.fromEntries(formData), imageId: ImageRequestId };
         const response = await fetch(`${this.URL}/api/cakes/${params.cakeId}`,
                                     {
                                         method: 'PUT',

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CakeCrafter.DataAccess.Migrations
 {
     [DbContext(typeof(CakeCrafterDbContext))]
-    [Migration("20240202125229_AddedImageEntity")]
-    partial class AddedImageEntity
+    [Migration("20240217061907_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,13 +41,10 @@ namespace CakeCrafter.DataAccess.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("ImageURL")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("ImageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Level")
                         .HasColumnType("int");
@@ -92,9 +89,9 @@ namespace CakeCrafter.DataAccess.Migrations
 
             modelBuilder.Entity("CakeCrafter.DataAccess.Entites.ImageEntity", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Extension")
                         .HasColumnType("nvarchar(10)");

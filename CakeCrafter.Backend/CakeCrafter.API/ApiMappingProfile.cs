@@ -11,7 +11,6 @@ namespace CakeCrafter.API
             CreateMap<CakeCreateRequest, Cake>();
             CreateMap<Cake, CakeGetResponse>();
             CreateMap<CakeUpdateRequest, Cake>();
-            CreateMap<Cake, CakeGetByIdResponse>();
         }
     }
 }

@@ -47,9 +47,11 @@ function CreateCakeCard(){
         fetchGetCategories();
       }, []);
 
+    
+    // const [isImageInput, setIsImageInput] = useState(true);
+    // const [isURLInput, setIsURLInput] = useState(true);
 
-    const [isImageInput, setIsImageInput] = useState(true);
-    const [isURLInput, setIsURLInput] = useState(true);
+    const [imageResult, setImageResult] = useState(0);
 
     const [imageId, setImageId] = useState(null);
     const imageIdHandle = async (e) => {
@@ -62,51 +64,57 @@ function CreateCakeCard(){
           });
         const image = await response.json();
         setImageId(image);
-        setIsImageInput(true);
-        setIsURLInput(false);
+
+        // setIsImageInput(true);
+        // setIsURLInput(false);
     }
 
     const [imageURL, setImageURL] = useState(null);
-    const imageURLHandle = (e) => {
-        const res = e.target.value;
-        setImageURL(res);
-        console.log(imageURL);
-        if(e.target.value !== ''){
-            setIsImageInput(false);
-            setIsURLInput(true);
-        }
-        else{
-            setIsImageInput(true);
-            setIsURLInput(true);
-        }
+    const imageURLHandle = async(e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const imgURL = formData.get('imageURL');
+        const response = await fetch('http://localhost:5000/api/cakes/ImageByUrl', 
+        {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(imgURL)
+        });
+        const image = await response.json();
+        setImageURL(image);
     }
-
+                                                            
     return(
         <>
-            <Form method='post' id='create-image'>
-                <Box display='flex' justifyContent='space-between' width='50%' mt='5vh' ml='10%' alignItems='center'> 
-                    <Text>Фотография: </Text>
-                    <Tabs width='50%' isFitted>
-                        <TabList>
-                            <Tab>Файл</Tab>
-                            <Tab>URL</Tab>
-                        </TabList>
-
-                        <TabPanels>
-                            <TabPanel padding='0' pt='2vh'>
-                                <Input
-                                    name='image'
-                                    width='100%'
-                                    placeholder="Select file"
-                                    size="md"
-                                    p='0.8vh'
-                                    type="file"
-                                    form="create-image"
-                                    onChange={imageIdHandle}
-                                    disabled={!isImageInput}
-                                />  
-                            </TabPanel>
-                            <TabPanel padding='0' pt='2vh'>
+            <Box display='flex' justifyContent='space-between' width='50%' mt='5vh' ml='10%' alignItems='center'> 
+                <Text>Фотография: </Text>
+                <Tabs width='50%' isFitted onChange={(index) => setImageResult(index)}>
+                    <TabList>
+                        <Tab>Файл</Tab>
+                        <Tab>URL</Tab>
+                    </TabList>
+                    <TabPanels>
+                        <TabPanel padding='0' pt='2vh'>
+                            <Input
+                                name='image'
+                                width='100%'
+                                placeholder="Select file"
+                                size="md"
+                                p='0.5vh'
+                                type="file"
+                                onChange={imageIdHandle}
+                                //disabled={!isImageInput}
+                            />  
+                        </TabPanel>
+                        <TabPanel padding='0' pt='2vh'>
+                            <Form 
+                                method='post' 
+                                action='ImageByUrl' 
+                                onSubmit={imageURLHandle}
+                                id='create-img'
+                            >
                                 <Input
                                     name='imageURL'
                                     width='100%'
@@ -114,15 +122,17 @@ function CreateCakeCard(){
                                     size="md"
                                     p='0.8vh'
                                     type="text"
-                                    form="create-image"
-                                    onChange={imageURLHandle}
-                                    disabled={!isURLInput}
+                                    form="create-img"
                                 />
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>        
-                </Box>
-            </Form>
+                                <Box display='flex' justifyContent='center' width='100%'>
+                                    <Button type='submit' mt='2vh'>Загрузить</Button>
+                                </Box>
+                            </Form>
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>        
+            </Box>
+            
             <Form method="post" id="create-cake-form">
                 <Box display='flex' flexDirection='column' width='50%' ml='10%'>
                     <Divider mt='1vh'/>
@@ -144,6 +154,17 @@ function CreateCakeCard(){
                             type="text"
                             name="imageURL"
                             defaultValue={imageURL}
+                            readOnly="readonly"
+                        />
+                    </Box>
+                    <Divider mt='1vh'/>
+                    <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
+                        <Text>ImageResult:</Text>
+                        <Input
+                            width='50%'
+                            type="text"
+                            name="imageResult"
+                            Value={imageResult}
                             readOnly="readonly"
                         />
                     </Box>

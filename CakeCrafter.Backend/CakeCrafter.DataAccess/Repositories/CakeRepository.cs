@@ -21,62 +21,57 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<ItemsPage<Cake>> Get(int categoryId, int skip, int take)
         {
+            var totalCakesInCategory = await _context.Cakes.AsNoTracking()
+                                                           .Where(cake => cake.CategoryId == categoryId)
+                                                           .CountAsync();
+
             var queryCakesInCategory = await _context.Cakes.AsNoTracking()
                                                            .Include(C => C.Image)
                                                            .Where(cake => cake.CategoryId == categoryId)
                                                            .Skip(skip)
                                                            .Take(take)
                                                            .ToArrayAsync();                //получаем все изделия в категории
-
+             
             foreach (var cake in queryCakesInCategory)
             {
-                if (cake.ImageURL == null)
+                if(cake.ImageId == null)
                 {
-                    if (cake.Image == null)
-                    {
-                        cake.ImageURL = null;
-                    }
-                    else
-                    {
-                        string HostURL = "http://localhost:5000/Resources/Images/";
-                        cake.ImageURL = HostURL + cake.Image.Id.ToString() + cake.Image.Extension;
-                    }
+                    cake.ImageUrl = null;
+                }
+                else
+                {
+                    cake.ImageUrl = cake.Image.Id.ToString() + cake.Image.Extension;
                 }
             }
 
             var page = new ItemsPage<Cake>
             {
                 Items = queryCakesInCategory.Select(_mapper.Map<CakeEntity, Cake>)
-                                            .ToArray(),                               
+                                            .ToArray(),
 
-                TotalItems = queryCakesInCategory.Length                                //указываем, солько всего
+                TotalItems = totalCakesInCategory                               //указываем, солько всего
             };                                                                          //изделий в категории
             return page;
         }
 
         public async Task<Cake?> GetById(int id)
         {
-            var dbCake = await _context.Cakes.AsNoTracking()
+            var cake = await _context.Cakes.AsNoTracking()
                                              .Include(cake => cake.Image)
                                              .FirstOrDefaultAsync(cake => cake.Id == id);
-            if (dbCake == null)
+            if (cake == null)
             {
                 return null;
             }
-
-            if (dbCake.ImageURL == null)
+            if (cake.ImageId == null)
             {
-                if (dbCake.Image == null)
-                {
-                    dbCake.ImageURL = null;
-                }
+                cake.ImageUrl = null;
             }
             else
             {
-                dbCake.ImageId = null;
+                cake.ImageUrl = cake.Image.Id.ToString() + cake.Image.Extension;
             }
-
-            var result = _mapper.Map<CakeEntity, Cake>(dbCake);
+            var result = _mapper.Map<CakeEntity, Cake>(cake);
 
             return result;
         }
@@ -99,9 +94,9 @@ namespace CakeCrafter.DataAccess.Repositories
             }
 
             dbCake = _mapper.Map<Cake, CakeEntity>(cake);
-
             _context.Cakes.Update(dbCake);
             await _context.SaveChangesAsync();
+
             return cake;
         }
 
