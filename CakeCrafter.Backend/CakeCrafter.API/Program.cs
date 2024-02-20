@@ -41,6 +41,8 @@ namespace CakeCrafter.API
                 cfg.AddProfile<ApiMappingProfile>();
             });
 
+            builder.Services.AddHttpClient();
+
             builder.Services.AddRepositories();
             builder.Services.AddServices();
 

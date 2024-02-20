@@ -5,7 +5,7 @@
         public int Id { get; init; }
         public required string Name { get; init; }
         public required string Description { get; init; }
-        public string? ImageUrl { get; set; } = null;
+        public Uri? ImageUrl { get; set; }
         public Guid? ImageId { get; set; }
         public int? TasteId { get; init; }
 

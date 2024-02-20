@@ -2,6 +2,7 @@
 {
     public class URLs
     {
-        public string ImagesURL { get; set; }
+        public Uri ImageHostUrl { get; set; }
+        //public string SectionName добавить название секции
     }
 }

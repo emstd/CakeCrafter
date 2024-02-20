@@ -10,7 +10,10 @@ namespace CakeCrafter.DataAccess
         {
             CreateMap<Category, CategoryEntity>().ReverseMap();
             CreateMap<Taste, TasteEntity>().ReverseMap();
-            CreateMap<Cake, CakeEntity>().ReverseMap();
+            CreateMap<Cake, CakeEntity>().ReverseMap().
+                ForMember(cake => cake.ImageName, opt => opt.MapFrom(x => x.ImageId == null || x.Image == null
+                                                                          ? "NoImage.png"
+                                                                          : $"{x.ImageId}{x.Image.Extension}"));
             CreateMap<Image, ImageEntity>();
         }
     }

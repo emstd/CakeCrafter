@@ -31,25 +31,13 @@ namespace CakeCrafter.DataAccess.Repositories
                                                            .Skip(skip)
                                                            .Take(take)
                                                            .ToArrayAsync();                //получаем все изделия в категории
-             
-            foreach (var cake in queryCakesInCategory)
-            {
-                if(cake.ImageId == null)
-                {
-                    cake.ImageUrl = null;
-                }
-                else
-                {
-                    cake.ImageUrl = cake.Image.Id.ToString() + cake.Image.Extension;
-                }
-            }
 
             var page = new ItemsPage<Cake>
             {
                 Items = queryCakesInCategory.Select(_mapper.Map<CakeEntity, Cake>)
                                             .ToArray(),
 
-                TotalItems = totalCakesInCategory                               //указываем, солько всего
+                TotalItems = totalCakesInCategory                                       //указываем, солько всего
             };                                                                          //изделий в категории
             return page;
         }
@@ -63,14 +51,7 @@ namespace CakeCrafter.DataAccess.Repositories
             {
                 return null;
             }
-            if (cake.ImageId == null)
-            {
-                cake.ImageUrl = null;
-            }
-            else
-            {
-                cake.ImageUrl = cake.Image.Id.ToString() + cake.Image.Extension;
-            }
+
             var result = _mapper.Map<CakeEntity, Cake>(cake);
 
             return result;
@@ -87,7 +68,7 @@ namespace CakeCrafter.DataAccess.Repositories
 
         public async Task<Cake?> Update(Cake cake)
         {
-            var dbCake = await _context.Cakes.AsNoTracking().FirstOrDefaultAsync(dbCake => dbCake.Id == cake.Id);
+            var dbCake = await _context.Cakes.AsNoTracking().FirstOrDefaultAsync(c => c.Id == cake.Id);
             if (dbCake == null)
             {
                 return null;
