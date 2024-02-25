@@ -49,7 +49,7 @@ namespace CakeCrafter.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.Configure<URLs>(builder.Configuration.GetSection("URLs"));
+            builder.Services.Configure<ImageHostSettings>(builder.Configuration.GetSection(ImageHostSettings.SectionName));
 
             var app = builder.Build();
             app.UseHttpLogging();

@@ -15,8 +15,7 @@ namespace CakeCrafter.BusinessLogic
 
         public async Task<Guid> CreateImage(Image image)
         {
-            var fileName = image.Name;
-            var path = Path.Combine("wwwroot", "Resources", "Images", fileName);
+            var path = Path.Combine("wwwroot", "Resources", "Images", image.Name);
 
             await using(var fileStream = new FileStream(path, FileMode.Create))
             {

@@ -16,34 +16,28 @@ namespace CakeCrafter.API.Controllers
     {
         private readonly ICakeService _service;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IImageService _imageService;
+        public IOptions<ImageHostSettings> _imageHostSettings;
 
-        public CakesController(ICakeService service,
-                               IMapper mapper,
-                               IWebHostEnvironment webHostEnvironment,
-                               IImageService imageService)
+        public CakesController(ICakeService service, IMapper mapper, IOptions<ImageHostSettings> imageHostSettings)
         {
             _service = service;
             _mapper = mapper;
-            _webHostEnvironment = webHostEnvironment;
-            _imageService = imageService;
+            _imageHostSettings = imageHostSettings;
         }
 
         [HttpGet]
         public async Task<ActionResult<ItemsPage<CakeGetResponse>>> GetCakes([FromQuery] int categoryId,
                                                                              [FromQuery] int skip,
-                                                                             [FromQuery] int take,
-                                                                             [FromServices] IOptions<URLs> _URLs)
+                                                                             [FromQuery] int take)
         {
             var cakesPage = await _service.Get(categoryId, skip, take);
-            var urls = _URLs.Value;
+            var imageSettings = _imageHostSettings.Value;
             var cakesResponse = new ItemsPage<CakeGetResponse>
             {
                 Items = cakesPage.Items.Select(cake =>
                 {
                     var cakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
-                    cakeResponse.ImageUrl = cake.GetImageUrl(urls.ImageHostUrl);
+                    cakeResponse.ImageUrl = cake.GetImageUrl(imageSettings.ImageHostUrl);
                     return cakeResponse;
                 })
                 .ToArray(),
@@ -53,16 +47,16 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CakeGetResponse>> GetCakeById(int id, [FromServices] IOptions<URLs> URLs)
+        public async Task<ActionResult<CakeGetResponse>> GetCakeById(int id)
         {
-            var urls = URLs.Value;
+            var imageSettings = _imageHostSettings.Value;
             var cake = await _service.GetById(id);
             if (cake == null)
             {
                 return NotFound();
             }
             var cakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
-            cakeResponse.ImageUrl = cake.GetImageUrl(urls.ImageHostUrl);
+            cakeResponse.ImageUrl = cake.GetImageUrl(imageSettings.ImageHostUrl);
             return Ok(cakeResponse);
         }
 
@@ -73,48 +67,10 @@ namespace CakeCrafter.API.Controllers
             return Ok(await _service.Create(cake));
         }
 
-        [HttpPost("image")]
-        public async Task<ActionResult<Guid>> DownloadImage([Required] IFormFile image)
-        {
-            if (image is { Length: > 0 })
-            {
-                await using var imageStream = image.OpenReadStream();
-                string imgExtension = Path.GetExtension(image.FileName);
-                Image img = new Image(imageStream, imgExtension);
-                var imageId = await _imageService.CreateImage(img);
-
-                return Ok(imageId);
-            }
-            return BadRequest();
-        }
-
-        [HttpPost("ImageByUrl")]
-        public async Task<ActionResult<string>> CreateImage([FromBody] string imageUrl, [FromServices] IHttpClientFactory clientFactory)
-        {
-            if (string.IsNullOrEmpty(imageUrl))
-            {
-                return BadRequest();
-            }
-            try
-            {
-                using var httpClient = clientFactory.CreateClient();
-                await using var imageStream = await httpClient.GetStreamAsync(imageUrl);
-                await using var image = new Image(imageStream);
-                var imageId = await _imageService.CreateImage(image);
-                return Ok(imageId);
-
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
         [HttpPut("{id}")]
-        public async Task<ActionResult<CakeGetResponse>> UpdateCake(CakeUpdateRequest cakeUpdate, int id, [FromServices] IOptions<URLs> URLs)
+        public async Task<ActionResult<CakeGetResponse>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
         {
-            URLs urls = URLs.Value;
+            ImageHostSettings imageSettings = _imageHostSettings.Value;
             var cake = _mapper.Map<CakeUpdateRequest, Cake>(cakeUpdate);
             cake.Id = id;
             var updatedCake = await _service.Update(cake);
@@ -123,7 +79,7 @@ namespace CakeCrafter.API.Controllers
                 return NotFound();
             }
             var cakeResponse = _mapper.Map<Cake, CakeGetResponse>(updatedCake);
-            cakeResponse.ImageUrl = updatedCake.GetImageUrl(urls.ImageHostUrl);
+            cakeResponse.ImageUrl = updatedCake.GetImageUrl(imageSettings.ImageHostUrl);
             return Ok(cakeResponse);
         }
 
