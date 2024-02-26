@@ -47,34 +47,27 @@ function CreateCakeCard(){
         fetchGetCategories();
       }, []);
 
-    
-    // const [isImageInput, setIsImageInput] = useState(true);
-    // const [isURLInput, setIsURLInput] = useState(true);
+    const [uploadOption, setUploadOption] = useState(0);
 
-    const [imageResult, setImageResult] = useState(0);
-
-    const [imageId, setImageId] = useState(null);
-    const imageIdHandle = async (e) => {
+    const [imageIdFile, setImageIdFile] = useState(null);
+    const imageIdFileHandle = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('image', e.target.files[0]);
-        const response = await fetch('http://localhost:5000/api/cakes/image', {
+        const response = await fetch('http://localhost:5000/api/images/imageFile', {
             method: 'POST',
             body: formData,
           });
         const image = await response.json();
-        setImageId(image);
-
-        // setIsImageInput(true);
-        // setIsURLInput(false);
+        setImageIdFile(image);
     }
 
-    const [imageURL, setImageURL] = useState(null);
-    const imageURLHandle = async(e) => {
+    const [imageIdUrl, setImageIdUrl] = useState(null);
+    const imageIdUrlHandle = async(e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const imgURL = formData.get('imageURL');
-        const response = await fetch('http://localhost:5000/api/cakes/ImageByUrl', 
+        const imgURL = formData.get('imageIdUrl');
+        const response = await fetch('http://localhost:5000/api/images/imageUrl', 
         {
             method: 'POST',
             headers: {
@@ -83,14 +76,14 @@ function CreateCakeCard(){
             body: JSON.stringify(imgURL)
         });
         const image = await response.json();
-        setImageURL(image);
+        setImageIdUrl(image);
     }
                                                             
     return(
         <>
             <Box display='flex' justifyContent='space-between' width='50%' mt='5vh' ml='10%' alignItems='center'> 
                 <Text>Фотография: </Text>
-                <Tabs width='50%' isFitted onChange={(index) => setImageResult(index)}>
+                <Tabs width='50%' isFitted onChange={(index) => setUploadOption(index)}>
                     <TabList>
                         <Tab>Файл</Tab>
                         <Tab>URL</Tab>
@@ -104,19 +97,18 @@ function CreateCakeCard(){
                                 size="md"
                                 p='0.5vh'
                                 type="file"
-                                onChange={imageIdHandle}
-                                //disabled={!isImageInput}
+                                onChange={imageIdFileHandle}
                             />  
                         </TabPanel>
                         <TabPanel padding='0' pt='2vh'>
                             <Form 
                                 method='post' 
                                 action='ImageByUrl' 
-                                onSubmit={imageURLHandle}
+                                onSubmit={imageIdUrlHandle}
                                 id='create-img'
                             >
                                 <Input
-                                    name='imageURL'
+                                    name='imageIdUrl'
                                     width='100%'
                                     placeholder="Введите URL"
                                     size="md"
@@ -141,8 +133,8 @@ function CreateCakeCard(){
                         <Input
                             width='50%'
                             type="text"
-                            name="imageId"
-                            defaultValue={imageId}
+                            name="imageIdFile"
+                            defaultValue={imageIdFile}
                             readOnly="readonly"
                         />
                     </Box>
@@ -152,19 +144,19 @@ function CreateCakeCard(){
                         <Input
                             width='50%'
                             type="text"
-                            name="imageURL"
-                            defaultValue={imageURL}
+                            name="imageIdUrl"
+                            defaultValue={imageIdUrl}
                             readOnly="readonly"
                         />
                     </Box>
                     <Divider mt='1vh'/>
                     <Box display='flex' justifyContent='space-between' mt='3vh' alignItems='center'>
-                        <Text>ImageResult:</Text>
+                        <Text>uploadOption:</Text>
                         <Input
                             width='50%'
                             type="text"
-                            name="imageResult"
-                            Value={imageResult}
+                            name="uploadOption"
+                            Value={uploadOption}
                             readOnly="readonly"
                         />
                     </Box>
