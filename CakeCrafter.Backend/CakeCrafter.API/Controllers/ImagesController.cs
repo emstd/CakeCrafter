@@ -20,16 +20,17 @@ namespace CakeCrafter.API.Controllers
         [HttpPost("imageFile")]
         public async Task<ActionResult<Guid>> DownloadImage([Required] IFormFile image)
         {
-            if (image is { Length: > 0 })
+            if (image is not { Length: > 0 })
             {
-                await using var imageStream = image.OpenReadStream();
-                string imgExtension = Path.GetExtension(image.FileName);
-                await using Image img = new Image(imageStream, imgExtension);
-                var imageId = await _imageService.CreateImage(img);
-
-                return Ok(imageId);
+                return BadRequest();
             }
-            return BadRequest();
+
+            await using var imageStream = image.OpenReadStream();
+            string imgExtension = Path.GetExtension(image.FileName);
+            await using Image img = new Image(imageStream, imgExtension);
+            var imageId = await _imageService.CreateImage(img);
+
+            return Ok(imageId);
         }
 
         [HttpPost("imageUrl")]

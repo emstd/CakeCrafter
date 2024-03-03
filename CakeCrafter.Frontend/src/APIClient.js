@@ -129,19 +129,13 @@ export class APIClient
     CreateCake = async( {params, request} ) =>
     {
         const formData = await request.formData();
-        const uploadOption = formData.get('uploadOption');
-        let imageRequestId = null;
-        
-        uploadOption == 0 
-                    ? imageRequestId = formData.get('imageIdFile') 
-                    : imageRequestId = formData.get('imageIdUrl');
-                        
-        imageRequestId === "" 
-                        ? imageRequestId = null 
-                        : imageRequestId = imageRequestId;
 
+        const imageRequestId = formData.get('uploadOption') == 0        //Смотрим, какой TAB был выбран и решаем какой Id картинки вписывать в запрос
+                    ? formData.get('imageIdFile') 
+                    : formData.get('imageIdUrl');
 
-        const newCake = { ...Object.fromEntries(formData), imageId: imageRequestId};
+        const newCake = { ...Object.fromEntries(formData), imageId: imageRequestId === "" ? null : imageRequestId};
+
         const response = await fetch(`${this.URL}/api/cakes`,
                                     {
                                         method: 'POST',
@@ -157,7 +151,6 @@ export class APIClient
 
         let defaultId = formData.get('defaultImageId');     //Получаем ID картинки, которая была, если не было, то null
         defaultId = defaultId === '' ? null : defaultId;    
-
 
         let imageRequestId = null;
         
@@ -219,7 +212,4 @@ export class APIClient
         const image = await response.json();
         return response;
     };
-
-
-
 };
