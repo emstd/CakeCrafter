@@ -1,6 +1,5 @@
 ﻿using CakeCrafter.Core.Interfaces.Services;
 using CakeCrafter.Core.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -44,10 +43,11 @@ namespace CakeCrafter.API.Controllers
             {
                 using var httpClient = clientFactory.CreateClient();
                 await using var imageStream = await httpClient.GetStreamAsync(imageUrl);
-                await using var image = new Image(imageStream);
+                string imgExtension = Path.GetExtension(imageUrl) ?? ".jpg";
+                await using var image = new Image(imageStream, imgExtension);
                 var imageId = await _imageService.CreateImage(image);
-                return Ok(imageId);
 
+                return Ok(imageId);
             }
             catch (Exception ex)
             {

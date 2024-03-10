@@ -1,6 +1,4 @@
-﻿using CakeCrafter.Core.Interfaces;
-
-namespace CakeCrafter.Core.Models
+﻿namespace CakeCrafter.Core.Models
 {
     public class Category
     {
