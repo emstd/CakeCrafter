@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeCrafter.DataAccess", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeCrafter.Core", "CakeCrafter.Core\CakeCrafter.Core.csproj", "{2DFF9B7A-68D3-46BA-88BC-E5761211A387}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeCrafter.BusinessLogic", "CakeCrafter.BusinessLogic\CakeCrafter.BusinessLogic.csproj", "{8859580C-78BA-4A84-B55D-C13AA4AE6720}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeCrafter.BusinessLogic", "CakeCrafter.BusinessLogic\CakeCrafter.BusinessLogic.csproj", "{8859580C-78BA-4A84-B55D-C13AA4AE6720}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeCrafter.Tests", "CakeCrafter.Tests\CakeCrafter.Tests.csproj", "{88859E04-7603-45A0-ADC4-49771E43D547}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8859580C-78BA-4A84-B55D-C13AA4AE6720}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8859580C-78BA-4A84-B55D-C13AA4AE6720}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8859580C-78BA-4A84-B55D-C13AA4AE6720}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88859E04-7603-45A0-ADC4-49771E43D547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88859E04-7603-45A0-ADC4-49771E43D547}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88859E04-7603-45A0-ADC4-49771E43D547}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88859E04-7603-45A0-ADC4-49771E43D547}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
