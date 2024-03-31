@@ -46,7 +46,7 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetCakeById(int id)
+        public async Task<ActionResult<CakeGetResponse>> GetCakeById(int id)
         {
             if (id == 0 || id < 0)
             {

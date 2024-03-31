@@ -16,9 +16,9 @@ namespace CakeCrafter.Tests.API
         public async Task GetById_ShouldReturnNotFoundAsync(int id)
         {
             //Arrange
-            var service = new Mock<ICakeService>();
-            var mapper = new Mock<IMapper>();
-            var settings = new Mock<IOptions<ImageHostSettings>>();
+            var service = new Mock<ICakeService>(MockBehavior.Strict);
+            var mapper = new Mock<IMapper>(MockBehavior.Strict);
+            var settings = new Mock<IOptions<ImageHostSettings>>(MockBehavior.Strict);
 
             CakesController cakesController = new CakesController(service.Object, mapper.Object, settings.Object);
 
@@ -26,7 +26,7 @@ namespace CakeCrafter.Tests.API
             var result = await cakesController.GetCakeById(id);
 
             //Assert
-            Assert.IsType<BadRequestResult>(result);
+            Assert.IsType<BadRequestResult>(result.Result);
         }
     }
 }
