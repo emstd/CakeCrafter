@@ -20,7 +20,6 @@ namespace CakeCrafter.IntegrationTests
                 .WithWebHostBuilder(x =>
                 {
                     x.UseEnvironment("IntegrationTests");
-                    x.UseSetting("ConnectionStrings:DefaultConnection", "Server=(localdb)\\mssqllocaldb;database=CakeCrafterdb123;trusted_connection=true;TrustServerCertificate=True");
                     //x.UseSetting("ConnectionStrings:DefaultConnection", _msSqlContainer.GetConnectionString());
                 });
             _client = app.CreateClient();
