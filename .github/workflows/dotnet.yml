@@ -28,8 +28,6 @@ jobs:
       run: dotnet restore CakeCrafter.Backend/CakeCrafter.sln
     - name: Build
       run: dotnet build CakeCrafter.Backend/CakeCrafter.sln --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
 
   unit_tests:
     runs-on: ubuntu-latest
