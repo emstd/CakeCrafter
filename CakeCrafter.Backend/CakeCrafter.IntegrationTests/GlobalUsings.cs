@@ -1,1 +1,11 @@
 global using Xunit;
+global using CakeCrafter.API;
+global using CakeCrafter.API.Contracts;
+global using CakeCrafter.DataAccess;
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.DependencyInjection;
+global using Newtonsoft.Json;
+global using System.Net;
+global using System.Text;
