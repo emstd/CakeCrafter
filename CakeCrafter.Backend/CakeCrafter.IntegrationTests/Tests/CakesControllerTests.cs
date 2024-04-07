@@ -1,4 +1,6 @@
-﻿namespace CakeCrafter.IntegrationTests.Tests
+﻿using CakeCrafter.Core.Pages;
+
+namespace CakeCrafter.IntegrationTests.Tests
 {
     public class CakesControllerTests : IClassFixture<WebApplicationFactory<Program>>,  //этот интерфейс позволяет создать WebApplicationFactory один раз на все тестовые методы
                                         IAsyncLifetime                                  //для асинхронной инциализации, которую нельзя вызвать в конструкторе
@@ -36,24 +38,36 @@
         }
 
         [Fact]
-        public async Task Get_ShouldReturnOKStatusCode()
+        public async Task Get_ShouldReturnOKStatusCodeAndItemsPage()
         {
             var response = await _client.GetAsync("api/cakes?categoryId=1&skip=0&take=5");
 
+            var content = await response.Content.ReadAsStringAsync();
+            var cakesResponse = JsonConvert.DeserializeObject<ItemsPage<CakeGetResponse>>(content);
+
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            Assert.NotNull(cakesResponse);
+            Assert.NotNull(cakesResponse.Items);
+            Assert.IsType<ItemsPage<CakeGetResponse>> (cakesResponse);
+            Assert.True(cakesResponse.Items.All(item => item.GetType() == typeof(CakeGetResponse)));
         }
 
         [Fact]
-        public async Task GetById_ShouldReurnOKStatusCode()
+        public async Task GetById_ShouldReurnOKStatusCodeAndCakeGetResponse()
         {
             //если базу все-таки чистить, то нужно добавить логику предварительного создания торта
-            var response = await _client.GetAsync("api/cakes/3");
+            var response = await _client.GetAsync("api/cakes/4");
+
+            var content = await response.Content.ReadAsStringAsync();
+            var cakeResponse = JsonConvert.DeserializeObject<CakeGetResponse>(content);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.IsType<CakeGetResponse>(cakeResponse);
         }
 
         [Fact]
-        public async Task Create_ShouldCreateCakeAndReturnIntId()
+        public async Task Create_ShouldReturnOKStatusCodeAndCreateCakeAndReturnIntId()
         {
             var cakeCreateRequest = new CakeCreateRequest()
             {
@@ -68,18 +82,51 @@
             };
 
             var jsonCakeCreateRequest = JsonConvert.SerializeObject(cakeCreateRequest);
+            var requestContent = new StringContent(jsonCakeCreateRequest, Encoding.UTF8, "application/json");
 
-            var content = new StringContent(jsonCakeCreateRequest, Encoding.UTF8, "application/json");
+            var response = await _client.PostAsync("api/cakes", requestContent);
 
-            var response = await _client.PostAsync("api/cakes", content);
-
-            var cakeStringId = await response.Content.ReadAsStringAsync();
-            int.TryParse(cakeStringId, out int cakeIntId);
-
+            var responseContent = await response.Content.ReadAsStringAsync();
+            _ = int.TryParse(responseContent, out int cakeId);
 
             Assert.True(response.IsSuccessStatusCode);
-            Assert.IsType<int>(cakeIntId);
+            Assert.IsType<int>(cakeId);
+        }
 
+        [Fact]
+        public async Task Update_ShuoldReturnOKStatusCodeAndCakeGetResponse()
+        {
+            int id = 5;                                         //Перед тестом или чистить базу и добавлять новый торт заранее, затем менять или получать Id уже существующих в тестовой базе?
+            var cakeUpdateRequest = new CakeUpdateRequest()
+            {
+                Name = "Измененный в тесте торт",
+                Description = "Вкусный тестовый торт",
+                //ImageId = Guid.NewGuid(),             //чтобы отправить с GUID'ой, надо уже иметь существующую в базе из-за внешнего ключа
+                CookTimeInMinutes = 90,
+                TasteId = null,
+                CategoryId = null,
+                Level = 2,
+                Weight = 1
+            };
+
+            var jsonCakeUpdateRequest = JsonConvert.SerializeObject(cakeUpdateRequest);
+            var requestContent = new StringContent(jsonCakeUpdateRequest, Encoding.UTF8, "application/json");
+
+            var response = await _client.PutAsync($"api/cakes/{id}", requestContent);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var cakeGetResponse = JsonConvert.DeserializeObject<CakeGetResponse>(responseContent);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.IsType<CakeGetResponse>(cakeGetResponse);
+        }
+
+        [Fact]
+        public async Task Delete_ShouldReturnOKStatusCode()
+        {
+            var response = await _client.DeleteAsync("api/cakes/3");    //Опять же получается, что тест пройдет только один раз, если не чистить базу и не создавать заранее удаляемый Cake.
+                                                                        //Еще вдобавок сначала отработал этот тест, а потом GetById с тем же Id и соответственно GetById не прошел
+            Assert.True(response.IsSuccessStatusCode);
         }
     }
 }
