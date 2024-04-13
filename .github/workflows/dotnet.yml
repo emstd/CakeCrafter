@@ -35,4 +35,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Test
-        run: dotnet test CakeCrafter.Backend/CakeCrafter.Tests/CakeCrafter.Tests.csproj --verbosity normal
+        run: dotnet test CakeCrafter.Backend/CakeCrafter.UnitTests/CakeCrafter.UnitTests.csproj --verbosity normal
