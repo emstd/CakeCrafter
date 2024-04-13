@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace CakeCrafter.Tests.API
+namespace CakeCrafter.UnitTests.API
 {
     public class CakesControllerTests
     {

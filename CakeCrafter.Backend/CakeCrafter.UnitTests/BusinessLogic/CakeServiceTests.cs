@@ -3,7 +3,7 @@ using CakeCrafter.Core.Models;
 using CakeCrafter.Domain;
 using Moq;
 
-namespace CakeCrafter.Tests.BusinessLogic
+namespace CakeCrafter.UnitTests.BusinessLogic
 {
     public class CakeServiceTests
     {
@@ -44,7 +44,7 @@ namespace CakeCrafter.Tests.BusinessLogic
         [Fact]
         public async void Update_ShouldUpdateCake()
         {
-            
+
         }
     }
 }

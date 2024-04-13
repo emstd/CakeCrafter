@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeCrafter.Core", "CakeCra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeCrafter.BusinessLogic", "CakeCrafter.BusinessLogic\CakeCrafter.BusinessLogic.csproj", "{8859580C-78BA-4A84-B55D-C13AA4AE6720}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeCrafter.Tests", "CakeCrafter.Tests\CakeCrafter.Tests.csproj", "{88859E04-7603-45A0-ADC4-49771E43D547}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CakeCrafter.IntegrationTests", "CakeCrafter.IntegrationTests\CakeCrafter.IntegrationTests.csproj", "{D99A3028-5DD3-4E3E-9C67-3495A41E8F17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeCrafter.IntegrationTests", "CakeCrafter.IntegrationTests\CakeCrafter.IntegrationTests.csproj", "{D99A3028-5DD3-4E3E-9C67-3495A41E8F17}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeCrafter.UnitTests", "CakeCrafter.UnitTests\CakeCrafter.UnitTests.csproj", "{76E2B7C7-6519-43D2-A1C3-0FD035614744}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +37,14 @@ Global
 		{8859580C-78BA-4A84-B55D-C13AA4AE6720}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8859580C-78BA-4A84-B55D-C13AA4AE6720}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8859580C-78BA-4A84-B55D-C13AA4AE6720}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88859E04-7603-45A0-ADC4-49771E43D547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88859E04-7603-45A0-ADC4-49771E43D547}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88859E04-7603-45A0-ADC4-49771E43D547}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88859E04-7603-45A0-ADC4-49771E43D547}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D99A3028-5DD3-4E3E-9C67-3495A41E8F17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D99A3028-5DD3-4E3E-9C67-3495A41E8F17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D99A3028-5DD3-4E3E-9C67-3495A41E8F17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D99A3028-5DD3-4E3E-9C67-3495A41E8F17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76E2B7C7-6519-43D2-A1C3-0FD035614744}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76E2B7C7-6519-43D2-A1C3-0FD035614744}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76E2B7C7-6519-43D2-A1C3-0FD035614744}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76E2B7C7-6519-43D2-A1C3-0FD035614744}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
