@@ -4,7 +4,7 @@ using CakeCrafter.Core.Models;
 
 namespace CakeCrafter.API.Controllers
 {
-    public class TastesController : InformationController<Taste>
+    public class TastesController : GenericController<Taste>
     {
         public TastesController(IGenericService<Taste> service) : base(service)
         {

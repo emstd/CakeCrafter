@@ -4,7 +4,7 @@ using CakeCrafter.Core.Models;
 
 namespace CakeCrafter.API.Controllers
 {
-    public class CategoriesController : InformationController<Category>
+    public class CategoriesController : GenericController<Category>
     {
         public CategoriesController(IGenericService<Category> service) : base(service)
         {

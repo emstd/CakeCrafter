@@ -29,18 +29,22 @@ namespace CakeCrafter.API.Controllers
                                                                              [FromQuery] int skip,
                                                                              [FromQuery] int take)
         {
-            //Добавить проверку на корректность входных параметров
+            if (categoryId < 1 || skip < 0 || take < 0)
+            {
+                return BadRequest();
+            }
+
             var cakesPage = await _service.Get(categoryId, skip, take);
             var imageSettings = _imageHostSettings.Value;
             var cakesResponse = new ItemsPage<CakeGetResponse>
             {
                 Items = cakesPage.Items.Select(cake =>
-                {
-                    var cakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
-                    cakeResponse.ImageUrl = cake.GetImageUrl(imageSettings.ImageHostUrl);
-                    return cakeResponse;
-                })
-                .ToArray(),
+                    {
+                        var cakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
+                        cakeResponse.ImageUrl = cake.GetImageUrl(imageSettings.ImageHostUrl);
+                        return cakeResponse;
+                    })
+                    .ToArray(),
                 TotalItems = cakesPage.TotalItems
             };
             return Ok(cakesResponse);
@@ -80,7 +84,7 @@ namespace CakeCrafter.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<CakeGetResponse>> UpdateCake(CakeUpdateRequest cakeUpdate, int id)
         {
-            if(!ModelState.IsValid || id == 0 || id < 0)
+            if (!ModelState.IsValid || id == 0 || id < 0)
             {
                 return BadRequest();
             }
@@ -102,6 +106,11 @@ namespace CakeCrafter.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Cake>>> DeleteCake(int id)
         {
+            if (id < 1)
+            {
+                return BadRequest();
+            }
+
             var result = await _service.Delete(id);
             return Ok(result);
         }

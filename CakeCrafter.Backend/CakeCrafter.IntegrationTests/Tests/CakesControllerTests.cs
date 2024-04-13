@@ -30,6 +30,7 @@ namespace CakeCrafter.IntegrationTests.Tests
         {
             _scope.Dispose();
             _client.Dispose();
+            _dbContext.Dispose();
             return Task.CompletedTask;
         }
 
