@@ -1,14 +1,18 @@
-﻿using CakeCrafter.Core.Pages;
+﻿using AutoFixture;
+using CakeCrafter.Core.Pages;
+using CakeCrafter.DataAccess.Entites;
+using Respawn.Graph;
 
 namespace CakeCrafter.IntegrationTests.Tests
 {
-    public class CakesControllerTests : IClassFixture<WebApplicationFactory<Program>>,  //этот интерфейс позволяет создать WebApplicationFactory один раз на все тестовые методы
-                                        IAsyncLifetime                                  //для асинхронной инциализации, которую нельзя вызвать в конструкторе
+    public class CakesControllerTests : IClassFixture<WebApplicationFactory<Program>>,  //Этот интерфейс позволяет создать WebApplicationFactory один раз на все тестовые методы
+                                        IAsyncLifetime                                  //Этот для асинхронной инциализации, которую нельзя вызвать в конструкторе
     {
         private readonly WebApplicationFactory<Program> _app;
         private readonly IServiceScope _scope;
         private readonly HttpClient _client;
         private readonly CakeCrafterDbContext _dbContext;
+        private readonly Fixture _fixture;
         public CakesControllerTests(WebApplicationFactory<Program> app)
         {
             _app = app.WithWebHostBuilder(webHostBuilder =>         // Есть подозрение, что эту настройку надо вынести в кастомную Factory, чтобы эта лямбда не вызывалась каждый раз для каждого метода теста
@@ -18,7 +22,8 @@ namespace CakeCrafter.IntegrationTests.Tests
 
             _scope = _app.Services.CreateScope();
             _client = _app.CreateClient();
-            _dbContext = _scope.ServiceProvider.GetRequiredService<CakeCrafterDbContext>(); //Создал отдельно контекст не только для миграции, но и для создания required сущностей, прада у меня их нет, просто попробовать.
+            _dbContext = _scope.ServiceProvider.GetRequiredService<CakeCrafterDbContext>();
+            _fixture = new Fixture();
         }
 
         public Task DisposeAsync()
@@ -31,15 +36,27 @@ namespace CakeCrafter.IntegrationTests.Tests
         public async Task InitializeAsync()
         {
             await _dbContext.Database.MigrateAsync();
-            //foreach (var entity in _dbContext.Model.GetEntityTypes())         //надо ли очищать все данные из тестовой базы?
-            //{
-            //    await _dbContext.Database.ExecuteSqlRawAsync($"DELETE FROM [{entity.GetTableName()}]");
-            //}
+
+            var connection = _dbContext.Database.GetDbConnection();
+            
+            await connection.OpenAsync();
+            var respawner = await Respawner.CreateAsync(connection, new RespawnerOptions
+            {
+                TablesToIgnore = new Table[]
+                {
+                "__EFMigrationsHistory"
+                }
+            });
+
+            await respawner.ResetAsync(connection);
         }
+
+
 
         [Fact]
         public async Task Get_ShouldReturnOKStatusCodeAndItemsPage()
         {
+            await CreateTestCakeEntity();
             var response = await _client.GetAsync("api/cakes?categoryId=1&skip=0&take=5");
 
             var content = await response.Content.ReadAsStringAsync();
@@ -49,15 +66,15 @@ namespace CakeCrafter.IntegrationTests.Tests
 
             Assert.NotNull(cakesResponse);
             Assert.NotNull(cakesResponse.Items);
-            Assert.IsType<ItemsPage<CakeGetResponse>> (cakesResponse);
+            Assert.IsType<ItemsPage<CakeGetResponse>>(cakesResponse);
             Assert.True(cakesResponse.Items.All(item => item.GetType() == typeof(CakeGetResponse)));
         }
 
         [Fact]
         public async Task GetById_ShouldReurnOKStatusCodeAndCakeGetResponse()
         {
-            //если базу все-таки чистить, то нужно добавить логику предварительного создания торта
-            var response = await _client.GetAsync("api/cakes/4");
+            int cakeId = await CreateTestCakeEntity();
+            var response = await _client.GetAsync($"api/cakes/{cakeId}");
 
             var content = await response.Content.ReadAsStringAsync();
             var cakeResponse = JsonConvert.DeserializeObject<CakeGetResponse>(content);
@@ -69,17 +86,11 @@ namespace CakeCrafter.IntegrationTests.Tests
         [Fact]
         public async Task Create_ShouldReturnOKStatusCodeAndCreateCakeAndReturnIntId()
         {
-            var cakeCreateRequest = new CakeCreateRequest()
-            {
-                Name = "Наполеон",
-                Description = "Вкусный сливочный торт",
-                //ImageId = Guid.NewGuid(),             //чтобы отправить с GUID'ой, надо уже иметь существующую в базе из-за внешнего ключа
-                CookTimeInMinutes = 90,
-                TasteId = null,
-                CategoryId = null,
-                Level = 2,
-                Weight = 1
-            };
+            var cakeCreateRequest = _fixture.Build<CakeCreateRequest>()
+                                        .Without(x => x.TasteId)
+                                        .Without(x => x.CategoryId)
+                                        .Without(x => x.ImageId)
+                                        .Create();
 
             var jsonCakeCreateRequest = JsonConvert.SerializeObject(cakeCreateRequest);
             var requestContent = new StringContent(jsonCakeCreateRequest, Encoding.UTF8, "application/json");
@@ -96,23 +107,17 @@ namespace CakeCrafter.IntegrationTests.Tests
         [Fact]
         public async Task Update_ShuoldReturnOKStatusCodeAndCakeGetResponse()
         {
-            int id = 5;                                         //Перед тестом или чистить базу и добавлять новый торт заранее, затем менять или получать Id уже существующих в тестовой базе?
-            var cakeUpdateRequest = new CakeUpdateRequest()
-            {
-                Name = "Измененный в тесте торт",
-                Description = "Вкусный тестовый торт",
-                //ImageId = Guid.NewGuid(),             //чтобы отправить с GUID'ой, надо уже иметь существующую в базе из-за внешнего ключа
-                CookTimeInMinutes = 90,
-                TasteId = null,
-                CategoryId = null,
-                Level = 2,
-                Weight = 1
-            };
+            var cakeId = await CreateTestCakeEntity();
+            var cakeUpdateRequest = _fixture.Build<CakeUpdateRequest>()
+                                        .Without(x => x.TasteId)
+                                        .Without(x => x.CategoryId)
+                                        .Without(x => x.ImageId)
+                                        .Create();
 
             var jsonCakeUpdateRequest = JsonConvert.SerializeObject(cakeUpdateRequest);
             var requestContent = new StringContent(jsonCakeUpdateRequest, Encoding.UTF8, "application/json");
 
-            var response = await _client.PutAsync($"api/cakes/{id}", requestContent);
+            var response = await _client.PutAsync($"api/cakes/{cakeId}", requestContent);
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var cakeGetResponse = JsonConvert.DeserializeObject<CakeGetResponse>(responseContent);
@@ -124,9 +129,28 @@ namespace CakeCrafter.IntegrationTests.Tests
         [Fact]
         public async Task Delete_ShouldReturnOKStatusCode()
         {
-            var response = await _client.DeleteAsync("api/cakes/3");    //Опять же получается, что тест пройдет только один раз, если не чистить базу и не создавать заранее удаляемый Cake.
-                                                                        //Еще вдобавок сначала отработал этот тест, а потом GetById с тем же Id и соответственно GetById не прошел
+            var cakeId = await CreateTestCakeEntity();
+            var response = await _client.DeleteAsync($"api/cakes/{cakeId}");
+
             Assert.True(response.IsSuccessStatusCode);
+        }
+
+        public async Task<int> CreateTestCakeEntity()
+        {
+            var testCakeEntity = _fixture.Build<CakeEntity>()
+                                    .Without(x => x.Id)
+                                    .Without(x => x.CategoryId)
+                                    .Without(x => x.Category)
+                                    .Without(x => x.TasteId)
+                                    .Without(x => x.Taste)
+                                    .Without(x => x.ImageId)
+                                    .Without(x => x.Image)
+                                    .Create();
+
+            await _dbContext.Cakes.AddAsync(testCakeEntity);
+            await _dbContext.SaveChangesAsync();
+            _dbContext.ChangeTracker.Clear();
+            return testCakeEntity.Id;
         }
     }
 }

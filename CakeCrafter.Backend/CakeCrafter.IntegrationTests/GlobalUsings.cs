@@ -9,3 +9,4 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Newtonsoft.Json;
 global using System.Net;
 global using System.Text;
+global using Respawn;
