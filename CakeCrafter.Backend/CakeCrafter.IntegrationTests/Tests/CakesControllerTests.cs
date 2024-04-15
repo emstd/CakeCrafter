@@ -1,7 +1,4 @@
-﻿using AutoFixture;
-using CakeCrafter.Core.Pages;
-using CakeCrafter.DataAccess.Entites;
-using Respawn.Graph;
+﻿using CakeCrafter.Core.Pages;
 
 namespace CakeCrafter.IntegrationTests.Tests
 {

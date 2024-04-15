@@ -10,3 +10,6 @@ global using Newtonsoft.Json;
 global using System.Net;
 global using System.Text;
 global using Respawn;
+global using AutoFixture;
+global using Respawn.Graph;
+global using CakeCrafter.DataAccess.Entites;
