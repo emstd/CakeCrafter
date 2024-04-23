@@ -1,4 +1,5 @@
 ﻿using CakeCrafter.Core.Pages;
+using System.Net.Mime;
 
 namespace CakeCrafter.IntegrationTests.Tests
 {
@@ -91,7 +92,7 @@ namespace CakeCrafter.IntegrationTests.Tests
                                         .Create();
 
             var jsonCakeCreateRequest = JsonConvert.SerializeObject(cakeCreateRequest);
-            var requestContent = new StringContent(jsonCakeCreateRequest, Encoding.UTF8, "application/json");
+            var requestContent = new StringContent(jsonCakeCreateRequest, Encoding.UTF8, MediaTypeNames.Application.Json);
 
             var response = await _client.PostAsync("api/cakes", requestContent);
 
@@ -103,7 +104,7 @@ namespace CakeCrafter.IntegrationTests.Tests
         }
 
         [Fact]
-        public async Task Update_ShuoldReturnOKStatusCodeAndCakeGetResponse()
+        public async Task Update_ShouldReturnOKStatusCodeAndCakeGetResponse()
         {
             var cakeId = await CreateTestCakeEntity();
             var cakeUpdateRequest = _fixture.Build<CakeUpdateRequest>()
@@ -113,7 +114,7 @@ namespace CakeCrafter.IntegrationTests.Tests
                                         .Create();
 
             var jsonCakeUpdateRequest = JsonConvert.SerializeObject(cakeUpdateRequest);
-            var requestContent = new StringContent(jsonCakeUpdateRequest, Encoding.UTF8, "application/json");
+            var requestContent = new StringContent(jsonCakeUpdateRequest, Encoding.UTF8, MediaTypeNames.Application.Json);
 
             var response = await _client.PutAsync($"api/cakes/{cakeId}", requestContent);
 
