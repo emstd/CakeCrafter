@@ -3,54 +3,11 @@ using System.Net.Mime;
 
 namespace CakeCrafter.IntegrationTests.Tests
 {
-    public class CakesControllerTests : IClassFixture<WebApplicationFactory<Program>>,  //Этот интерфейс позволяет создать WebApplicationFactory один раз на все тестовые методы
-                                        IAsyncLifetime                                  //Этот для асинхронной инциализации, которую нельзя вызвать в конструкторе
+    public class CakesControllerTests : BaseInitialization, IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Program> _app;
-        private readonly IServiceScope _scope;
-        private readonly HttpClient _client;
-        private readonly CakeCrafterDbContext _dbContext;
-        private readonly Fixture _fixture;
-        public CakesControllerTests(WebApplicationFactory<Program> app)
+        public CakesControllerTests(WebApplicationFactory<Program> app) : base(app)
         {
-            _app = app.WithWebHostBuilder(webHostBuilder =>         // Есть подозрение, что эту настройку надо вынести в кастомную Factory, чтобы эта лямбда не вызывалась каждый раз для каждого метода теста
-            {
-                webHostBuilder.UseEnvironment("IntegrationTests");
-            });
-
-            _scope = _app.Services.CreateScope();
-            _client = _app.CreateClient();
-            _dbContext = _scope.ServiceProvider.GetRequiredService<CakeCrafterDbContext>();
-            _fixture = new Fixture();
         }
-
-        public Task DisposeAsync()
-        {
-            _scope.Dispose();
-            _client.Dispose();
-            _dbContext.Dispose();
-            return Task.CompletedTask;
-        }
-
-        public async Task InitializeAsync()
-        {
-            await _dbContext.Database.MigrateAsync();
-
-            var connection = _dbContext.Database.GetDbConnection();
-            
-            await connection.OpenAsync();
-            var respawner = await Respawner.CreateAsync(connection, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                "__EFMigrationsHistory"
-                }
-            });
-
-            await respawner.ResetAsync(connection);
-        }
-
-
 
         [Fact]
         public async Task Get_ShouldReturnOKStatusCodeAndItemsPage()
@@ -132,24 +89,6 @@ namespace CakeCrafter.IntegrationTests.Tests
             var response = await _client.DeleteAsync($"api/cakes/{cakeId}");
 
             Assert.True(response.IsSuccessStatusCode);
-        }
-
-        public async Task<int> CreateTestCakeEntity()
-        {
-            var testCakeEntity = _fixture.Build<CakeEntity>()
-                                    .Without(x => x.Id)
-                                    .Without(x => x.CategoryId)
-                                    .Without(x => x.Category)
-                                    .Without(x => x.TasteId)
-                                    .Without(x => x.Taste)
-                                    .Without(x => x.ImageId)
-                                    .Without(x => x.Image)
-                                    .Create();
-
-            await _dbContext.Cakes.AddAsync(testCakeEntity);
-            await _dbContext.SaveChangesAsync();
-            _dbContext.ChangeTracker.Clear();
-            return testCakeEntity.Id;
         }
     }
 }

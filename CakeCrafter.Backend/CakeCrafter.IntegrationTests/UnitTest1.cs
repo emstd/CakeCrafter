@@ -1,10 +1,3 @@
-using CakeCrafter.API;
-using CakeCrafter.DataAccess;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace CakeCrafter.IntegrationTests
 {
     public class UnitTest1 : IAsyncLifetime

@@ -3,48 +3,10 @@ using System.Net.Mime;
 
 namespace CakeCrafter.IntegrationTests.Tests
 {
-    public class CategoriesControllerTests : IClassFixture<WebApplicationFactory<Program>>, IAsyncLifetime
+    public class CategoriesControllerTests : BaseInitialization, IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<Program> _app;
-        private readonly IServiceScope _scope;
-        private readonly HttpClient _client;
-        private readonly CakeCrafterDbContext _dbContext;
-        private readonly Fixture _fixture;
-
-        public CategoriesControllerTests(WebApplicationFactory<Program> app)
+        public CategoriesControllerTests(WebApplicationFactory<Program> app) : base(app)
         {
-            _app = app.WithWebHostBuilder(webHostBuilder =>
-            {
-                webHostBuilder.UseEnvironment("IntegrationTests");
-            });
-            _scope = _app.Services.CreateScope();
-            _client = _app.CreateClient();
-            _dbContext = _scope.ServiceProvider.GetRequiredService<CakeCrafterDbContext>();
-            _fixture = new Fixture();
-        }
-
-        public Task DisposeAsync()
-        {
-            _scope.Dispose();
-            _client.Dispose();
-            _dbContext.Dispose();
-            return Task.CompletedTask;
-        }
-
-        public async Task InitializeAsync()
-        {
-            await _dbContext.Database.MigrateAsync();
-            var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync();
-            var respawner = await Respawner.CreateAsync(connection, new RespawnerOptions
-            {
-                TablesToIgnore = new Table[]
-                {
-                "__EFMigrationsHistory"
-                }
-            });
-
-            await respawner.ResetAsync(connection);
         }
 
         [Fact]
@@ -113,18 +75,5 @@ namespace CakeCrafter.IntegrationTests.Tests
 
             Assert.True(response.IsSuccessStatusCode);
         }
-
-        public async Task<int> CreateTestCategoryEntity()
-        {
-            var testCategory = _fixture.Build<CategoryEntity>()
-                                .Without(x => x.Id)
-                                .Create();
-
-            await _dbContext.Categories.AddAsync(testCategory);
-            await _dbContext.SaveChangesAsync();
-            _dbContext.ChangeTracker.Clear();
-            return testCategory.Id;
-        }
-
     }
 }
