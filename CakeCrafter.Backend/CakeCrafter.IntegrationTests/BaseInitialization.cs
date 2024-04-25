@@ -1,5 +1,6 @@
 ﻿namespace CakeCrafter.IntegrationTests
 {
+    [Collection("DataCollection")]
     public class BaseInitialization : IAsyncLifetime
     {
         protected WebApplicationFactory<Program> _app;
@@ -7,6 +8,7 @@
         protected readonly HttpClient _client;
         protected readonly CakeCrafterDbContext _dbContext;
         protected readonly Fixture _fixture;
+        private Respawner _respawner = null!;
 
         public BaseInitialization(WebApplicationFactory<Program> app)
         {
@@ -22,23 +24,19 @@
 
         public async Task DisposeAsync()
         {
-            //var connection = _dbContext.Database.GetDbConnection();
+            await _respawner.ResetAsync("Server=(localdb)\\mssqllocaldb;database=CakeCrafterTestsDb;trusted_connection=true;TrustServerCertificate=True");
+        }
 
-            //await connection.OpenAsync();
-            var respawner = await Respawner.CreateAsync("Server=(localdb)\\mssqllocaldb;database=CakeCrafterTestsDb;trusted_connection=true;TrustServerCertificate=True", new RespawnerOptions
+        public async Task InitializeAsync()
+        {
+            await _dbContext.Database.MigrateAsync();
+            _respawner = await Respawner.CreateAsync("Server=(localdb)\\mssqllocaldb;database=CakeCrafterTestsDb;trusted_connection=true;TrustServerCertificate=True", new RespawnerOptions
             {
                 TablesToIgnore = new Table[]
                 {
                 "__EFMigrationsHistory"
                 }
             });
-
-            await respawner.ResetAsync("Server=(localdb)\\mssqllocaldb;database=CakeCrafterTestsDb;trusted_connection=true;TrustServerCertificate=True");
-        }
-
-        public async Task InitializeAsync()
-        {
-            await _dbContext.Database.MigrateAsync();
         }
 
         public async Task<int> CreateTestCakeEntity()
