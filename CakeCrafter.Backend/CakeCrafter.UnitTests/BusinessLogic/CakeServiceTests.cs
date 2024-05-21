@@ -41,10 +41,10 @@ namespace CakeCrafter.UnitTests.BusinessLogic
             //не проходит Assert.True(result == true);
         }
 
-        [Fact]
-        public async void Update_ShouldUpdateCake()
-        {
+        //[Fact]
+        //public async void Update_ShouldUpdateCake()
+        //{
 
-        }
+        //}
     }
 }
