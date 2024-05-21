@@ -16,12 +16,17 @@ namespace CakeCrafter.API.Controllers
         private readonly ICakeService _service;
         private readonly IMapper _mapper;
         public IOptions<ImageHostSettings> _imageHostSettings;
+        private readonly ILogger<CakesController> _logger;
 
-        public CakesController(ICakeService service, IMapper mapper, IOptions<ImageHostSettings> imageHostSettings)
+        public CakesController(ICakeService service,
+                               IMapper mapper,
+                               IOptions<ImageHostSettings> imageHostSettings,
+                               ILogger<CakesController> logger)
         {
             _service = service;
             _mapper = mapper;
             _imageHostSettings = imageHostSettings;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -55,6 +60,7 @@ namespace CakeCrafter.API.Controllers
         {
             if (id == 0 || id < 0)
             {
+                _logger.LogWarning("Input {id} is sub zero", id);
                 return BadRequest();
             }
 

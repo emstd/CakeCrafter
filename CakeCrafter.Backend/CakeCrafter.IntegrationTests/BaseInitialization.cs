@@ -1,6 +1,6 @@
 ﻿namespace CakeCrafter.IntegrationTests
 {
-    [Collection("DataCollection")]
+    [Collection("DataCollection")]      //Этот атрибут позволяет указать тесты "одной коллекции". Тесты из одной коллекции выполняются последовательно, а не параллельно, следовательно не будет конфликтов при миграциях и откатах. Классы-наследники так же наследуют этот атрибут.
     public class BaseInitialization : IAsyncLifetime
     {
         protected WebApplicationFactory<Program> _app;

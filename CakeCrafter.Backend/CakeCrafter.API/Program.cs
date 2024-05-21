@@ -2,6 +2,7 @@ using CakeCrafter.API.Extensions;
 using CakeCrafter.API.Options;
 using CakeCrafter.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace CakeCrafter.API
 {
@@ -10,6 +11,12 @@ namespace CakeCrafter.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(builder.Configuration)
+                    .CreateLogger();
+
+            builder.Services.AddSerilog();
 
             builder.Host.UseDefaultServiceProvider(x =>
             {
@@ -52,7 +59,6 @@ namespace CakeCrafter.API
             builder.Services.Configure<ImageHostSettings>(builder.Configuration.GetSection(ImageHostSettings.SectionName));
 
             var app = builder.Build();
-            app.UseHttpLogging();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
