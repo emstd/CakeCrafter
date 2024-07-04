@@ -1,4 +1,6 @@
-﻿namespace CakeCrafter.API.Contracts
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CakeCrafter.API.Contracts
 {
     public record CakeCreateRequest
     {

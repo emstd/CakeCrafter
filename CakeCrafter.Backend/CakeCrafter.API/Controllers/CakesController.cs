@@ -36,6 +36,7 @@ namespace CakeCrafter.API.Controllers
         {
             if (categoryId < 1 || skip < 0 || take < 0)
             {
+                _logger.LogError("Invalid input parameters: {categoryId}, {skip}, {take}", categoryId, skip, take);
                 return BadRequest();
             }
 
@@ -60,7 +61,7 @@ namespace CakeCrafter.API.Controllers
         {
             if (id == 0 || id < 0)
             {
-                _logger.LogWarning("Input {id} is sub zero", id);
+                _logger.LogError("Input {id} is sub zero", id);
                 return BadRequest();
             }
 
@@ -68,6 +69,7 @@ namespace CakeCrafter.API.Controllers
             var cake = await _service.GetById(id);
             if (cake == null)
             {
+                _logger.LogWarning("Cake with id {id} not found", id);
                 return NotFound();
             }
             var cakeResponse = _mapper.Map<Cake, CakeGetResponse>(cake);
@@ -80,6 +82,7 @@ namespace CakeCrafter.API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogError("Invalid create cake request {CakeCreateRequest}", cakeCreate);
                 return BadRequest();
             }
 
@@ -92,6 +95,7 @@ namespace CakeCrafter.API.Controllers
         {
             if (!ModelState.IsValid || id == 0 || id < 0)
             {
+                _logger.LogError("Invalid cake update request {CakeUpdateRequest} or invalid id: {ID}", cakeUpdate, id);
                 return BadRequest();
             }
 
@@ -102,6 +106,7 @@ namespace CakeCrafter.API.Controllers
 
             if (updatedCake == null)
             {
+                _logger.LogError("Cake with id {id} not found", id);
                 return NotFound();
             }
             var cakeResponse = _mapper.Map<Cake, CakeGetResponse>(updatedCake);
@@ -114,6 +119,7 @@ namespace CakeCrafter.API.Controllers
         {
             if (id < 1)
             {
+                _logger.LogError("Invalid cake ID: {id}", id);
                 return BadRequest();
             }
 
