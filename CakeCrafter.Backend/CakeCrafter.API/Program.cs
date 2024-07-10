@@ -1,6 +1,7 @@
 using CakeCrafter.API.Extensions;
 using CakeCrafter.API.Options;
 using CakeCrafter.DataAccess;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -11,6 +12,13 @@ namespace CakeCrafter.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultScheme = "DEFAULT";
+                x.AddScheme<AppAuthHandler>(x.DefaultScheme, null);
+            });
+                
 
             Log.Logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(builder.Configuration)
@@ -72,6 +80,7 @@ namespace CakeCrafter.API
             app.UseHttpsRedirection();
             app.UseCors("AllowCakeCrafterApp");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
