@@ -13,11 +13,8 @@ namespace CakeCrafter.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddAuthentication(x =>
-            {
-                x.DefaultScheme = "DEFAULT";
-                x.AddScheme<AppAuthHandler>(x.DefaultScheme, null);
-            });
+            builder.Services.AddAuthentication()
+                .AddScheme<AuthenticationSchemeOptions, AppAuthHandler>("MyScheme", opt => { });
                 
 
             Log.Logger = new LoggerConfiguration()

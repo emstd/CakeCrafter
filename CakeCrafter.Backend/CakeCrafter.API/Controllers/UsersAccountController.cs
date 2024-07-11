@@ -10,9 +10,22 @@ namespace CakeCrafter.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var user = User;
+            var userNameClaim = User.Claims.FirstOrDefault(x => x.Type == "UserName");
 
-            return Ok(user.ToString());
+            if (User.Identity == null || !User.Identity.IsAuthenticated)
+            {
+                return Forbid();
+            }
+
+            if (userNameClaim is null)
+            {
+                return Forbid();
+            }
+
+            var claimType = userNameClaim.Type;
+            var userName = userNameClaim.Value;
+
+            return Ok(new { claimType, userName });
         }
     }
 }

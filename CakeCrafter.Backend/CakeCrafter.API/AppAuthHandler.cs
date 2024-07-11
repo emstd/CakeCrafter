@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 
 namespace CakeCrafter.API
@@ -16,7 +17,21 @@ namespace CakeCrafter.API
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            return await AuthenticateAsync();
+            var claims = new[]
+            {
+                new Claim("UserName", "TestUser")
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "MyScheme");
+
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            //Context.User = claimsPrincipal;
+
+            var authenticationTicket = new AuthenticationTicket(claimsPrincipal, "MyScheme");
+            
+
+            return AuthenticateResult.Success(authenticationTicket);
         }
     }
 }
