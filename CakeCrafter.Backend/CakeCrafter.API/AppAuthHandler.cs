@@ -19,18 +19,18 @@ namespace CakeCrafter.API
         {
             var claims = new[]
             {
-                new Claim("UserName", "TestUser")
+                new Claim("userId", "12345"),
+                new Claim(ClaimTypes.Name, "TestUser")
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "MyScheme");
 
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
 
-            //Context.User = claimsPrincipal;
+            Context.User = claimsPrincipal;
 
             var authenticationTicket = new AuthenticationTicket(claimsPrincipal, "MyScheme");
             
-
             return AuthenticateResult.Success(authenticationTicket);
         }
     }

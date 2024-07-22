@@ -2,8 +2,11 @@ using CakeCrafter.API.Extensions;
 using CakeCrafter.API.Options;
 using CakeCrafter.DataAccess;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Text;
 
 namespace CakeCrafter.API
 {
@@ -13,7 +16,27 @@ namespace CakeCrafter.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddAuthentication()
+            var jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
+            if (jwtOptions == null )
+            {
+                throw new ArgumentNullException(nameof(jwtOptions));
+            }
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey));
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = jwtOptions.ValidateIssuer,
+                        ValidIssuer = jwtOptions.Issuer,
+                        ValidateAudience = jwtOptions.ValidateAudience,
+                        ValidAudience = jwtOptions.Audience,
+                        ValidateLifetime = jwtOptions.ValidateLifeTime,
+                        ValidateIssuerSigningKey = jwtOptions.ValidateIssuerSigningKey,
+                        IssuerSigningKey = key
+                    };
+                })
                 .AddScheme<AuthenticationSchemeOptions, AppAuthHandler>("MyScheme", opt => { });
                 
 
