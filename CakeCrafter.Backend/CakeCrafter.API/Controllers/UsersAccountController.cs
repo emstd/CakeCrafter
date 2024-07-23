@@ -1,5 +1,5 @@
 ﻿using CakeCrafter.API.Contracts;
-using Microsoft.AspNetCore.Authentication;
+using CakeCrafter.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -7,9 +7,16 @@ using System.Security.Claims;
 namespace CakeCrafter.API.Controllers
 {
     [ApiController]
+    [AllowAnonymous]
     [Route("api/[controller]")]
     public class UsersAccountController : ControllerBase
     {
+        private readonly IUserService _userService;
+        public UsersAccountController(IUserService service)
+        {
+            _userService = service;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -17,6 +24,20 @@ namespace CakeCrafter.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+
+            var user = await _userService.GetUserByEmail(request.Email);
+
+            if (user == null)
+            {
+                return BadRequest("This email does not exist");
+            }
+
+            if (request.Password != user.Password)
+            {
+                return BadRequest("Incorret password");
+            }
+
+            //создать access token и refresh token
 
             return Ok(Task.CompletedTask);
         }

@@ -17,11 +17,8 @@ namespace CakeCrafter.API
             var builder = WebApplication.CreateBuilder(args);
 
             var jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
-            if (jwtOptions == null )
-            {
+            if (jwtOptions is null )
                 throw new ArgumentNullException(nameof(jwtOptions));
-            }
-            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey));
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
@@ -34,7 +31,7 @@ namespace CakeCrafter.API
                         ValidAudience = jwtOptions.Audience,
                         ValidateLifetime = jwtOptions.ValidateLifeTime,
                         ValidateIssuerSigningKey = jwtOptions.ValidateIssuerSigningKey,
-                        IssuerSigningKey = key
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
                     };
                 })
                 .AddScheme<AuthenticationSchemeOptions, AppAuthHandler>("MyScheme", opt => { });

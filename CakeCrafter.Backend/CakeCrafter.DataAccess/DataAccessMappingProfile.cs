@@ -15,6 +15,7 @@ namespace CakeCrafter.DataAccess
                                                                           ? "NoImage.png"
                                                                           : $"{x.ImageId}{x.Image.Extension}"));
             CreateMap<Image, ImageEntity>();
+            CreateMap<User, UserEntity>().ReverseMap();
         }
     }
 }
