@@ -9,19 +9,22 @@ namespace CakeCrafter.API.Controllers
     [ApiController]
     [AllowAnonymous]
     [Route("api/[controller]")]
-    public class UsersAccountController : ControllerBase
+    public class UserAccountController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UsersAccountController(IUserService service)
+        private readonly ILogger<UserAccountController> _logger;
+        public UserAccountController(IUserService service, ILogger<UserAccountController> logger)
         {
             _userService = service;
+            _logger = logger;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> SignIn([FromBody] LoginRequest request)
         {
             if (ModelState.IsValid)
             {
+                _logger.LogError("Invalid credentials {request}", request);
                 return BadRequest(ModelState);
             }
 

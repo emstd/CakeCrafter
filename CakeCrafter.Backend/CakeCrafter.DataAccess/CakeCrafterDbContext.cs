@@ -1,4 +1,5 @@
-﻿using CakeCrafter.DataAccess.Entites;
+﻿using CakeCrafter.DataAccess.Cofigurations;
+using CakeCrafter.DataAccess.Entites;
 using Microsoft.EntityFrameworkCore;
 
 namespace CakeCrafter.DataAccess
@@ -15,5 +16,11 @@ namespace CakeCrafter.DataAccess
         public DbSet<CakeEntity> Cakes { get; set; }
         public DbSet<ImageEntity> Images { get; set; }
         public DbSet<UserEntity> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+        }
     }
 }

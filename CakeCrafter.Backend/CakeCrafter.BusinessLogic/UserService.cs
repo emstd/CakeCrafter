@@ -12,6 +12,12 @@ namespace CakeCrafter.BusinessLogic
         {
             _repository = repository;
         }
+
+        public (string, string) ConfirmAccess()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> Create(User user)
         {
             var result = await _repository.Create(user);

@@ -16,7 +16,10 @@ namespace CakeCrafter.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var jwtOptions = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
+            var jwtOptions = builder.Configuration
+                .GetSection(JwtOptions.SectionName)
+                .Get<JwtOptions>();
+
             if (jwtOptions is null )
                 throw new ArgumentNullException(nameof(jwtOptions));
 

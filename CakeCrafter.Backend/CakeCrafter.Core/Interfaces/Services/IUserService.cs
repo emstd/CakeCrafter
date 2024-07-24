@@ -6,5 +6,6 @@ namespace CakeCrafter.Core.Interfaces.Services
     {
         Task<bool> Create(User user);
         Task<User> GetUserByEmail(string email);
+        (string, string) ConfirmAccess();
     }
 }
