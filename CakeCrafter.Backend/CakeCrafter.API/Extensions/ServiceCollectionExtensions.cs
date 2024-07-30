@@ -16,6 +16,7 @@ namespace CakeCrafter.API.Extensions
             services.AddScoped<IGenericRepository<Category>, GenericRepository<Category, CategoryEntity>>();
             services.AddScoped<IGenericRepository<Taste>, GenericRepository<Taste, TasteEntity>>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }
@@ -26,6 +27,7 @@ namespace CakeCrafter.API.Extensions
             services.AddScoped<IGenericService<Category>, GenericService<Category>>();
             services.AddScoped<IGenericService<Taste>, GenericService<Taste>>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             return services;
         }

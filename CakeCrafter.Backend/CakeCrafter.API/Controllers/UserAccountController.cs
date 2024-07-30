@@ -1,8 +1,12 @@
 ﻿using CakeCrafter.API.Contracts;
+using CakeCrafter.API.Options;
 using CakeCrafter.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace CakeCrafter.API.Controllers
 {
@@ -20,9 +24,9 @@ namespace CakeCrafter.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SignIn([FromBody] LoginRequest request)
+        public async Task<IActionResult> SignIn([FromBody] LoginRequest request, [FromServices] IConfiguration configuration)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _logger.LogError("Invalid credentials {request}", request);
                 return BadRequest(ModelState);
@@ -32,17 +36,34 @@ namespace CakeCrafter.API.Controllers
 
             if (user == null)
             {
+                _logger.LogError("This email {email} does not exist", request.Email);
                 return BadRequest("This email does not exist");
             }
 
             if (request.Password != user.Password)
             {
+                _logger.LogError("Incorrect password {password}", request.Password);
                 return BadRequest("Incorret password");
             }
 
-            //создать access token и refresh token
+            var jwtOptions = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
 
-            return Ok(Task.CompletedTask);
+            if (jwtOptions == null)
+            {
+                throw new InvalidOperationException("JWT configuration not found");
+            }
+
+            JwtSecurityToken token = new JwtSecurityToken(
+                issuer: jwtOptions.Issuer,
+                audience: jwtOptions.Audience,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(jwtOptions.TokenLifeTime)),
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)), SecurityAlgorithms.HmacSha256)
+                );
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            string tokenString = handler.WriteToken(token);
+
+            return Ok(tokenString);
         }
 
         [Authorize]
