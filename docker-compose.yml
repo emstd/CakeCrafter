@@ -1,0 +1,33 @@
+services:
+  ccdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=AwesomePass_1234
+    restart: always
+    networks:
+      - cc-network
+
+  cakecrafter_backend:
+    depends_on:
+      - ccdb
+    build:
+      context: ./CakeCrafter.Backend
+    image: emstd/cakecrafter_backend:runtime
+    networks:
+      - cc-network
+
+  cakecrafter_frontend:
+    build:
+      context: ./CakeCrafter.Frontend
+    image: emstd/cakecrafter_frontend:runtime
+    ports:
+      - "8080:80"
+    networks:
+      - cc-network
+
+networks:
+  cc-network:
+    driver: bridge
