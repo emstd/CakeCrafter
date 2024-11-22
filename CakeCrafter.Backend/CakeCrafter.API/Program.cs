@@ -20,7 +20,7 @@ namespace CakeCrafter.API
                 .GetSection(JwtOptions.SectionName)
                 .Get<JwtOptions>();
 
-            if (jwtOptions is null )
+            if (jwtOptions is null)
                 throw new ArgumentNullException(nameof(jwtOptions));
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -38,7 +38,7 @@ namespace CakeCrafter.API
                     };
                 })
                 .AddScheme<AuthenticationSchemeOptions, AppAuthHandler>("MyScheme", opt => { });
-                
+
 
             Log.Logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(builder.Configuration)
@@ -57,11 +57,11 @@ namespace CakeCrafter.API
             {
                 o.AddPolicy("AllowCakeCrafterApp", p =>
                 {
-                    p.WithOrigins("http://127.0.0.1:5173")
+                    p.AllowAnyOrigin()
                     .WithHeaders().AllowAnyHeader()
-                    .WithMethods().AllowAnyMethod()
-                    .AllowCredentials()
-                    .SetIsOriginAllowedToAllowWildcardSubdomains();
+                    .WithMethods().AllowAnyMethod();
+                    //.AllowCredentials()
+                    //.SetIsOriginAllowedToAllowWildcardSubdomains();
                 });
             });
             builder.Services.AddControllers();
@@ -106,7 +106,7 @@ namespace CakeCrafter.API
 
             app.MapControllers();
 
-            app.Run();
+            app.MigrateDatabase().Run();
         }
     }
 }

@@ -2,7 +2,7 @@ import { redirect } from "react-router-dom";
 
 export class APIClient
 {
-    URL = "http://localhost:5000";
+    URL = "http://localhost:5010";
 
 
     /////***** Cakes Categories *****/////
@@ -16,7 +16,7 @@ export class APIClient
 
     GetCategoryNameById = async(cakeId) =>
     {
-        const response = await fetch(`http://localhost:5000/api/Categories/${cakeId}`);
+        const response = await fetch(`${this.URL}/api/Categories/${cakeId}`);
         const responseJson = await response.json();
         const categoryName = responseJson.name;
         return categoryName;
@@ -120,7 +120,7 @@ export class APIClient
 
     GetCakeById = async( {params} ) =>
     {
-        const response = await fetch(`http://localhost:5000/api/Cakes/${params.cakeId}`);
+        const response = await fetch(`${this.URL}/api/Cakes/${params.cakeId}`);
         const jsonResponse = await response.json();
 
         return jsonResponse;
@@ -201,7 +201,7 @@ export class APIClient
     /////***** Image *****/////
     CreateFileImage = async(imageId) =>
     {
-        const response = await fetch('http://localhost:5000/api/images/imageUrl', 
+        const response = await fetch(`${this.URL}/api/images/imageUrl`, 
         {
             method: 'POST',
             headers: {

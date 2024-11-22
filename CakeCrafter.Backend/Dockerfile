@@ -10,5 +10,4 @@ RUN dotnet publish ./CakeCrafter.API/CakeCrafter.API.csproj -o /publish
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /publish
 COPY --from=build /publish ./
-ENV ASPNETCORE_URLS=http://+:5005
 ENTRYPOINT [ "dotnet", "CakeCrafter.API.dll" ]
